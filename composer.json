@@ -1,0 +1,45 @@
+{
+  "name": "cosmocode/formserver",
+  "description": "Generate forms from YAML, handle submitted data",
+  "type": "project",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Anna Dabrowska",
+      "email": "dabrowska@cosmocode.de"
+    },
+    {
+      "name": "Carl Aischmann",
+      "email": "aischmann@cosmocode.de"
+    }
+  ],
+  "require": {
+    "php": ">=7.2",
+    "php-di/php-di": "^6.0",
+    "monolog/monolog": "^1.24",
+    "slim/psr7": "^0.5",
+    "slim/slim": "^4.2",
+    "slim/twig-view": "^2.0",
+    "michelf/php-markdown": "~1.8.0",
+    "mustangostang/spyc": "~0.6.2"
+  },
+  "config": {
+    "platform": {
+      "php": "7.2"
+    },
+    "process-timeout": 900
+  },
+  "require-dev": {
+    "squizlabs/php_codesniffer": "^3.4",
+    "phpunit/phpunit": "^7.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "CosmoCode\\Formserver\\": "src",
+      "CosmoCode\\Tests\\Formserver\\": "tests"
+    }
+  },
+  "scripts": {
+    "start": "php -S localhost:8181 -t public"
+  }
+}
