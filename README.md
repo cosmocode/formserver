@@ -17,3 +17,5 @@ Test run on the built-in PHP server
 ```bash
 composer start
 ```
+
+Go to `http://localhost:8181`
