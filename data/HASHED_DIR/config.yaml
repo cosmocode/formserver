@@ -59,3 +59,9 @@ form:
         type: upload
         label: Bitte laden Sie eine Datei hoch
         fileext: text/*
+      image0:
+        type: image
+        label: Hier ein kreatives Bild.
+        src: /test_image.png
+        width: 200
+        height: 100

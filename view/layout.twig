@@ -140,3 +140,11 @@
         </label>
     </div>
 {%- endblock -%}
+
+
+{%- block image -%}
+    <div class="image">
+        <div class="image-label">{{ label }}</div>
+        <img src="{{ src }}" {{ width is defined ? 'width='~width }} {{ width is defined ? 'height='~height }}>
+    </div>
+{%- endblock -%}
