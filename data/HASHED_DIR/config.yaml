@@ -48,3 +48,10 @@ form:
           - Erste Auswahl
           - Zweite Auswahl
           - Dritte Auswahl
+      testfrage10:
+        type: checklist
+        label: Hier kann man mal mehr auswählen
+        choices:
+          - Erste Auswahl
+          - Zweite Auswahl
+          - Dritte Auswahl

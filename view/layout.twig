@@ -108,6 +108,18 @@
 {%- endblock -%}
 
 
+{%- block checklist -%}
+    <div class="checklist">
+        <div class="checklist-label">{{ label }}</div>
+        {%- for choice in choices -%}
+            <label for="{{ id~'_'~loop.index0 }}"> {{ choice }}
+                <input type="checkbox" id="{{ id~'['~loop.index0~']' }}" name="{{ id~'['~loop.index0~']' }}" value="{{ choice }}" />
+            </label>
+        {%- endfor -%}
+    </div>
+{%- endblock -%}
+
+
 {%- block dropdown -%}
     <div class="select">
         <div class="select-label">{{ label }}</div>
