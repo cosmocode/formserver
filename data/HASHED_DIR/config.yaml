@@ -1,0 +1,42 @@
+meta:
+  title: 'Formular #1'
+
+form:
+  testfrage1:
+    type: textinput
+    label: Wie finden Sie diese Frage?
+
+  group1:
+    type: fieldset
+    label: Das Label des Fieldsets
+    children:
+      testfrage1:
+        type: numberinput
+        label: Ist diese Frage besser? (number)
+      testfrage2:
+        type: date
+        label: Und diese? (date)
+      testfrage3:
+        type: time
+        label: Und diese? (time)
+      testfrage4:
+        type: datetime
+        label: Und diese? (datetime)
+      testfrage5:
+        type: textarea
+        label: Und diese? (textarea)
+        cols: 10
+        rows: 20
+      testfrage6:
+        type: email
+        label: Und diese? (email)
+      testfrage7_hidden:
+        type: hidden
+        value: "Ich bin versteckt"
+      testfrage8:
+        type: radioset
+        label: Hier kann man mal mehr auswählen
+        choices:
+          - Erste Auswahl
+          - Zweite Auswahl
+          - Dritte Auswahl
