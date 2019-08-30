@@ -2,8 +2,20 @@
 
 namespace CosmoCode\Formserver\FormGenerator\FormElements;
 
-class DefaultFormElement extends AbstractFormElement
+/**
+ * Dynamic form elements have an input which the user can fill out
+ *
+ */
+class DynamicFormElement extends AbstractFormElement
 {
+	/**
+	 * @var mixed
+	 */
+	protected $value;
+
+	public function getValue() {
+		return $this->value;
+	}
 
 	public function setValue($value) {
 		$this->value = $value;

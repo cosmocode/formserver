@@ -3,8 +3,8 @@
 namespace CosmoCode\Formserver\FormGenerator;
 
 
-use CosmoCode\Formserver\FormGenerator\FormElements\AbstractFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\FieldsetFormElement;
+use CosmoCode\Formserver\FormGenerator\FormElements\AbstractFormElement;
 
 // TODO Exception handling
 class FormRenderer

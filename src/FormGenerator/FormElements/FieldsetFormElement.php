@@ -2,17 +2,26 @@
 
 namespace CosmoCode\Formserver\FormGenerator\FormElements;
 
-
-class FieldsetFormElement extends AbstractFormElement
+/**
+ * FieldsetFormElement is a special StaticFormElement, since it contains child formElements
+ * @package CosmoCode\Formserver\FormGenerator\FormElements
+ */
+class FieldsetFormElement extends StaticFormElement
 {
 
 	/**
-	 * @var AbstractFormElement[]
+	 * @var DynamicFormElement[]
 	 */
 	protected $children;
 
+	public function __construct($id, array $config)
+	{
+		unset($config['children']); // Children config not needed
+		parent::__construct($id, $config);
+	}
+
 	/**
-	 * @return AbstractFormElement[]
+	 * @return DynamicFormElement[]
 	 */
 	public function getChildren() {
 		return $this->children;
@@ -20,15 +29,5 @@ class FieldsetFormElement extends AbstractFormElement
 
 	public function addChild(AbstractFormElement $child) {
 		$this->children[] = $child;
-	}
-
-	/**
-	 * Prepare variables array for twig view.
-	 *
-	 * @return array
-	 */
-	public function getViewVariables()
-	{
-		return array_merge($this->getConfig(),[ 'id' => $this->getId()]);
 	}
 }

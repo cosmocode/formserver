@@ -3,7 +3,7 @@
 namespace CosmoCode\Formserver\FormGenerator\FormElements;
 
 
-abstract class AbstractFormElement implements FormElementInterface
+abstract class AbstractFormElement
 {
 	/**
 	 * @var string
@@ -15,17 +15,12 @@ abstract class AbstractFormElement implements FormElementInterface
 	 */
 	protected $config;
 
-	/**
-	 * @var mixed
-	 */
-	protected $value;
 
 	public function __construct($id, array $config)
 	{
 		$this->id = $id;
 
 		$this->config = $config;
-		unset($this->config['children']); // Children config not needed
 	}
 
 	public function getId() {
@@ -41,7 +36,5 @@ abstract class AbstractFormElement implements FormElementInterface
 		return $this->config;
 	}
 
-	public function getValue() {
-		return $this->value;
-	}
+	abstract public function getViewVariables();
 }

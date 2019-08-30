@@ -4,20 +4,35 @@ namespace CosmoCode\Formserver\FormGenerator;
 
 
 use CosmoCode\Formserver\Exceptions\FormException;
-use CosmoCode\Formserver\FormGenerator\FormElements\DefaultFormElement;
+use CosmoCode\Formserver\FormGenerator\FormElements\DynamicFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\FieldsetFormElement;
-use CosmoCode\Formserver\FormGenerator\FormElements\HiddenFormElement;
+use CosmoCode\Formserver\FormGenerator\FormElements\StaticFormElement;
 
 class FormElementFactory
 {
 	public static function createFormElement(string $id, array $config) {
-		switch ($config['type']) {
+		$formType = $config['type'];
+		switch ($formType) {
 			case 'fieldset':
 				return self::createFieldsetFormElement($id, $config);
 			case 'hidden':
-				return self::createHiddenFormElement($id, $config);
+			case 'download':
+			case 'image':
+				return self::createStaticFormElement($id, $config);
+			case 'textinput':
+			case 'numberinput':
+			case 'date':
+			case 'time':
+			case 'datetime':
+			case 'email':
+			case 'textarea':
+			case 'radioset':
+			case 'checklist':
+			case 'dropdown':
+			case 'upload':
+				return self::createDynamicFormElement($id, $config);
 			default:
-				return self::createDefaultFormElement($id, $config);
+				throw new FormException("Could not build FormElement with id $id. Undefined type ($formType)");
 		}
 	}
 
@@ -37,13 +52,13 @@ class FormElementFactory
 		return $listFormElement;
 	}
 
-	protected static function createDefaultFormElement(string $id, array $config)
+	protected static function createDynamicFormElement(string $id, array $config)
 	{
-		return new DefaultFormElement($id, $config);
+		return new DynamicFormElement($id, $config);
 	}
 
-	protected static function createHiddenFormElement(string $id, array $config)
+	protected static function createStaticFormElement(string $id, array $config)
 	{
-		return new HiddenFormElement($id, $config);
+		return new StaticFormElement($id, $config);
 	}
 }

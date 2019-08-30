@@ -3,7 +3,7 @@
 namespace CosmoCode\Formserver\FormGenerator;
 
 
-use CosmoCode\Formserver\FormGenerator\FormElements\AbstractFormElement;
+use CosmoCode\Formserver\FormGenerator\FormElements\DynamicFormElement;
 
 class Form
 {
@@ -12,7 +12,7 @@ class Form
 	 */
 	protected $configDir;
 
-	/** @var AbstractFormElement[] */
+	/** @var DynamicFormElement[] */
 	protected $formElements = [];
 
 	public function __construct(array $formConfig)
