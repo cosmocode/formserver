@@ -23,7 +23,7 @@ class FormAction extends AbstractAction
             $form = new Form($config['form']);
             $formRenderer = new FormRenderer();
 
-            $formHtml = $formRenderer->renderForm($form->getFormElements());
+            $formHtml = $formRenderer->renderForm($form->getFormElements(), $config['meta']['title'] ?? 'Form Title');
             $this->response->getBody()->write($formHtml);
 
             $this->logger->info("Form $id was viewed");

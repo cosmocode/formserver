@@ -1,10 +1,11 @@
 {%- block form -%}
+    <!DOCTYPE html>
     <html lang="de">
         <head>
-            <title>{{ title }}</title>
+            <title>{{ title is defined ? title : 'Form'}}</title>
         </head>
     <body>
-        <form action="{{ action }}" method="post">
+        <form {{ action is defined ? 'action='~action }} method="post">
             {{ formHtml | raw }}
 
             <button type="submit">Absenden</button>
@@ -100,8 +101,8 @@
     <div class="radioset">
         <div class="radioset-label">{{ label }}</div>
         {%- for choice in choices -%}
-            <label for="{{ id~'_'~loop.index0 }}"> {{ choice }}
-            <input type="radio" id="{{ id~'['~loop.index0~']' }}" name="{{ id }}" value="{{ choice }}" />
+            <label for="{{ id~'['~loop.index0~']' }}"> {{ choice }}
+                <input type="radio" id="{{ id~'['~loop.index0~']' }}" name="{{ id }}" value="{{ choice }}" />
             </label>
         {%- endfor -%}
     </div>
@@ -112,7 +113,7 @@
     <div class="checklist">
         <div class="checklist-label">{{ label }}</div>
         {%- for choice in choices -%}
-            <label for="{{ id~'_'~loop.index0 }}"> {{ choice }}
+            <label for="{{ id~'['~loop.index0~']' }}"> {{ choice }}
                 <input type="checkbox" id="{{ id~'['~loop.index0~']' }}" name="{{ id~'['~loop.index0~']' }}" value="{{ choice }}" />
             </label>
         {%- endfor -%}
@@ -123,7 +124,7 @@
 {%- block dropdown -%}
     <div class="select">
         <div class="select-label">{{ label }}</div>
-        <select id="{{ id }}" name="{{ id }}" {{ size is defined ? 'size='~size }}" {{ multiselect is defined and multiselect ? 'multiple' }}>
+        <select id="{{ id }}" name="{{ id }}" {{ size is defined ? 'size='~size }} {{ multiselect is defined and multiselect ? 'multiple' }}>
             {%- for choice in choices -%}
                 <option>{{ choice }}</option>
             {%- endfor -%}
@@ -152,6 +153,6 @@
 {%- block image -%}
     <div class="image">
         <div class="image-label">{{ label }}</div>
-        <img src="{{ src }}" {{ width is defined ? 'width='~width }} {{ width is defined ? 'height='~height }}>
+        <img src="{{ src }}" {{ width is defined ? 'width='~width }} {{ width is defined ? 'height='~height }} alt="{{ alt is defined ? alt : label }}">
     </div>
 {%- endblock -%}
