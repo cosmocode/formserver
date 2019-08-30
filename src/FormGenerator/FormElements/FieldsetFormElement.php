@@ -2,6 +2,8 @@
 
 namespace CosmoCode\Formserver\FormGenerator\FormElements;
 
+use CosmoCode\Formserver\Exceptions\FormException;
+
 /**
  * FieldsetFormElement is a special StaticFormElement, since it contains child formElements
  * @package CosmoCode\Formserver\FormGenerator\FormElements
@@ -25,6 +27,15 @@ class FieldsetFormElement extends StaticFormElement
 	 */
 	public function getChildren() {
 		return $this->children;
+	}
+
+	public function getChildById(string $id) {
+		foreach ($this->children as $child) {
+			if ($child->getId() === $id) {
+				return $child;
+			}
+		}
+		throw new FormException("Could not get child in FieldsetFormElement '" . $this->id . "'. Child with id $id not found.");
 	}
 
 	public function addChild(AbstractFormElement $child) {

@@ -21,6 +21,9 @@ class FormAction extends AbstractAction
             $config = YamlHelper::parseYaml($id);
 
             $form = new Form($config['form']);
+            if ($this->request->getMethod() === 'POST') {
+                $form->submitData($this->request->getParsedBody());
+            }
             $formRenderer = new FormRenderer();
 
             $formHtml = $formRenderer->renderForm($form->getFormElements(), $config['meta']['title'] ?? 'Form Title');
