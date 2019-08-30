@@ -106,3 +106,15 @@
         {%- endfor -%}
     </div>
 {%- endblock -%}
+
+
+{%- block dropdown -%}
+    <div class="select">
+        <div class="select-label">{{ label }}</div>
+        <select id="{{ id }}" name="{{ id }}" {{ size is defined ? 'size='~size }}" {{ multiselect is defined and multiselect ? 'multiple' }}>
+            {%- for choice in choices -%}
+                <option>{{ choice }}</option>
+            {%- endfor -%}
+        </select>
+    </div>
+{%- endblock -%}

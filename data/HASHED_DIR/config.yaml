@@ -40,3 +40,11 @@ form:
           - Erste Auswahl
           - Zweite Auswahl
           - Dritte Auswahl
+      testfrage9:
+        type: dropdown
+        size: 1
+        multiselect: false
+        choices:
+          - Erste Auswahl
+          - Zweite Auswahl
+          - Dritte Auswahl
