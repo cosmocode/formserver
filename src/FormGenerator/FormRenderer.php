@@ -13,16 +13,16 @@ use CosmoCode\Formserver\FormGenerator\FormElements\AbstractFormElement;
  */
 class FormRenderer
 {
-	/** @var \Twig\Environment */
+	/** @var \Twig\TemplateWrapper */
 	protected $twig;
 
 	public function __construct(string $twigLayout = 'layout.twig')
 	{
 		$twigLoader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/../../view/');
-		$twig = new \Twig\Environment($twigLoader);
+		$twigEnvironment = new \Twig\Environment($twigLoader);
 
 		try {
-			$this->twig = $twig->load($twigLayout);
+			$this->twig = $twigEnvironment->load($twigLayout);
 		} catch (\Twig\Error\Error $e) {
 			throw new TwigException("Could not load twig layout file '$twigLayout':" . $e->getMessage());
 		}
