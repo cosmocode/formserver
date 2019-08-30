@@ -25,7 +25,7 @@ abstract class AbstractFormElement implements FormElementInterface
 		$this->id = $id;
 
 		$this->config = $config;
-		unset($this->config['children']);
+		unset($this->config['children']); // Children config not needed
 	}
 
 	public function getId() {
