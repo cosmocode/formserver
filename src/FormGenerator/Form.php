@@ -50,7 +50,6 @@ class Form
 	protected function submitDataIfDynamicFormElement(AbstractFormElement $formElement, $value) {
 		if ($formElement instanceof  DynamicFormElement) {
 			$formElement->setValue($value);
-			var_dump($formElement->getValue());
 		}
 	}
 }
