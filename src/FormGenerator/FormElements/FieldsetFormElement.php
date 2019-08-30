@@ -16,10 +16,10 @@ class FieldsetFormElement extends StaticFormElement
 	 */
 	protected $children;
 
-	public function __construct($id, array $config)
+	public function __construct($id, array $config, AbstractFormElement $parent = null)
 	{
 		unset($config['children']); // Children config not needed
-		parent::__construct($id, $config);
+		parent::__construct($id, $config, $parent);
 	}
 
 	/**
@@ -27,15 +27,6 @@ class FieldsetFormElement extends StaticFormElement
 	 */
 	public function getChildren() {
 		return $this->children;
-	}
-
-	public function getChildById(string $id) {
-		foreach ($this->children as $child) {
-			if ($child->getId() === $id) {
-				return $child;
-			}
-		}
-		throw new FormException("Could not get child in FieldsetFormElement '" . $this->id . "'. Child with id $id not found.");
 	}
 
 	public function addChild(AbstractFormElement $child) {

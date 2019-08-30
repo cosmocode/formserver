@@ -27,6 +27,6 @@ class DynamicFormElement extends AbstractFormElement
 
 	public function getViewVariables()
 	{
-		return array_merge($this->getConfig(),[ 'id' => $this->getId(), 'value' => $this->getValue()]);
+		return array_merge($this->getConfig(),[ 'id' => $this->getFormElementId(), 'value' => $this->getValue()]);
 	}
 }

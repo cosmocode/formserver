@@ -16,6 +16,6 @@ class MarkDownFormElement extends StaticFormElement
 	{
 		$markdown = Markdown::defaultTransform($this->getConfig()['markdown'] ?? '');
 
-		return array_merge($this->getConfig(),[ 'id' => $this->getId(), 'markdown' => $markdown]);
+		return array_merge($this->getConfig(),[ 'id' => $this->getFormElementId(), 'markdown' => $markdown]);
 	}
 }

@@ -29,27 +29,20 @@ class Form
 		return $this->formElements;
 	}
 
-	public function submitData(array $data) {
+	public function submitData(array $postData) {
 		// Traverse each AbstractFormElement of this Form
 		foreach ($this->formElements as $formElement) {
 			// If AbstractFormElement is FieldsetFormElement it contains childs which have to be filled
 			if ($formElement instanceof FieldsetFormElement) {
-				$fieldsetData = $data[$formElement->getId()] ?? [];
-				foreach ($fieldsetData as $key => $fdata) {
-					try {
-						$fieldsetChild = $formElement->getChildById($formElement->getId() . '[' . $key . ']');
-						$this->submitDataIfDynamicFormElement($fieldsetChild, $fdata);
-					} catch (FormException $ignored) {}
+				foreach ($formElement->getChildren() as $fieldsetChild) {
+					if ($fieldsetChild instanceof DynamicFormElement) {
+						$fieldsetChildValue = $postData[$formElement->getId()][$fieldsetChild->getId()] ?? '';
+						$fieldsetChild->setValue($fieldsetChildValue);
+					}
 				}
-			} else {
-				$this->submitDataIfDynamicFormElement($formElement, $data[$formElement->getId()]);
+			} elseif ($formElement instanceof DynamicFormElement) {
+				$formElement->setValue($postData[$formElement->getId()]);
 			}
-		}
-	}
-
-	protected function submitDataIfDynamicFormElement(AbstractFormElement $formElement, $value) {
-		if ($formElement instanceof  DynamicFormElement) {
-			$formElement->setValue($value);
 		}
 	}
 }
