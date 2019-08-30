@@ -55,3 +55,7 @@ form:
           - Erste Auswahl
           - Zweite Auswahl
           - Dritte Auswahl
+      fileupload1:
+        type: upload
+        label: Bitte laden Sie eine Datei hoch
+        fileext: "text/*"
