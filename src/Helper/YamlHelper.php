@@ -3,6 +3,8 @@
 namespace CosmoCode\Formserver\Helper;
 
 
+use CosmoCode\Formserver\Exceptions\YamlException;
+
 class YamlHelper
 {
 	public static function parseYaml($configDir) {
