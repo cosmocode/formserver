@@ -10,7 +10,7 @@ class FieldsetFormElement extends StaticFormElement
 {
 
 	/**
-	 * @var DynamicFormElement[]
+	 * @var AbstractFormElement[]
 	 */
 	protected $children;
 
@@ -21,7 +21,7 @@ class FieldsetFormElement extends StaticFormElement
 	}
 
 	/**
-	 * @return DynamicFormElement[]
+	 * @return AbstractFormElement[]
 	 */
 	public function getChildren() {
 		return $this->children;
