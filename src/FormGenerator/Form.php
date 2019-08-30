@@ -29,12 +29,4 @@ class Form
 	public function submitData( array $data) {
 
 	}
-
-	public function validate() {
-
-	}
-
-	public function storeValidValues() {
-
-	}
 }
