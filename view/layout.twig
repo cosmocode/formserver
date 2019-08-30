@@ -17,7 +17,12 @@
 
 {%- block fieldset -%}
     <fieldset>
-        {{ fieldsetHtml | raw }}
+        <div class="fieldset-label">
+            {{ label }}
+        </div>
+        {% for renderedChildView in renderedChildViews %}
+            {{ renderedChildView | raw }}
+        {% endfor %}
     </fieldset>
 {%- endblock -%}
 

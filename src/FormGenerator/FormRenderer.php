@@ -37,7 +37,11 @@ class FormRenderer
 	public function renderForm($formElements, string $title = '') {
 		$formHtml = '';
 		foreach ($formElements as $formElement) {
-			$formHtml .= $this->renderFormElement($formElement);
+			if ($formElement instanceof FieldsetFormElement) {
+				$formHtml .= $this->renderFieldsetFormElement($formElement);
+			} else {
+				$formHtml .= $this->renderFormElement($formElement);
+			}
 		}
 
 		return $this->renderBlock('form', ['formHtml' => $formHtml, 'title' => $title]);
@@ -46,20 +50,27 @@ class FormRenderer
 	/**
 	 * Renders the view of a FormElement
 	 *
-	 * @param AbstractFormElement $formElement
+	 * @param FieldsetFormElement $formElement
 	 * @return string
 	 * @throws TwigException
 	 */
-	protected function renderFormElement(AbstractFormElement $formElement) {
-		if ($formElement instanceof FieldsetFormElement) {
-			$fieldsetHtml = '';
-			foreach ($formElement->getChildren() as $childFormElement) {
-				$fieldsetHtml .= $this->renderFormElement($childFormElement);
-			}
-
-			return $this->renderBlock('fieldset', ['fieldsetHtml' => $fieldsetHtml]);
+	protected function renderFieldsetFormElement(FieldsetFormElement $formElement) {
+		foreach ($formElement->getChildren() as $childFormElement) {
+			$formElement->addRenderedChildView(
+				$this->renderFormElement($childFormElement)
+			);
 		}
 
+		return $this->renderFormElement($formElement);
+	}
+
+	/**
+	 * Helper function to render a FormElement
+	 *
+	 * @param AbstractFormElement $formElement
+	 * @return string
+	 */
+	protected function renderFormElement(AbstractFormElement $formElement) {
 		return $this->renderBlock($formElement->getType(), $formElement->getViewVariables());
 	}
 
