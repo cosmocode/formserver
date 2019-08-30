@@ -29,6 +29,6 @@ class FieldsetFormElement extends AbstractFormElement
 	 */
 	public function getViewVariables()
 	{
-		return array_merge($this->config,[ 'id' => $this->getId()]);
+		return array_merge($this->getConfig(),[ 'id' => $this->getId()]);
 	}
 }

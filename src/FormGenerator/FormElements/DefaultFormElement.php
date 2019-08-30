@@ -10,11 +10,11 @@ class DefaultFormElement extends AbstractFormElement
 	}
 
 	public function getValidationRules() {
-		return $this->config['validation'] ?? [];
+		return $this->getConfig()['validation'] ?? [];
 	}
 
 	public function getViewVariables()
 	{
-		return array_merge($this->config,[ 'id' => $this->getId(), 'value' => $this->getValue()]);
+		return array_merge($this->getConfig(),[ 'id' => $this->getId(), 'value' => $this->getValue()]);
 	}
 }

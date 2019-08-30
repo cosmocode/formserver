@@ -33,7 +33,7 @@ abstract class AbstractFormElement implements FormElementInterface
 	}
 
 	public function getType() {
-		return $this->config['type'];
+		return $this->getConfig()['type'];
 	}
 
 	public function getConfig()
