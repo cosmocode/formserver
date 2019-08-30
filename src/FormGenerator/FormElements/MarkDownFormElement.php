@@ -5,6 +5,9 @@ namespace CosmoCode\Formserver\FormGenerator\FormElements;
 
 use Michelf\Markdown;
 
+/**
+ * Renders markdown
+ */
 class MarkDownFormElement extends StaticFormElement
 {
 	/**

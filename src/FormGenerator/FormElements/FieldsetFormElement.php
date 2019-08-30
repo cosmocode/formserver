@@ -2,11 +2,9 @@
 
 namespace CosmoCode\Formserver\FormGenerator\FormElements;
 
-use CosmoCode\Formserver\Exceptions\FormException;
 
 /**
  * FieldsetFormElement is a special StaticFormElement, since it contains child formElements
- * @package CosmoCode\Formserver\FormGenerator\FormElements
  */
 class FieldsetFormElement extends StaticFormElement
 {

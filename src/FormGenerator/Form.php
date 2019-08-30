@@ -3,7 +3,6 @@
 namespace CosmoCode\Formserver\FormGenerator;
 
 
-use CosmoCode\Formserver\Exceptions\FormException;
 use CosmoCode\Formserver\FormGenerator\FormElements\AbstractFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\DynamicFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\FieldsetFormElement;
@@ -41,7 +40,7 @@ class Form
 					}
 				}
 			} elseif ($formElement instanceof DynamicFormElement) {
-				$formElement->setValue($postData[$formElement->getId()]);
+				$formElement->setValue($postData[$formElement->getId()] ?? '');
 			}
 		}
 	}

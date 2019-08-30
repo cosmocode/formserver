@@ -9,7 +9,6 @@ use CosmoCode\Formserver\FormGenerator\FormElements\AbstractFormElement;
 
 /**
  * Renders twig blocks
- *
  */
 class FormRenderer
 {

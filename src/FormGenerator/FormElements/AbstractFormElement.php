@@ -2,7 +2,9 @@
 
 namespace CosmoCode\Formserver\FormGenerator\FormElements;
 
-
+/**
+ * Base class for every FormElement
+ */
 abstract class AbstractFormElement
 {
 	/**
