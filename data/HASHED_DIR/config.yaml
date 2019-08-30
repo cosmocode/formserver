@@ -69,3 +69,6 @@ form:
         type: download
         href: /test_file.txt
         label: Eine Datei zum herunterladen!
+      markdown0:
+        type: markdown
+        markdown: Hello _Markdown_!

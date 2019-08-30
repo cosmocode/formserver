@@ -156,3 +156,10 @@
         <img src="{{ src }}" {{ width is defined ? 'width='~width }} {{ width is defined ? 'height='~height }} alt="{{ alt is defined ? alt : label }}">
     </div>
 {%- endblock -%}
+
+
+{%- block markdown -%}
+    <div class="markdown">
+        {{ markdown | raw }}
+    </div>
+{%- endblock -%}

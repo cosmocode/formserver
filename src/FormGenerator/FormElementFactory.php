@@ -6,6 +6,7 @@ namespace CosmoCode\Formserver\FormGenerator;
 use CosmoCode\Formserver\Exceptions\FormException;
 use CosmoCode\Formserver\FormGenerator\FormElements\DynamicFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\FieldsetFormElement;
+use CosmoCode\Formserver\FormGenerator\FormElements\MarkDownFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\StaticFormElement;
 
 class FormElementFactory
@@ -15,6 +16,8 @@ class FormElementFactory
 		switch ($formType) {
 			case 'fieldset':
 				return self::createFieldsetFormElement($id, $config);
+			case 'markdown':
+				return self::createMarkdownFormElement($id, $config);
 			case 'hidden':
 			case 'download':
 			case 'image':
@@ -50,6 +53,10 @@ class FormElementFactory
 		}
 
 		return $listFormElement;
+	}
+
+	protected static function createMarkdownFormElement(string $id, array $config) {
+		return new MarkDownFormElement($id, $config);
 	}
 
 	protected static function createDynamicFormElement(string $id, array $config)
