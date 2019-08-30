@@ -136,7 +136,7 @@
     <div class="file-upload">
         <label for="{{ id }}">
             {{ label }}
-            <input type="file" id={{ id }} name="{{ id }}" {{ fileext is defined ? 'accept='~fileext }}/>
+            <input type="file" id={{ id }} name="{{ id }}" {{ fileext is defined ? 'accept='~fileext }} />
         </label>
     </div>
 {%- endblock -%}

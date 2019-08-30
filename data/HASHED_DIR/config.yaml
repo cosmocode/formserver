@@ -58,4 +58,4 @@ form:
       fileupload1:
         type: upload
         label: Bitte laden Sie eine Datei hoch
-        fileext: "text/*"
+        fileext: text/*
