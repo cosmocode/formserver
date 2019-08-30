@@ -101,7 +101,7 @@
         <div class="radioset-label">{{ label }}</div>
         {%- for choice in choices -%}
             <label for="{{ id~'_'~loop.index0 }}"> {{ choice }}
-            <input type="radio" id="{{ id~'_'~loop.index0 }}" name="{{ id }}" value="{{ choice }}" />
+            <input type="radio" id="{{ id~'['~loop.index0~']' }}" name="{{ id }}" value="{{ choice }}" />
             </label>
         {%- endfor -%}
     </div>
