@@ -25,7 +25,7 @@
     <div class="text-input">
         <label for="{{ id }}">
             {{ label }}
-            <input type="text" id={{ id }} name={{ id }} />
+            <input type="text" id="{{ id }}" name="{{ id }}" />
         </label>
     </div>
 {%- endblock -%}
@@ -35,7 +35,7 @@
     <div class="number-input">
         <label for="{{ id }}">
             {{ label }}
-            <input type="number" id={{ id }} name={{ id }} />
+            <input type="number" id="{{ id }}" name="{{ id }}" />
         </label>
     </div>
 {%- endblock -%}
@@ -45,7 +45,7 @@
     <div class="date-input">
         <label for="{{ id }}">
             {{ label }}
-            <input type="date" id={{ id }} name={{ id }} />
+            <input type="date" id="{{ id }}" name="{{ id }}" />
         </label>
     </div>
 {%- endblock -%}
@@ -55,7 +55,7 @@
     <div class="time-input">
         <label for="{{ id }}">
             {{ label }}
-            <input type="time" id={{ id }} name={{ id }} />
+            <input type="time" id="{{ id }}" name="{{ id }}" />
         </label>
     </div>
 {%- endblock -%}
@@ -65,7 +65,7 @@
     <div class="datetime-input">
         <label for="{{ id }}">
             {{ label }}
-            <input type="datetime-local" id={{ id }} name={{ id }} />
+            <input type="datetime-local" id="{{ id }}" name="{{ id }}" />
         </label>
     </div>
 {%- endblock -%}
@@ -75,14 +75,14 @@
     <div class="email-input">
         <label for="{{ id }}">
             {{ label }}
-            <input type="email" id={{ id }} name={{ id }} />
+            <input type="email" id="{{ id }}" name="{{ id }}" />
         </label>
     </div>
 {%- endblock -%}
 
 
 {%- block hidden -%}
-    <input type="hidden" id={{ id }} name={{ id }} value="{{ value }}"/>
+    <input type="hidden" id="{{ id }}" name="{{ id }}" value="{{ value }}"/>
 {%- endblock -%}
 
 
@@ -90,7 +90,7 @@
     <div class="textarea">
         <label for="{{ id }}">
             {{ label }}
-            <textarea id={{ id }} name={{ id }}  {{ cols is defined ? 'cols='~cols }} {{ rows is defined ? 'rows='~rows }}></textarea>
+            <textarea id={{ id }} name="{{ id }}"  {{ cols is defined ? 'cols='~cols }} {{ rows is defined ? 'rows='~rows }}></textarea>
         </label>
     </div>
 {%- endblock -%}
@@ -136,7 +136,7 @@
     <div class="file-upload">
         <label for="{{ id }}">
             {{ label }}
-            <input type="file" id={{ id }} name={{ id }} {{ fileext is defined ? 'accept='~fileext~ }}/>
+            <input type="file" id={{ id }} name="{{ id }}" {{ fileext is defined ? 'accept='~fileext }}/>
         </label>
     </div>
 {%- endblock -%}
