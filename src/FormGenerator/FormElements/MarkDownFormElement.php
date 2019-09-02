@@ -8,7 +8,7 @@ use Michelf\Markdown;
 /**
  * Renders markdown
  */
-class MarkDownFormElement extends StaticFormElement
+class MarkDownFormElement extends AbstractFormElement
 {
 	/**
 	 * Prepare variables array for twig view.
