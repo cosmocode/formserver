@@ -4,7 +4,7 @@ namespace CosmoCode\Formserver\FormGenerator;
 
 
 use CosmoCode\Formserver\FormGenerator\FormElements\AbstractFormElement;
-use CosmoCode\Formserver\FormGenerator\FormElements\DynamicFormElement;
+use CosmoCode\Formserver\FormGenerator\FormElements\InputFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\FieldsetFormElement;
 
 class Form
@@ -34,12 +34,12 @@ class Form
 			// If AbstractFormElement is FieldsetFormElement it contains childs which have to be filled
 			if ($formElement instanceof FieldsetFormElement) {
 				foreach ($formElement->getChildren() as $fieldsetChild) {
-					if ($fieldsetChild instanceof DynamicFormElement) {
+					if ($fieldsetChild instanceof InputFormElement) {
 						$fieldsetChildValue = $postData[$formElement->getId()][$fieldsetChild->getId()] ?? '';
 						$fieldsetChild->setValue($fieldsetChildValue);
 					}
 				}
-			} elseif ($formElement instanceof DynamicFormElement) {
+			} elseif ($formElement instanceof InputFormElement) {
 				$formElement->setValue($postData[$formElement->getId()] ?? '');
 			}
 		}

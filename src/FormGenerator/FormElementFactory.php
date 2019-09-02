@@ -5,7 +5,7 @@ namespace CosmoCode\Formserver\FormGenerator;
 
 use CosmoCode\Formserver\Exceptions\FormException;
 use CosmoCode\Formserver\FormGenerator\FormElements\AbstractFormElement;
-use CosmoCode\Formserver\FormGenerator\FormElements\DynamicFormElement;
+use CosmoCode\Formserver\FormGenerator\FormElements\InputFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\FieldsetFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\MarkDownFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\StaticFormElement;
@@ -61,7 +61,7 @@ class FormElementFactory
 
 	protected static function createDynamicFormElement(string $id, array $config, AbstractFormElement $parent = null)
 	{
-		return new DynamicFormElement($id, $config, $parent);
+		return new InputFormElement($id, $config, $parent);
 	}
 
 	protected static function createStaticFormElement(string $id, array $config, AbstractFormElement $parent = null)
