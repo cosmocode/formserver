@@ -34,7 +34,7 @@ class FormElementFactory
 			case 'checklist':
 			case 'dropdown':
 			case 'upload':
-				return self::createDynamicFormElement($id, $config, $parent);
+				return self::createInputFormElement($id, $config, $parent);
 			default:
 				throw new FormException("Could not build FormElement with id $id. Undefined type ($formType)");
 		}
@@ -59,7 +59,7 @@ class FormElementFactory
 		return new MarkDownFormElement($id, $config, $parent);
 	}
 
-	protected static function createDynamicFormElement(string $id, array $config, AbstractFormElement $parent = null)
+	protected static function createInputFormElement(string $id, array $config, AbstractFormElement $parent = null)
 	{
 		return new InputFormElement($id, $config, $parent);
 	}
