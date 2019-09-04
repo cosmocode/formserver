@@ -34,7 +34,7 @@ class FormRenderer
 	 * @return string
 	 * @throws TwigException
 	 */
-	public function renderForm($formElements, string $title = '') {
+	public function renderForm($formElements, string $title = '', string $css = 'bulma.min.css') {
 		$formHtml = '';
 		foreach ($formElements as $formElement) {
 			if ($formElement instanceof FieldsetFormElement) {
@@ -44,24 +44,24 @@ class FormRenderer
 			}
 		}
 
-		return $this->renderBlock('form', ['formHtml' => $formHtml, 'title' => $title]);
+		return $this->renderBlock('form', ['formHtml' => $formHtml, 'title' => $title, 'css' => $css]);
 	}
 
 	/**
 	 * Renders the view of a FormElement
 	 *
-	 * @param FieldsetFormElement $formElement
+	 * @param FieldsetFormElement $fieldsetFormElement
 	 * @return string
 	 * @throws TwigException
 	 */
-	protected function renderFieldsetFormElement(FieldsetFormElement $formElement) {
-		foreach ($formElement->getChildren() as $childFormElement) {
-			$formElement->addRenderedChildView(
+	protected function renderFieldsetFormElement(FieldsetFormElement $fieldsetFormElement) {
+		foreach ($fieldsetFormElement->getChildren() as $childFormElement) {
+			$fieldsetFormElement->addRenderedChildView(
 				$this->renderFormElement($childFormElement)
 			);
 		}
 
-		return $this->renderFormElement($formElement);
+		return $this->renderFormElement($fieldsetFormElement);
 	}
 
 	/**
