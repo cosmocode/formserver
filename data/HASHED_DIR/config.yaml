@@ -1,5 +1,6 @@
 meta:
   title: 'Formular #1'
+  css: bulma.css
 
 form:
   testfrage1:
@@ -25,8 +26,8 @@ form:
       testfrage5:
         type: textarea
         label: Und diese? (textarea)
-        cols: 10
-        rows: 20
+        cols: 50
+        rows: 8
       testfrage6:
         type: email
         label: Und diese? (email)
@@ -64,7 +65,7 @@ form:
         label: Hier ein kreatives Bild.
         src: /test_image.png
         width: 200
-        height: 100
+        height: 200
       filedownload:
         type: download
         href: /test_file.txt
