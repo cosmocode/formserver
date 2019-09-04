@@ -21,7 +21,7 @@ class InputFormElement extends AbstractFormElement
 	}
 
 	public function getValidationRules() {
-		return $this->getConfig()['validation'] ?? [];
+		return $this->getConfigValue('validation') ?? [];
 	}
 
 	public function getViewVariables()

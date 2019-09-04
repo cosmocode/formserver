@@ -52,12 +52,16 @@ abstract class AbstractFormElement
 	}
 
 	public function getType() {
-		return $this->getConfig()['type'];
+		return $this->getConfigValue('type');
 	}
 
 	public function getConfig()
 	{
 		return $this->config;
+	}
+
+	public function getConfigValue(string $key) {
+		return $this->config[$key] ?? null;
 	}
 
 	abstract public function getViewVariables();
