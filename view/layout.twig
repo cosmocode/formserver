@@ -114,7 +114,7 @@
     <div class="field">
         <label class="label" for="{{ id }}">{{ label }}</label>
         <div class="control">
-            <textarea id={{ id }} name="{{ id }}"  {{ cols is defined ? 'cols='~cols }} {{ rows is defined ? 'rows='~rows }}>{{ value }}</textarea>
+            <textarea id="{{ id }}" name="{{ id }}"  {{ cols is defined ? 'cols='~cols }} {{ rows is defined ? 'rows='~rows }}>{{ value }}</textarea>
         </div>
     </div>
 {%- endblock -%}
@@ -169,7 +169,7 @@
 {%- block upload -%}
     <div class="file">
         <label class="file-label">
-            <input type="file" class="file-input" id={{ id }} name="{{ id }}" {{ fileext is defined ? 'accept='~fileext }} />
+            <input type="file" class="file-input" id="{{ id }}" name="{{ id }}" {{ fileext is defined ? 'accept='~fileext }} />
             <span class="file-cta">
                 <span class="file-icon">
                     <i class="fas fa-upload"></i>
