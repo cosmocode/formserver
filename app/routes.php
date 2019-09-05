@@ -17,6 +17,6 @@ return function (App $app) {
 
     $app->group('/forms', function (Group $group) use ($container) {
         $group->get('', FormAction::class);
-        $group->get('/{id}', FormAction::class);
+        $group->any('/{id}', FormAction::class);
     });
 };
