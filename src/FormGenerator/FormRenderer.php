@@ -34,7 +34,7 @@ class FormRenderer
 	 * @return string
 	 * @throws TwigException
 	 */
-	public function renderForm($formElements, string $title = '', string $css = 'bulma.min.css') {
+	public function renderForm($formElements, string $title = '') {
 		$formHtml = '';
 		foreach ($formElements as $formElement) {
 			if ($formElement instanceof FieldsetFormElement) {
@@ -44,7 +44,7 @@ class FormRenderer
 			}
 		}
 
-		return $this->renderBlock('form', ['formHtml' => $formHtml, 'title' => $title, 'css' => $css]);
+		return $this->renderBlock('form', ['formHtml' => $formHtml, 'title' => $title]);
 	}
 
 	/**
