@@ -95,11 +95,8 @@
 {%- block email -%}
     <div class="field">
         <label class="label" for="{{ id }}">{{ label }}</label>
-        <div class="control has-icons-left">
+        <div class="control">
             <input type="email" id="{{ id }}" name="{{ id }}"  value="{{ value }}" />
-            <span class="icon is-small is-left">
-                <i class="fas fa-envelope"></i>
-            </span>
         </div>
     </div>
 {%- endblock -%}
@@ -171,9 +168,6 @@
         <label class="file-label">
             <input type="file" class="file-input" id="{{ id }}" name="{{ id }}" {{ fileext is defined ? 'accept='~fileext }} />
             <span class="file-cta">
-                <span class="file-icon">
-                    <i class="fas fa-upload"></i>
-                </span>
                 <span class="file-label">
                     {{ label }}
                 </span>
