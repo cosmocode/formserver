@@ -13,7 +13,8 @@ use CosmoCode\Formserver\FormGenerator\FormElements\UploadFormElement;
 
 class FormElementFactory
 {
-	public static function createFormElement(string $id, array $config, AbstractFormElement $parent = null) {
+	public static function createFormElement(string $id, array $config, AbstractFormElement $parent = null)
+	{
 		$formType = $config['type'];
 		switch ($formType) {
 			case 'fieldset':
@@ -57,7 +58,8 @@ class FormElementFactory
 		return $listFormElement;
 	}
 
-	protected static function createMarkdownFormElement(string $id, array $config, AbstractFormElement $parent = null) {
+	protected static function createMarkdownFormElement(string $id, array $config, AbstractFormElement $parent = null)
+	{
 		return new MarkDownFormElement($id, $config, $parent);
 	}
 
@@ -71,7 +73,8 @@ class FormElementFactory
 		return new StaticFormElement($id, $config, $parent);
 	}
 
-	protected static function createUploadFormElement(string $id, array $config, AbstractFormElement $parent = null) {
+	protected static function createUploadFormElement(string $id, array $config, AbstractFormElement $parent = null)
+	{
 		return new UploadFormElement($id, $config, $parent);
 	}
 }

@@ -12,19 +12,23 @@ class InputFormElement extends AbstractFormElement
 	 */
 	protected $value;
 
-	public function hasValue() {
+	public function hasValue()
+	{
 		return !empty($this->value);
 	}
 
-	public function getValue() {
+	public function getValue()
+	{
 		return $this->value;
 	}
 
-	public function setValue($value) {
+	public function setValue($value)
+	{
 		$this->value = $value;
 	}
 
-	public function getValidationRules() {
+	public function getValidationRules()
+	{
 		return $this->getConfigValue('validation') ?? [];
 	}
 

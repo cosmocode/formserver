@@ -36,15 +36,18 @@ class Form
 		}
 	}
 
-	public function getFormElements() {
+	public function getFormElements()
+	{
 		return $this->formElements;
 	}
 
-	public function getMeta(string $key) {
+	public function getMeta(string $key)
+	{
 		return $this->meta[$key] ?? null;
 	}
 
-	public function submit(array $data, array $files) {
+	public function submit(array $data, array $files)
+	{
 		foreach ($this->formElements as $formElement) {
 			if ($formElement instanceof FieldsetFormElement) {
 				foreach ($formElement->getChildren() as $fieldsetChild) {
@@ -56,7 +59,8 @@ class Form
 		}
 	}
 
-	public function persist() {
+	public function persist()
+	{
 		$values = [];
 		foreach ($this->formElements as $formElement) {
 			if ($formElement instanceof FieldsetFormElement) {
@@ -73,7 +77,8 @@ class Form
 		}
 	}
 
-	public function restore() {
+	public function restore()
+	{
 		$values = YamlHelper::parseYaml($this->formDirectory . 'values.yaml');
 
 		foreach ($this->formElements as $formElement) {
@@ -87,7 +92,8 @@ class Form
 		}
 	}
 
-	protected function submitFormElement(AbstractFormElement $formElement, array $data, array $files) {
+	protected function submitFormElement(AbstractFormElement $formElement, array $data, array $files)
+	{
 		if ($formElement instanceof InputFormElement) {
 			$value = $formElement->hasParent()
 				? $data[$formElement->getParent()->getId()][$formElement->getId()] ?? null
@@ -113,7 +119,8 @@ class Form
 	 * @param UploadedFile $uploadedFile
 	 * @param AbstractFormElement $formElement
 	 */
-	protected function moveUploadedFile(UploadedFile $uploadedFile, AbstractFormElement $formElement) {
+	protected function moveUploadedFile(UploadedFile $uploadedFile, AbstractFormElement $formElement)
+	{
 		$extension = pathinfo($uploadedFile->getClientFilename(), PATHINFO_EXTENSION);
 		$baseName = $formElement->hasParent()
 			? $formElement->getParent()->getId() . '_' . $formElement->getId()

@@ -36,7 +36,8 @@ class UploadFormElement extends AbstractFormElement
 		return $this->fileName;
 	}
 
-	public function getValidationRules() {
+	public function getValidationRules()
+	{
 		return $this->getConfigValue('validation') ?? [];
 	}
 

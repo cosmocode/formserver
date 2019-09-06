@@ -34,7 +34,8 @@ abstract class AbstractFormElement
 	 *
 	 * @return string
 	 */
-	public function getId() {
+	public function getId()
+	{
 		return $this->id;
 	}
 
@@ -43,7 +44,8 @@ abstract class AbstractFormElement
 	 *
 	 * @return string
 	 */
-	public function getFormElementId() {
+	public function getFormElementId()
+	{
 		if ($this->parent !== null) {
 			return $this->parent->getFormElementId() . '[' . $this->id . ']';
 		}
@@ -51,7 +53,8 @@ abstract class AbstractFormElement
 		return $this->getId();
 	}
 
-	public function getType() {
+	public function getType()
+	{
 		return $this->getConfigValue('type');
 	}
 
@@ -60,15 +63,18 @@ abstract class AbstractFormElement
 		return $this->config;
 	}
 
-	public function getConfigValue(string $key) {
+	public function getConfigValue(string $key)
+	{
 		return $this->config[$key] ?? null;
 	}
 
-	public function getParent() {
+	public function getParent()
+	{
 		return $this->parent;
 	}
 
-	public function hasParent() {
+	public function hasParent()
+	{
 		return $this->parent !== null;
 	}
 

@@ -12,7 +12,8 @@ class YamlHelper
 	 * @return mixed
 	 * @throws YamlException
 	 */
-	public static function parseYaml($yamlPath) {
+	public static function parseYaml($yamlPath)
+	{
 		$config = \Spyc::YAMLLoad($yamlPath);
 		//TODO catch yaml parse exceptions
 		if (empty($config)) {

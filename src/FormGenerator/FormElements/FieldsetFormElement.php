@@ -28,11 +28,13 @@ class FieldsetFormElement extends AbstractFormElement
 	/**
 	 * @return AbstractFormElement[]
 	 */
-	public function getChildren() {
+	public function getChildren()
+	{
 		return $this->children;
 	}
 
-	public function addChild(AbstractFormElement $child) {
+	public function addChild(AbstractFormElement $child)
+	{
 		$this->children[] = $child;
 	}
 
@@ -40,7 +42,7 @@ class FieldsetFormElement extends AbstractFormElement
 	/**
 	 * @return string[]
 	 */
-	public function getRenderedChildViews(): array
+	public function getRenderedChildViews()
 	{
 		return $this->renderedChildViews;
 	}

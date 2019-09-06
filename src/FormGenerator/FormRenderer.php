@@ -34,7 +34,8 @@ class FormRenderer
 	 * @return string
 	 * @throws TwigException
 	 */
-	public function renderForm(Form $form) {
+	public function renderForm(Form $form)
+	{
 		$formHtml = '';
 		$title = $form->getMeta('title');
 		foreach ($form->getFormElements() as $formElement) {
@@ -55,7 +56,8 @@ class FormRenderer
 	 * @return string
 	 * @throws TwigException
 	 */
-	protected function renderFieldsetFormElement(FieldsetFormElement $fieldsetFormElement) {
+	protected function renderFieldsetFormElement(FieldsetFormElement $fieldsetFormElement)
+	{
 		foreach ($fieldsetFormElement->getChildren() as $childFormElement) {
 			$fieldsetFormElement->addRenderedChildView(
 				$this->renderFormElement($childFormElement)
@@ -71,7 +73,8 @@ class FormRenderer
 	 * @param AbstractFormElement $formElement
 	 * @return string
 	 */
-	protected function renderFormElement(AbstractFormElement $formElement) {
+	protected function renderFormElement(AbstractFormElement $formElement)
+	{
 		return $this->renderBlock($formElement->getType(), $formElement->getViewVariables());
 	}
 
@@ -83,7 +86,8 @@ class FormRenderer
 	 * @return string
 	 * @throws TwigException
 	 */
-	protected function renderBlock($block, $variables) {
+	protected function renderBlock($block, $variables)
+	{
 		if (!$this->twig->hasBlock($block)) {
 			throw new TwigException("Template block for form element type '$block' not found.");
 		}
