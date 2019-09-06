@@ -9,6 +9,7 @@ use CosmoCode\Formserver\FormGenerator\FormElements\InputFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\FieldsetFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\MarkDownFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\StaticFormElement;
+use CosmoCode\Formserver\FormGenerator\FormElements\UploadFormElement;
 
 class FormElementFactory
 {
@@ -23,6 +24,8 @@ class FormElementFactory
 			case 'download':
 			case 'image':
 				return self::createStaticFormElement($id, $config, $parent);
+			case 'upload':
+				return self::createUploadFormElement($id, $config, $parent);
 			case 'textinput':
 			case 'numberinput':
 			case 'date':
@@ -33,7 +36,6 @@ class FormElementFactory
 			case 'radioset':
 			case 'checklist':
 			case 'dropdown':
-			case 'upload':
 				return self::createInputFormElement($id, $config, $parent);
 			default:
 				throw new FormException("Could not build FormElement with id $id. Undefined type ($formType)");
@@ -67,5 +69,9 @@ class FormElementFactory
 	protected static function createStaticFormElement(string $id, array $config, AbstractFormElement $parent = null)
 	{
 		return new StaticFormElement($id, $config, $parent);
+	}
+
+	protected static function createUploadFormElement(string $id, array $config, AbstractFormElement $parent = null) {
+		return new UploadFormElement($id, $config, $parent);
 	}
 }

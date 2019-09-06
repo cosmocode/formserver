@@ -21,4 +21,10 @@ class YamlHelper
 
 		return $config;
 	}
+
+	public static function persistYaml(array $values, string $yamlPath)
+	{
+		$yaml = \Spyc::YAMLDump($values);
+		file_put_contents($yamlPath, $yaml);
+	}
 }

@@ -64,5 +64,13 @@ abstract class AbstractFormElement
 		return $this->config[$key] ?? null;
 	}
 
+	public function getParent() {
+		return $this->parent;
+	}
+
+	public function hasParent() {
+		return $this->parent !== null;
+	}
+
 	abstract public function getViewVariables();
 }

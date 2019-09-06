@@ -14,7 +14,7 @@
                         <h1 class="title">{{ title }}</h1>
                     {% endif %}
 
-                    <form method="post">
+                    <form method="post" enctype="multipart/form-data">
                         {{ formHtml | raw }}
                         <div class="field">
                             <div class="control">
@@ -153,6 +153,7 @@
         <div class="control">
             <div class="select">
                 <select id="{{ id }}" name="{{ id }}" {{ size is defined ? 'size='~size }} {{ multiselect is defined and multiselect ? 'multiple' }}>
+                    <option value="">{{ default is defined ? default }}</option>
                     {%- for choice in choices -%}
                         <option {{ choice in value ? 'selected' }}>{{ choice }}</option>
                     {%- endfor -%}
@@ -166,10 +167,13 @@
 {%- block upload -%}
     <div class="file">
         <label class="file-label">
-            <input type="file" class="file-input" id="{{ id }}" name="{{ id }}" {{ fileext is defined ? 'accept='~fileext }} />
+            <input type="file" class="file-input" id="{{ id }}" name="{{ id }}" {{ fileext is defined ? 'accept='~fileext }} {{ is_uploaded ? 'disabled' }}/>
             <span class="file-cta">
+                <span class="file-icon">
+                    <i class="fas fa-upload"></i>
+                </span>
                 <span class="file-label">
-                    {{ label }}
+                    {{ is_uploaded ? label_uploaded : label }}
                 </span>
             </span>
         </label>

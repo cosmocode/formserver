@@ -21,8 +21,12 @@ class FormAction extends AbstractAction
 
             $form = new Form($id);
             if ($this->request->getMethod() === 'POST') {
-                $form->submitData($this->request->getParsedBody());
+                $form->submit($this->request->getParsedBody(), $this->request->getUploadedFiles());
+                $form->persist();
+            } elseif ($this->request->getMethod() === 'GET') {
+                $form->restore();
             }
+
             $formRenderer = new FormRenderer();
 
             $formHtml = $formRenderer->renderForm($form);

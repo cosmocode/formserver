@@ -12,6 +12,10 @@ class InputFormElement extends AbstractFormElement
 	 */
 	protected $value;
 
+	public function hasValue() {
+		return !empty($this->value);
+	}
+
 	public function getValue() {
 		return $this->value;
 	}
