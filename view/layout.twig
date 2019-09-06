@@ -6,6 +6,8 @@
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <title>{{ title is defined ? title : 'Form'}}</title>
             <link rel="stylesheet" href="/css/bulma.min.css" />
+            <link rel="stylesheet" href="/css/flatpickr.min.css" >
+            <script src="/js/flatpickr.min.js"></script>
         </head>
         <body>
             <section class="section">
@@ -66,7 +68,7 @@
     <div class="field">
         <label class="label" for="{{ id }}">{{ label }}</label>
         <div class="control">
-            <input type="date" id="{{ id }}" name="{{ id }}"  value="{{ value }}" />
+            <input type="text" id="{{ id }}" name="{{ id }}"  value="{{ value }}" data-calender-type="date" />
         </div>
     </div>
 {%- endblock -%}
@@ -76,7 +78,7 @@
     <div class="field">
         <label class="label" for="{{ id }}">{{ label }}</label>
         <div class="control">
-            <input type="time" id="{{ id }}" name="{{ id }}"  value="{{ value }}" />
+            <input type="text" id="{{ id }}" name="{{ id }}"  value="{{ value }}" data-calender-type="time" />
         </div>
     </div>
 {%- endblock -%}
@@ -86,7 +88,7 @@
     <div class="field">
         <label class="label" for="{{ id }}">{{ label }}</label>
         <div class="control">
-            <input type="datetime-local" id="{{ id }}" name="{{ id }}"  value="{{ value }}" />
+            <input type="text" id="{{ id }}" name="{{ id }}"  value="{{ value }}"  data-calender-type="datetime"/>
         </div>
     </div>
 {%- endblock -%}
