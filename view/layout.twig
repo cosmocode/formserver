@@ -26,16 +26,17 @@
                     </form>
                 </div>
             </section>
+            <script src="/js/custom.js"></script>
         </body>
     </html>
 {%- endblock -%}
 
 
 {%- block fieldset -%}
-    <fieldset>
-        <div class="label fieldset-label">
+    <fieldset {{ disabled is defined and disabled ? 'disabled' }}>
+        <legend class="label fieldset-label">
             {{ label }}
-        </div>
+        </legend>
         {% for rendered_child_view in rendered_child_views %}
             {{ rendered_child_view | raw }}
         {% endfor %}
