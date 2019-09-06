@@ -48,6 +48,10 @@ class Form
 
     public function submit(array $data, array $files)
     {
+        // Important! Restore persisted data first to determine if UploadFormElements already have an uploaded file
+        // (They have a value which containts the file name)
+        $this->restore();
+
         foreach ($this->formElements as $formElement) {
             if ($formElement instanceof FieldsetFormElement) {
                 foreach ($formElement->getChildren() as $fieldsetChild) {
@@ -96,9 +100,8 @@ class Form
     {
         if ($formElement instanceof InputFormElement) {
             $value = $this->getFormElementValueFromArray($formElement, $data);
-            if (!empty($value)) {
-                $formElement->setValue($value);
-            }
+            // Important! Value must be set, even if empty. User can unset fields
+            $formElement->setValue($value);
         } elseif ($formElement instanceof UploadFormElement) {
             /** @var UploadedFile $file */
             $file = $this->getFormElementValueFromArray($formElement, $files);
