@@ -7,42 +7,42 @@ namespace CosmoCode\Formserver\FormGenerator\FormElements;
  */
 class UploadFormElement extends AbstractFormElement
 {
-	/**
-	 * @var string
-	 */
-	protected $fileName;
+    /**
+     * @var string
+     */
+    protected $fileName;
 
-	/**
-	 * @return bool
-	 */
-	public function isUploaded()
-	{
-		return !empty($this->fileName);
-	}
+    /**
+     * @return bool
+     */
+    public function isUploaded()
+    {
+        return !empty($this->fileName);
+    }
 
-	/**
-	 * @param string $fileName
-	 */
-	public function setFileName(string $fileName)
-	{
-		$this->fileName = $fileName;
-	}
+    /**
+     * @param string $fileName
+     */
+    public function setFileName(string $fileName)
+    {
+        $this->fileName = $fileName;
+    }
 
-	/**
-	 * @return string
-	 */
-	public function getFileName()
-	{
-		return $this->fileName;
-	}
+    /**
+     * @return string
+     */
+    public function getFileName()
+    {
+        return $this->fileName;
+    }
 
-	public function getValidationRules()
-	{
-		return $this->getConfigValue('validation') ?? [];
-	}
+    public function getValidationRules()
+    {
+        return $this->getConfigValue('validation') ?? [];
+    }
 
-	public function getViewVariables()
-	{
-		return array_merge($this->getConfig(),[ 'id' => $this->getFormElementId(), 'is_uploaded' => $this->isUploaded()]);
-	}
+    public function getViewVariables()
+    {
+        return array_merge($this->getConfig(),[ 'id' => $this->getFormElementId(), 'is_uploaded' => $this->isUploaded()]);
+    }
 }

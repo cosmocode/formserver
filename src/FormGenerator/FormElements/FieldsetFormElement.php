@@ -9,60 +9,60 @@ namespace CosmoCode\Formserver\FormGenerator\FormElements;
 class FieldsetFormElement extends AbstractFormElement
 {
 
-	/**
-	 * @var AbstractFormElement[]
-	 */
-	protected $children;
+    /**
+     * @var AbstractFormElement[]
+     */
+    protected $children;
 
-	/**
-	 * @var string[]
-	 */
-	protected $renderedChildViews = [];
+    /**
+     * @var string[]
+     */
+    protected $renderedChildViews = [];
 
-	public function __construct($id, array $config, AbstractFormElement $parent = null)
-	{
-		unset($config['children']); // Children config not needed
-		parent::__construct($id, $config, $parent);
-	}
+    public function __construct($id, array $config, AbstractFormElement $parent = null)
+    {
+        unset($config['children']); // Children config not needed
+        parent::__construct($id, $config, $parent);
+    }
 
-	/**
-	 * @return AbstractFormElement[]
-	 */
-	public function getChildren()
-	{
-		return $this->children;
-	}
+    /**
+     * @return AbstractFormElement[]
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
 
-	public function addChild(AbstractFormElement $child)
-	{
-		$this->children[] = $child;
-	}
-
-
-	/**
-	 * @return string[]
-	 */
-	public function getRenderedChildViews()
-	{
-		return $this->renderedChildViews;
-	}
-
-	/**
-	 * @param string $renderedView
-	 */
-	public function addRenderedChildView(string $renderedView)
-	{
-		$this->renderedChildViews[] = $renderedView;
-	}
+    public function addChild(AbstractFormElement $child)
+    {
+        $this->children[] = $child;
+    }
 
 
-	public function getViewVariables()
-	{
-		return array_merge($this->getConfig(),
-			[
-				'id' => $this->getFormElementId(),
-				'rendered_child_views' => $this->renderedChildViews,
-			]
-		);
-	}
+    /**
+     * @return string[]
+     */
+    public function getRenderedChildViews()
+    {
+        return $this->renderedChildViews;
+    }
+
+    /**
+     * @param string $renderedView
+     */
+    public function addRenderedChildView(string $renderedView)
+    {
+        $this->renderedChildViews[] = $renderedView;
+    }
+
+
+    public function getViewVariables()
+    {
+        return array_merge($this->getConfig(),
+            [
+                'id' => $this->getFormElementId(),
+                'rendered_child_views' => $this->renderedChildViews,
+            ]
+        );
+    }
 }
