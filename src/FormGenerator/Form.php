@@ -30,8 +30,8 @@ class Form
         $this->formDirectory = __DIR__ . "/../../data/$formId/";
         $config = YamlHelper::parseYaml($this->formDirectory . 'config.yaml');
         $this->meta = $config['meta'] ?? [];
-        $formConfig = $config['form'];
-        foreach ($formConfig as $formElementId => $formElementConfig) {
+
+        foreach ($config['form'] as $formElementId => $formElementConfig) {
             $this->formElements[] = FormElementFactory::createFormElement($formElementId, $formElementConfig);
         }
     }
@@ -65,10 +65,10 @@ class Form
         foreach ($this->formElements as $formElement) {
             if ($formElement instanceof FieldsetFormElement) {
                 foreach ($formElement->getChildren() as $fieldsetChild) {
-                    $this->getValue($values, $fieldsetChild);
+                    $this->insertFormElementValueInArray($fieldsetChild, $values);
                 }
             } else {
-                $this->getValue($values, $formElement);
+                $this->insertFormElementValueInArray($formElement, $values);
             }
         }
 
@@ -95,19 +95,17 @@ class Form
     protected function submitFormElement(AbstractFormElement $formElement, array $data, array $files)
     {
         if ($formElement instanceof InputFormElement) {
-            $value = $formElement->hasParent()
-                ? $data[$formElement->getParent()->getId()][$formElement->getId()] ?? null
-                : $data[$formElement->getId()] ?? null;
-            $formElement->setValue($value);
+            $value = $this->getFormElementValueFromArray($formElement, $data);
+            if (!empty($value)) {
+                $formElement->setValue($value);
+            }
         } elseif ($formElement instanceof UploadFormElement) {
             /** @var UploadedFile $file */
-            $file = $formElement->hasParent()
-                ? $files[$formElement->getParent()->getId()][$formElement->getId()] ?? null
-                : $files[$formElement->getId()] ?? null;
+            $file = $this->getFormElementValueFromArray($formElement, $files);
 
             if ($file !== null && $file->getError() === UPLOAD_ERR_OK) {
-                $filePath = $this->moveUploadedFile($file, $formElement);
-                $formElement->setFileName($filePath);
+                $fileName = $this->moveUploadedFile($file, $formElement);
+                $formElement->setValue($fileName);
             }
         }
     }
@@ -118,6 +116,7 @@ class Form
      *
      * @param UploadedFile $uploadedFile
      * @param AbstractFormElement $formElement
+     * @return string
      */
     protected function moveUploadedFile(UploadedFile $uploadedFile, AbstractFormElement $formElement)
     {
@@ -133,42 +132,28 @@ class Form
         return $fileName;
     }
 
-    protected function getValue(array &$values, AbstractFormElement $formElement)
+    protected function restoreValue(array $values, AbstractFormElement $formElement)
     {
-        if ($formElement instanceof InputFormElement && $formElement->hasValue()) {
-            if ($formElement->hasParent()) {
-                $values[$formElement->getParent()->getId()][$formElement->getId()] = $formElement->getValue();
-            } else {
-                $values[$formElement->getId()] = $formElement->getValue();
-            }
-        } elseif ($formElement instanceof UploadFormElement && $formElement->isUploaded()) {
-            if ($formElement->hasParent()) {
-                $values[$formElement->getParent()->getId()][$formElement->getId()] = $formElement->getFileName();
-            } else {
-                $values[$formElement->getId()] = $formElement->getFileName();
+        if ($formElement instanceof InputFormElement || $formElement instanceof UploadFormElement) {
+            $value = $this->getFormElementValueFromArray($formElement, $values);
+            if (!empty($value)) {
+                $formElement->setValue($value);
             }
         }
     }
 
-    protected function restoreValue(array $values, AbstractFormElement $formElement)
-    {
-        if ($formElement instanceof InputFormElement) {
+    protected function getFormElementValueFromArray(AbstractFormElement $formElement, array $array) {
+        return $formElement->hasParent()
+            ? $array[$formElement->getParent()->getId()][$formElement->getId()] ?? null
+            : $array[$formElement->getId()] ?? null;
+    }
+
+    protected function insertFormElementValueInArray(AbstractFormElement $formElement, array &$array) {
+        if ($formElement instanceof InputFormElement || $formElement instanceof UploadFormElement) {
             if ($formElement->hasParent()) {
-                $value = $values[$formElement->getParent()->getId()][$formElement->getId()] ?? null;
+                $array[$formElement->getParent()->getId()][$formElement->getId()] = $formElement->getValue();
             } else {
-                $value = $values[$formElement->getId()] ?? null;
-            }
-            if (!empty($value)) {
-                $formElement->setValue($value);
-            }
-        } elseif ($formElement instanceof UploadFormElement) {
-            if ($formElement->hasParent()) {
-                $value = $values[$formElement->getParent()->getId()][$formElement->getId()];
-            } else {
-                $value = $values[$formElement->getId()];
-            }
-            if (!empty($value)) {
-                $formElement->setFileName($value);
+                $array[$formElement->getId()] = $formElement->getValue();
             }
         }
     }

@@ -10,30 +10,30 @@ class UploadFormElement extends AbstractFormElement
     /**
      * @var string
      */
-    protected $fileName;
+    protected $value;
 
     /**
      * @return bool
      */
-    public function isUploaded()
+    public function hasValue()
     {
-        return !empty($this->fileName);
+        return !empty($this->value);
     }
 
     /**
-     * @param string $fileName
+     * @param string|null $value
      */
-    public function setFileName(string $fileName)
+    public function setValue(string $value = null)
     {
-        $this->fileName = $fileName;
+        $this->value = $value;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getFileName()
+    public function getValue()
     {
-        return $this->fileName;
+        return $this->value;
     }
 
     public function getValidationRules()
@@ -43,6 +43,6 @@ class UploadFormElement extends AbstractFormElement
 
     public function getViewVariables()
     {
-        return array_merge($this->getConfig(),[ 'id' => $this->getFormElementId(), 'is_uploaded' => $this->isUploaded()]);
+        return array_merge($this->getConfig(),[ 'id' => $this->getFormElementId(), 'is_uploaded' => $this->hasValue()]);
     }
 }

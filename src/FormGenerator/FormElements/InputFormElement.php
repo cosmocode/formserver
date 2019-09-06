@@ -12,16 +12,25 @@ class InputFormElement extends AbstractFormElement
      */
     protected $value;
 
+    /**
+     * @return bool
+     */
     public function hasValue()
     {
         return !empty($this->value);
     }
 
+    /**
+     * @return mixed
+     */
     public function getValue()
     {
         return $this->value;
     }
 
+    /**
+     * @param mixed $value
+     */
     public function setValue($value)
     {
         $this->value = $value;
