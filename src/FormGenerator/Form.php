@@ -150,6 +150,11 @@ class Form
 
     protected function insertFormElementValueInArray(AbstractFormElement $formElement, array &$array) {
         if ($formElement instanceof InputFormElement || $formElement instanceof UploadFormElement) {
+            // Dont need to persist an empty value
+            if (empty($formElement->getValue())) {
+                return;
+            }
+
             if ($formElement->hasParent()) {
                 $array[$formElement->getParent()->getId()][$formElement->getId()] = $formElement->getValue();
             } else {
