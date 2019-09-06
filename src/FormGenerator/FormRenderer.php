@@ -34,9 +34,10 @@ class FormRenderer
 	 * @return string
 	 * @throws TwigException
 	 */
-	public function renderForm($formElements, string $title = '') {
+	public function renderForm(Form $form) {
 		$formHtml = '';
-		foreach ($formElements as $formElement) {
+		$title = $form->getMeta('title');
+		foreach ($form->getFormElements() as $formElement) {
 			if ($formElement instanceof FieldsetFormElement) {
 				$formHtml .= $this->renderFieldsetFormElement($formElement);
 			} else {

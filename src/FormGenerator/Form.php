@@ -6,19 +6,31 @@ namespace CosmoCode\Formserver\FormGenerator;
 use CosmoCode\Formserver\FormGenerator\FormElements\AbstractFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\InputFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\FieldsetFormElement;
+use CosmoCode\Formserver\FormGenerator\FormElements\UploadFormElement;
+use CosmoCode\Formserver\Helper\YamlHelper;
+use Slim\Psr7\UploadedFile;
 
 class Form
 {
 	/**
 	 * @var string
 	 */
-	protected $configDir;
+	protected $formDirectory;
+
+	/**
+	 * @var array
+	 */
+	protected $meta;
 
 	/** @var AbstractFormElement[] */
 	protected $formElements = [];
 
-	public function __construct(array $formConfig)
+	public function __construct(string $formId)
 	{
+		$this->formDirectory = __DIR__ . "/../../data/$formId/";
+		$config = YamlHelper::parseYaml($this->formDirectory . 'config.yaml');
+		$this->meta = $config['meta'] ?? [];
+		$formConfig = $config['form'];
 		foreach ($formConfig as $formElementId => $formElementConfig) {
 			$this->formElements[] = FormElementFactory::createFormElement($formElementId, $formElementConfig);
 		}

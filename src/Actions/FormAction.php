@@ -18,15 +18,14 @@ class FormAction extends AbstractAction
     {
         try {
             $id = $this->resolveArg('id');
-            $config = YamlHelper::parseYaml($id);
 
-            $form = new Form($config['form']);
+            $form = new Form($id);
             if ($this->request->getMethod() === 'POST') {
                 $form->submitData($this->request->getParsedBody());
             }
             $formRenderer = new FormRenderer();
 
-            $formHtml = $formRenderer->renderForm($form->getFormElements(), $config['meta']['title'] ?? 'Form Title');
+            $formHtml = $formRenderer->renderForm($form);
             $this->response->getBody()->write($formHtml);
 
             $this->logger->info("Form $id was viewed");
