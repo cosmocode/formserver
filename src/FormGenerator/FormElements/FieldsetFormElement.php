@@ -59,7 +59,7 @@ class FieldsetFormElement extends AbstractFormElement
 		return array_merge($this->getConfig(),
 			[
 				'id' => $this->getFormElementId(),
-				'renderedChildViews' => $this->renderedChildViews,
+				'rendered_child_views' => $this->renderedChildViews,
 			]
 		);
 	}
