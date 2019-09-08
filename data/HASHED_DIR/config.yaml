@@ -6,6 +6,8 @@ form:
   testfrage1:
     type: textinput
     label: Wie finden Sie diese Frage?
+    validation:
+      - match: /^sehr gut$/
 
   group1:
     type: fieldset
@@ -13,7 +15,10 @@ form:
     children:
       testfrage1:
         type: numberinput
-        label: Ist diese Frage besser? (number)
+        label: Ist diese Frage besser? (number 3-6)
+        validation:
+          - min: 3
+          - max: 6
       testfrage2:
         type: date
         label: Und diese? (date)
@@ -28,6 +33,8 @@ form:
         label: Und diese? (textarea)
         cols: 50
         rows: 8
+        validation:
+          - match: /[a-zA-Z0-9]/
       testfrage6:
         type: email
         label: Und diese? (email)

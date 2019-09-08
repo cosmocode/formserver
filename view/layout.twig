@@ -44,8 +44,13 @@
 
 
 {%- block textinput -%}
-    <div class="field">
+    <div class="field{% if errors %} is-error{% endif %}">
         <label class="label" for="{{ id }}">{{ label }}</label>
+        {% for error in errors %}
+            <span>
+                {{ error }}
+            </span>
+        {% endfor %}
         <div class="control">
             <input type="text" id="{{ id }}" name="{{ id }}" value="{{ value }}" />
         </div>
@@ -54,8 +59,13 @@
 
 
 {%- block numberinput -%}
-    <div class="field">
+    <div class="field{% if errors %} is-error{% endif %}">
         <label class="label" for="{{ id }}">{{ label }}</label>
+        {% for error in errors %}
+            <span>
+                {{ error }}
+            </span>
+        {% endfor %}
         <div class="control">
             <input type="number" id="{{ id }}" name="{{ id }}" value="{{ value }}" />
         </div>
@@ -109,8 +119,13 @@
 
 
 {%- block textarea -%}
-    <div class="field">
+    <div class="field{% if errors %} is-error{% endif %}">
         <label class="label" for="{{ id }}">{{ label }}</label>
+        {% for error in errors %}
+            <span>
+                {{ error }}
+            </span>
+        {% endfor %}
         <div class="control">
             <textarea id="{{ id }}" name="{{ id }}"  {{ cols is defined ? 'cols='~cols }} {{ rows is defined ? 'rows='~rows }}>{{ value }}</textarea>
         </div>
