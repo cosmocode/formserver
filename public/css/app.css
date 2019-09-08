@@ -1,0 +1,7 @@
+/**
+ * Custom app styles
+ */
+
+.is-error label, .is-error span, .is-error input, .is-error textarea {
+    color: red;
+}
