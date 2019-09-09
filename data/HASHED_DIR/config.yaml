@@ -59,7 +59,7 @@ form:
       fileupload1:
         type: upload
         label: Bitte laden Sie eine Datei hoch.
-        label_uploaded: Datei bereits hochgeladen.
+        label_uploaded: Datei durch erneuten Upload ersetzen
         fileext: text/*
       image0:
         type: image

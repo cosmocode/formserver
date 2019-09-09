@@ -3,6 +3,7 @@
 namespace CosmoCode\Formserver\FormGenerator;
 
 
+use CosmoCode\Formserver\Exceptions\FormException;
 use CosmoCode\Formserver\FormGenerator\FormElements\AbstractFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\InputFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\FieldsetFormElement;
@@ -107,6 +108,9 @@ class Form
             $file = $this->getFormElementValueFromArray($formElement, $files);
 
             if ($file !== null && $file->getError() === UPLOAD_ERR_OK) {
+                if (!empty($formElement->getValue())) {
+                    $this->deleteFileFromFormElement($formElement);
+                }
                 $fileName = $this->moveUploadedFile($file, $formElement);
                 $formElement->setValue($fileName);
             }
@@ -133,6 +137,20 @@ class Form
         $uploadedFile->moveTo($filePath);
 
         return $fileName;
+    }
+
+    /**
+     * Deletes a file (in favor of another uploaded one)
+     *
+     * @param UploadFormElement $formElement
+     */
+    protected function deleteFileFromFormElement(UploadFormElement $formElement) {
+        $filePath = $this->formDirectory . $formElement->getValue();
+        if(is_file($filePath)) {
+            unlink($filePath);
+        } else {
+            throw new FormException("Could not delete file: '$filePath'");
+        }
     }
 
     protected function restoreValue(array $values, AbstractFormElement $formElement)

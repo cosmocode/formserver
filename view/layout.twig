@@ -170,7 +170,7 @@
 {%- block upload -%}
     <div class="file">
         <label class="file-label">
-            <input type="file" class="file-input" id="{{ id }}" name="{{ id }}" {{ fileext is defined ? 'accept='~fileext }} {{ is_uploaded ? 'disabled' }}/>
+            <input type="file" class="file-input" id="{{ id }}" name="{{ id }}" {{ fileext is defined ? 'accept='~fileext }} />
             <span class="file-cta">
                 <span class="file-icon">
                     <i class="fas fa-upload"></i>
