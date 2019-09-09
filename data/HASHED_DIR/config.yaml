@@ -1,6 +1,5 @@
 meta:
   title: 'Formular #1'
-  css: bulma.css
 
 form:
   testfrage1:
@@ -45,6 +44,7 @@ form:
         type: dropdown
         size: 1
         multiselect: false
+        default: Bitte wählen
         choices:
           - Erste Auswahl
           - Zweite Auswahl
@@ -58,7 +58,8 @@ form:
           - Dritte Auswahl
       fileupload1:
         type: upload
-        label: Bitte laden Sie eine Datei hoch
+        label: Bitte laden Sie eine Datei hoch.
+        label_uploaded: Datei durch erneuten Upload ersetzen
         fileext: text/*
       image0:
         type: image

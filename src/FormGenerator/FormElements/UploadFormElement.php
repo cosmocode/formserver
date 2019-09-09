@@ -5,10 +5,10 @@ namespace CosmoCode\Formserver\FormGenerator\FormElements;
 /**
  * Dynamic form elements have an input which the user can fill out
  */
-class InputFormElement extends AbstractFormElement
+class UploadFormElement extends AbstractFormElement
 {
     /**
-     * @var mixed
+     * @var string
      */
     protected $value;
 
@@ -21,19 +21,19 @@ class InputFormElement extends AbstractFormElement
     }
 
     /**
-     * @return mixed
+     * @param string|null $value
+     */
+    public function setValue(string $value = null)
+    {
+        $this->value = $value;
+    }
+
+    /**
+     * @return string|null
      */
     public function getValue()
     {
         return $this->value;
-    }
-
-    /**
-     * @param mixed $value
-     */
-    public function setValue($value)
-    {
-        $this->value = $value;
     }
 
     public function getValidationRules()
@@ -43,6 +43,6 @@ class InputFormElement extends AbstractFormElement
 
     public function getViewVariables()
     {
-        return array_merge($this->getConfig(),[ 'id' => $this->getFormElementId(), 'value' => $this->getValue()]);
+        return array_merge($this->getConfig(),[ 'id' => $this->getFormElementId(), 'is_uploaded' => $this->hasValue()]);
     }
 }
