@@ -9,17 +9,29 @@ use Respect\Validation\Validator as v;
  */
 class InputFormElement extends AbstractFormElement
 {
-	/**
-	 * @var mixed
-	 */
-	protected $value;
+    /**
+     * @var mixed
+     */
+    protected $value;
 
+    /**
+     * @return bool
+     */
+    public function hasValue()
+    {
+        return !empty($this->value);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
 	/** @var array */
     protected $errors = [];
 
-	public function getValue() {
-		return $this->value;
-	}
 
     /**
      * Sets the value and triggers validation

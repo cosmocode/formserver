@@ -7,6 +7,8 @@
             <title>{{ title is defined ? title : 'Form'}}</title>
             <link rel="stylesheet" href="/css/bulma.min.css" />
             <link rel="stylesheet" href="/css/app.css" />
+            <link rel="stylesheet" href="/css/flatpickr.min.css" >
+            <script src="/js/flatpickr.min.js"></script>
         </head>
         <body>
             <section class="section">
@@ -15,7 +17,7 @@
                         <h1 class="title">{{ title }}</h1>
                     {% endif %}
 
-                    <form method="post">
+                    <form method="post" enctype="multipart/form-data">
                         {{ formHtml | raw }}
                         <div class="field">
                             <div class="control">
@@ -25,18 +27,19 @@
                     </form>
                 </div>
             </section>
+            <script src="/js/custom.js"></script>
         </body>
     </html>
 {%- endblock -%}
 
 
 {%- block fieldset -%}
-    <fieldset>
-        <div class="label fieldset-label">
+    <fieldset {{ disabled is defined and disabled ? 'disabled' }}>
+        <legend class="label fieldset-label">
             {{ label }}
-        </div>
-        {% for renderedChildView in renderedChildViews %}
-            {{ renderedChildView | raw }}
+        </legend>
+        {% for rendered_child_view in rendered_child_views %}
+            {{ rendered_child_view | raw }}
         {% endfor %}
     </fieldset>
 {%- endblock -%}
@@ -77,7 +80,7 @@
     <div class="field">
         <label class="label" for="{{ id }}">{{ label }}</label>
         <div class="control">
-            <input type="date" id="{{ id }}" name="{{ id }}"  value="{{ value }}" />
+            <input type="text" id="{{ id }}" name="{{ id }}"  value="{{ value }}" data-calender-type="date" />
         </div>
     </div>
 {%- endblock -%}
@@ -87,7 +90,7 @@
     <div class="field">
         <label class="label" for="{{ id }}">{{ label }}</label>
         <div class="control">
-            <input type="time" id="{{ id }}" name="{{ id }}"  value="{{ value }}" />
+            <input type="text" id="{{ id }}" name="{{ id }}"  value="{{ value }}" data-calender-type="time" />
         </div>
     </div>
 {%- endblock -%}
@@ -97,7 +100,7 @@
     <div class="field">
         <label class="label" for="{{ id }}">{{ label }}</label>
         <div class="control">
-            <input type="datetime-local" id="{{ id }}" name="{{ id }}"  value="{{ value }}" />
+            <input type="text" id="{{ id }}" name="{{ id }}"  value="{{ value }}"  data-calender-type="datetime"/>
         </div>
     </div>
 {%- endblock -%}
@@ -169,6 +172,7 @@
         <div class="control">
             <div class="select">
                 <select id="{{ id }}" name="{{ id }}" {{ size is defined ? 'size='~size }} {{ multiselect is defined and multiselect ? 'multiple' }}>
+                    <option value="">{{ default is defined ? default }}</option>
                     {%- for choice in choices -%}
                         <option {{ choice in value ? 'selected' }}>{{ choice }}</option>
                     {%- endfor -%}
@@ -184,8 +188,11 @@
         <label class="file-label">
             <input type="file" class="file-input" id="{{ id }}" name="{{ id }}" {{ fileext is defined ? 'accept='~fileext }} />
             <span class="file-cta">
+                <span class="file-icon">
+                    <i class="fas fa-upload"></i>
+                </span>
                 <span class="file-label">
-                    {{ label }}
+                    {{ is_uploaded ? label_uploaded : label }}
                 </span>
             </span>
         </label>

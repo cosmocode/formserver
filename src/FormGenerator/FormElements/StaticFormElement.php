@@ -7,13 +7,13 @@ namespace CosmoCode\Formserver\FormGenerator\FormElements;
  */
 class StaticFormElement extends AbstractFormElement
 {
-	/**
-	 * Prepare variables array for twig view.
-	 *
-	 * @return array
-	 */
-	public function getViewVariables()
-	{
-		return array_merge($this->getConfig(),[ 'id' => $this->getFormElementId()]);
-	}
+    /**
+     * Prepare variables array for twig view.
+     *
+     * @return array
+     */
+    public function getViewVariables()
+    {
+        return array_merge($this->getConfig(),[ 'id' => $this->getFormElementId()]);
+    }
 }

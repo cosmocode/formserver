@@ -10,15 +10,15 @@ use Michelf\Markdown;
  */
 class MarkDownFormElement extends AbstractFormElement
 {
-	/**
-	 * Prepare variables array for twig view.
-	 *
-	 * @return array
-	 */
-	public function getViewVariables()
-	{
-		$markdown = Markdown::defaultTransform($this->getConfig()['markdown'] ?? '');
+    /**
+     * Prepare variables array for twig view.
+     *
+     * @return array
+     */
+    public function getViewVariables()
+    {
+        $markdown = Markdown::defaultTransform($this->getConfig()['markdown'] ?? '');
 
-		return array_merge($this->getConfig(),[ 'id' => $this->getFormElementId(), 'markdown' => $markdown]);
-	}
+        return array_merge($this->getConfig(),[ 'id' => $this->getFormElementId(), 'markdown' => $markdown]);
+    }
 }

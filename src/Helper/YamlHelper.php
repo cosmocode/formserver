@@ -7,17 +7,25 @@ use CosmoCode\Formserver\Exceptions\YamlException;
 
 class YamlHelper
 {
-	/**
-	 * @param $configDir
-	 * @return mixed
-	 * @throws YamlException
-	 */
-	public static function parseYaml($configDir) {
-		$config = \Spyc::YAMLLoad(__DIR__ . "/../../data/$configDir/config.yaml");
-		if ($config === false) {
-			throw new YamlException("Could not parse config.yaml in directory: '$configDir'");
-		}
+    /**
+     * @param $yamlPath
+     * @return mixed
+     * @throws YamlException
+     */
+    public static function parseYaml($yamlPath)
+    {
+        $config = \Spyc::YAMLLoad($yamlPath);
+        //TODO catch yaml parse exceptions
+        if (empty($config)) {
+            throw new YamlException("Could not parse config.yaml in directory: '$yamlPath'");
+        }
 
-		return $config;
-	}
+        return $config;
+    }
+
+    public static function persistYaml(array $values, string $yamlPath)
+    {
+        $yaml = \Spyc::YAMLDump($values);
+        file_put_contents($yamlPath, $yaml);
+    }
 }
