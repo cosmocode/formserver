@@ -78,5 +78,10 @@ abstract class AbstractFormElement
         return $this->parent !== null;
     }
 
+    /**
+     * Variables needed to render the element
+     *
+     * @return array
+     */
     abstract public function getViewVariables();
 }

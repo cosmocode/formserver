@@ -47,7 +47,7 @@
 
 
 {%- block textinput -%}
-    <div class="field{% if errors %} is-error{% endif %}">
+    <div class="field {%- if errors %} is-error{% endif%}">
         <label class="label" for="{{ id }}">{{ label }}</label>
         {% for error in errors %}
             <span>
@@ -62,7 +62,7 @@
 
 
 {%- block numberinput -%}
-    <div class="field{% if errors %} is-error{% endif %}">
+    <div class="field {%- if errors %} is-error{% endif %}">
         <label class="label" for="{{ id }}">{{ label }}</label>
         {% for error in errors %}
             <span>
@@ -122,7 +122,7 @@
 
 
 {%- block textarea -%}
-    <div class="field{% if errors %} is-error{% endif %}">
+    <div class="field {%- if errors %} is-error{% endif %}">
         <label class="label" for="{{ id }}">{{ label }}</label>
         {% for error in errors %}
             <span>
