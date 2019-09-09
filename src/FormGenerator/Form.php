@@ -99,11 +99,7 @@ class Form
 
     protected function submitFormElement(AbstractFormElement $formElement, array $data, array $files)
     {
-        if ($formElement instanceof InputFormElement) {
-            $value = $this->getFormElementValueFromArray($formElement, $data);
-            // Important! Value must be set, even if empty. User can unset fields
-            $formElement->setValue($value);
-        } elseif ($formElement instanceof UploadFormElement) {
+        if ($formElement instanceof UploadFormElement) {
             /** @var UploadedFile $file */
             $file = $this->getFormElementValueFromArray($formElement, $files);
 
@@ -114,6 +110,10 @@ class Form
                 $fileName = $this->moveUploadedFile($file, $formElement);
                 $formElement->setValue($fileName);
             }
+        } elseif ($formElement instanceof InputFormElement) {
+            $value = $this->getFormElementValueFromArray($formElement, $data);
+            // Important! Value must be set, even if empty. User can unset fields
+            $formElement->setValue($value);
         }
     }
 
@@ -122,7 +122,7 @@ class Form
      * http://www.slimframework.com/docs/v3/cookbook/uploading-files.html
      *
      * @param UploadedFile $uploadedFile
-     * @param AbstractFormElement $formElement
+     * @param UploadFormElement $formElement
      * @return string
      */
     protected function moveUploadedFile(UploadedFile $uploadedFile, UploadFormElement $formElement)
