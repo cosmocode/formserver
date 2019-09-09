@@ -125,7 +125,7 @@ class Form
      * @param AbstractFormElement $formElement
      * @return string
      */
-    protected function moveUploadedFile(UploadedFile $uploadedFile, AbstractFormElement $formElement)
+    protected function moveUploadedFile(UploadedFile $uploadedFile, UploadFormElement $formElement)
     {
         $extension = pathinfo($uploadedFile->getClientFilename(), PATHINFO_EXTENSION);
         $baseName = $formElement->hasParent()
