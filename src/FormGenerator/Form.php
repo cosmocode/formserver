@@ -48,7 +48,7 @@ class Form
 
     public function submit(array $data, array $files)
     {
-        // Important! Restore persisted data first to determine if UploadFormElements already have an uploaded file
+        // Important! Restore persisted data first to determine if UploadFormElements have already an uploaded file
         // (They have a value which containts the file name)
         $this->restore();
 
