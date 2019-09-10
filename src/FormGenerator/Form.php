@@ -35,8 +35,7 @@ class Form
     public function __construct(string $formId)
     {
         $this->id = $formId;
-        $this->formDirectory = __DIR__ . "/../../data/$formId/";
-        $config = YamlHelper::parseYaml($this->formDirectory . 'config.yaml');
+        $config = YamlHelper::parseYaml($this->getFormDirectory() . 'config.yaml');
         $this->meta = $config['meta'] ?? [];
 
         foreach ($config['form'] as $formElementId => $formElementConfig) {
@@ -71,7 +70,7 @@ class Form
     }
 
     public function getFormDirectory() {
-        return $this->formDirectory;
+        return __DIR__ . '/../../data/' . $this->id . '/';
     }
 
     public function getId() {
