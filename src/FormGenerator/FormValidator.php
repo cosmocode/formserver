@@ -74,7 +74,6 @@ class FormValidator
                         if (!Validator::size(null, $allowed)->validate($filePath)) {
                             $formElement->addError('Fehler: erlaubte Dateigröße ' . $allowed);
                             $this->dropFile($formElement);
-                            return;
                         }
 
                         break;
@@ -88,7 +87,6 @@ class FormValidator
                             $formElement->addError('Fehler: erlaubte Formate ' . $formElement->getAllowedExtensionsAsString());
                             $this->dropFile($formElement);
 
-                            return;
                         }
 
                         break;
