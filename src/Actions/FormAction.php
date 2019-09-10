@@ -5,6 +5,7 @@ namespace CosmoCode\Formserver\Actions;
 
 use CosmoCode\Formserver\FormGenerator\Form;
 use CosmoCode\Formserver\FormGenerator\FormRenderer;
+use CosmoCode\Formserver\FormGenerator\FormValidator;
 use CosmoCode\Formserver\Service\Mailer;
 use CosmoCode\Formserver\Helper\YamlHelper;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -31,10 +32,14 @@ class FormAction extends AbstractAction
     {
         try {
             $id = $this->resolveArg('id');
-
             $form = new Form($id);
+            $formRenderer = new FormRenderer($form);
+            $formValidator = new FormValidator($form);
+
+
             if ($this->request->getMethod() === 'POST') {
                 $form->submit($this->request->getParsedBody(), $this->request->getUploadedFiles());
+                $formValidator->validate();
                 $form->persist();
                 //TODO cleam up if
                 if ($form->isValid() && isset($this->request->getParsedBody()['formcontrol']['send'])) {
@@ -44,9 +49,7 @@ class FormAction extends AbstractAction
                 $form->restore();
             }
 
-            $formRenderer = new FormRenderer();
-
-            $formHtml = $formRenderer->renderForm($form);
+            $formHtml = $formRenderer->render();
             $this->response->getBody()->write($formHtml);
 
             $this->logger->info("Form $id was viewed");

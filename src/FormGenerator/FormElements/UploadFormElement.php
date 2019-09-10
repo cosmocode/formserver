@@ -7,6 +7,17 @@ namespace CosmoCode\Formserver\FormGenerator\FormElements;
  */
 class UploadFormElement extends AbstractDynamicFormElement
 {
+
+    public function getAllowedExtensions() {
+        return strtolower(
+            $this->getConfig()['validation']['fileext'] ?? ''
+        );
+    }
+
+    public function getAllowedExtensionsAsArray() {
+        return explode(',', $this->getAllowedExtensions());
+    }
+
     /**
      * @inheritDoc
      */

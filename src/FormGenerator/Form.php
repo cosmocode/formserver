@@ -64,6 +64,10 @@ class Form
         return $this->meta[$key] ?? null;
     }
 
+    public function getFormDirectory() {
+        return $this->formDirectory;
+    }
+
     public function submit(array $data, array $files)
     {
         // Important! Restore persisted data first to determine if UploadFormElements have already an uploaded file
@@ -160,7 +164,13 @@ class Form
      */
     protected function moveUploadedFile(UploadedFile $uploadedFile, UploadFormElement $formElement)
     {
-        $extension = pathinfo($uploadedFile->getClientFilename(), PATHINFO_EXTENSION);
+        $extension = strtolower(
+            pathinfo(
+                $uploadedFile->getClientFilename(),
+                PATHINFO_EXTENSION
+            )
+        );
+
         $baseName = $formElement->hasParent()
             ? $formElement->getParent()->getId() . '_' . $formElement->getId()
             : $formElement->getId();

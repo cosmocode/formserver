@@ -185,19 +185,25 @@
 
 
 {%- block upload -%}
-    <div class="file">
+<div class="field file {%- if errors %} is-error{% endif %}">
+    <div class="control">
+        <label class="label">{{ label }}</label>
+        {% if is_uploaded %}
+            <a href="{{ original_file }}" target="_blank">Gespeicherte Datei</a><br>
+        {% endif %}
         <label class="file-label">
+            {% for error in errors %}
+                <span>{{ error }}</span><br />
+            {% endfor %}
             <input type="file" class="file-input" id="{{ id }}" name="{{ id }}" {{ fileext is defined ? 'accept='~fileext }} />
             <span class="file-cta">
-                <span class="file-icon">
-                    <i class="fas fa-upload"></i>
-                </span>
                 <span class="file-label">
-                    {{ is_uploaded ? label_uploaded : label }}
+                    {{ is_uploaded ? 'Datei ersetzen' : 'Datei hochladen' }}
                 </span>
             </span>
         </label>
     </div>
+</div>
 {%- endblock -%}
 
 

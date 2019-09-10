@@ -5,3 +5,8 @@
 .is-error label, .is-error span, .is-error input, .is-error textarea {
     color: red;
 }
+
+/* TODO: check bulma if this is obsolete */
+.file-label {
+    display: inline-block;
+}
