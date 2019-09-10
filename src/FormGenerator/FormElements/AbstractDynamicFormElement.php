@@ -13,7 +13,9 @@ abstract class AbstractDynamicFormElement extends AbstractFormElement
      */
     protected $value;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $errors = [];
 
     /**

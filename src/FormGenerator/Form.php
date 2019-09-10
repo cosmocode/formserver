@@ -14,10 +14,12 @@ use Slim\Psr7\UploadedFile;
 
 class Form
 {
+    const DATA_DIR = __DIR__ . '/../../data/';
+
     /**
      * @var string
      */
-    protected $formDirectory;
+    protected $id;
 
     /**
      * @var array
@@ -29,8 +31,8 @@ class Form
 
     public function __construct(string $formId)
     {
-        $this->formDirectory = __DIR__ . "/../../data/$formId/";
-        $config = YamlHelper::parseYaml($this->formDirectory . 'config.yaml');
+        $this->id = $formId;
+        $config = YamlHelper::parseYaml($this->getFormDirectory() . 'config.yaml');
         $this->meta = $config['meta'] ?? [];
 
         foreach ($config['form'] as $formElementId => $formElementConfig) {
@@ -65,7 +67,11 @@ class Form
     }
 
     public function getFormDirectory() {
-        return $this->formDirectory;
+        return self::DATA_DIR . $this->id . '/';
+    }
+
+    public function getId() {
+        return $this->id;
     }
 
     public function submit(array $data, array $files)
@@ -99,13 +105,13 @@ class Form
         }
 
         if (!empty($values)) {
-            YamlHelper::persistYaml($values, $this->formDirectory . 'values.yaml');
+            YamlHelper::persistYaml($values, $this->getFormDirectory() . 'values.yaml');
         }
     }
 
     public function restore()
     {
-        $values = YamlHelper::parseYaml($this->formDirectory . 'values.yaml');
+        $values = YamlHelper::parseYaml($this->getFormDirectory() . 'values.yaml');
 
         foreach ($this->formElements as $formElement) {
             if ($formElement instanceof FieldsetFormElement) {
@@ -176,7 +182,7 @@ class Form
             : $formElement->getId();
         $fileName = sprintf('%s.%0.8s', $baseName, $extension);
 
-        $filePath = $this->formDirectory . $fileName;
+        $filePath = $this->getFormDirectory() . $fileName;
         $uploadedFile->moveTo($filePath);
 
         return $fileName;
@@ -188,7 +194,7 @@ class Form
      * @param UploadFormElement $formElement
      */
     protected function deleteFileFromFormElement(UploadFormElement $formElement) {
-        $filePath = $this->formDirectory . $formElement->getValue();
+        $filePath = $this->getFormDirectory() . $formElement->getValue();
         if(is_file($filePath)) {
             unlink($filePath);
         } else {
@@ -200,9 +206,7 @@ class Form
     {
         if ($formElement instanceof InputFormElement || $formElement instanceof UploadFormElement) {
             $value = $this->getFormElementValueFromArray($formElement, $values);
-            if (!empty($value)) {
                 $formElement->setValue($value);
-            }
         }
     }
 

@@ -43,7 +43,8 @@ class UploadFormElement extends AbstractDynamicFormElement
                 'id' => $this->getFormElementId(),
                 'is_uploaded' => $this->hasValue(),
                 'errors' => $this->getErrors(),
-                'allowed_extensions' => $this->getAllowedExtensionsAsArray()
+                'allowed_extensions' => $this->getAllowedExtensionsAsArray(),
+                'value' => $this->getValue()
             ]
         );
     }
