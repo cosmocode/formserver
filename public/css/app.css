@@ -6,6 +6,10 @@
     color: red;
 }
 
+.file-label {
+    display: inline-block;
+}
+
 canvas {
     border: 1px solid black;
 }

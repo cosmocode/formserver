@@ -2,7 +2,6 @@
 
 namespace CosmoCode\Formserver\FormGenerator\FormElements;
 
-use Respect\Validation\Validator as Validator;
 
 /**
  * Base class for every InputFormElement
@@ -41,7 +40,6 @@ abstract class AbstractDynamicFormElement extends AbstractFormElement
     public function setValue($value)
     {
         $this->value = $value;
-        $this->validateValue($value);
     }
 
     /**
@@ -54,35 +52,8 @@ abstract class AbstractDynamicFormElement extends AbstractFormElement
         return $this->getConfigValue('validation') ?? [];
     }
 
-    /**
-     * Validates the input value
-     *
-     * @param string $value
-     */
-    public function validateValue($value)
-    {
-        foreach ($this->getValidationRules() as $rule) {
-            $validation = key($rule);
-            $allowed = $rule[$validation];
-
-            switch ($validation) {
-                case 'min':
-                    if (!Validator::intVal()->min($allowed)->validate($value)) {
-                        $this->addError('value smaller than ' . $allowed);
-                    }
-                    break;
-                case 'max':
-                    if (!Validator::intVal()->max($allowed)->validate($value)) {
-                        $this->addError('value larger than ' . $allowed);
-                    }
-                    break;
-                case 'match':
-                    if (!Validator::regex($allowed)->validate($value)) {
-                        $this->addError('value does not match ' . $allowed);
-                    }
-                    break;
-            }
-        }
+    public function isRequired() {
+        return isset($this->getValidationRules()['required']) && $this->getValidationRules()['required'];
     }
 
     /**

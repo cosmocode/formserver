@@ -15,30 +15,33 @@ class FormRenderer
     /** @var \Twig\TemplateWrapper */
     protected $twig;
 
-    public function __construct(string $twigLayout = 'layout.twig')
+    protected $form;
+
+    public function __construct(Form $form)
     {
+        $this->form = $form;
+
         $twigLoader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/../../view/');
         $twigEnvironment = new \Twig\Environment($twigLoader);
-
         try {
-            $this->twig = $twigEnvironment->load($twigLayout);
+            $this->twig = $twigEnvironment->load('layout.twig');
         } catch (\Twig\Error\Error $e) {
-            throw new TwigException("Could not load twig layout file '$twigLayout':" . $e->getMessage());
+            throw new TwigException("Could not load twig layout file 'layout.twig':" . $e->getMessage());
         }
     }
 
     /**
-     * Renders a complete Form
+     * Renders the complete Form
      *
      * @param AbstractFormElement[] $formElements
      * @return string
      * @throws TwigException
      */
-    public function renderForm(Form $form)
+    public function render()
     {
         $formHtml = '';
-        $title = $form->getMeta('title');
-        foreach ($form->getFormElements() as $formElement) {
+        $title = $this->form->getMeta('title');
+        foreach ($this->form->getFormElements() as $formElement) {
             if ($formElement instanceof FieldsetFormElement) {
                 $formHtml .= $this->renderFieldsetFormElement($formElement);
             } else {
