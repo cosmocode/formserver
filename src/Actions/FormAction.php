@@ -5,12 +5,25 @@ namespace CosmoCode\Formserver\Actions;
 
 use CosmoCode\Formserver\FormGenerator\Form;
 use CosmoCode\Formserver\FormGenerator\FormRenderer;
+use CosmoCode\Formserver\Service\Mailer;
 use CosmoCode\Formserver\Helper\YamlHelper;
 use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Log\LoggerInterface;
 use Slim\Exception\HttpBadRequestException;
 
 class FormAction extends AbstractAction
 {
+    /**
+     * @var Mailer
+     */
+    protected $mailer;
+
+    public function __construct(LoggerInterface $logger, Mailer $mailer)
+    {
+        parent::__construct($logger);
+        $this->mailer = $mailer;
+    }
+
     /**
      * @inheritDoc
      */
@@ -23,6 +36,10 @@ class FormAction extends AbstractAction
             if ($this->request->getMethod() === 'POST') {
                 $form->submit($this->request->getParsedBody(), $this->request->getUploadedFiles());
                 $form->persist();
+                //TODO cleam up if
+                if ($form->isValid() && isset($this->request->getParsedBody()['formcontrol']['send'])) {
+                    $this->mailer->sendForm($form->getMeta('email'), $form->getData());
+                }
             } elseif ($this->request->getMethod() === 'GET') {
                 $form->restore();
             }

@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use CosmoCode\Formserver\Service\Mailer;
 use DI\ContainerBuilder;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
@@ -24,5 +25,11 @@ return function (ContainerBuilder $containerBuilder) {
 
             return $logger;
         },
+        Mailer::class => function (ContainerInterface $c) {
+            $settings = $c->get('settings');
+            $mailSettings = $settings['email'] ?? [];
+
+            return new Mailer($mailSettings);
+        }
     ]);
 };

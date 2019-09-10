@@ -4,6 +4,7 @@ namespace CosmoCode\Formserver\FormGenerator;
 
 
 use CosmoCode\Formserver\Exceptions\FormException;
+use CosmoCode\Formserver\FormGenerator\FormElements\AbstractDynamicFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\AbstractFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\InputFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\FieldsetFormElement;
@@ -40,6 +41,22 @@ class Form
     public function getFormElements()
     {
         return $this->formElements;
+    }
+
+    public function getData() {
+        $data = [];
+
+        foreach ($this->formElements as $formElement) {
+            if ($formElement instanceof FieldsetFormElement) {
+                foreach ($formElement->getChildren() as $fieldsetChild) {
+                    $this->insertFormElementValueInArray($fieldsetChild, $data);
+                }
+            } else {
+                $this->insertFormElementValueInArray($formElement, $data);
+            }
+        }
+
+        return $data;
     }
 
     public function getMeta(string $key)
@@ -95,6 +112,22 @@ class Form
                 $this->restoreValue($values, $formElement);
             }
         }
+    }
+
+    public function isValid() {
+        foreach ($this->formElements as $formElement) {
+            if ($formElement instanceof FieldsetFormElement) {
+                foreach ($formElement->getChildren() as $fieldsetChild) {
+                    if ($fieldsetChild instanceof AbstractDynamicFormElement && !$fieldsetChild->isValid()) {
+                        return false;
+                    }
+                }
+            } elseif ($formElement instanceof AbstractDynamicFormElement && !$formElement->isValid()) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     protected function submitFormElement(AbstractFormElement $formElement, array $data, array $files)
