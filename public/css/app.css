@@ -5,3 +5,7 @@
 .is-error label, .is-error span, .is-error input, .is-error textarea {
     color: red;
 }
+
+canvas {
+    border: 1px solid black;
+}
