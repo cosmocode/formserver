@@ -25,11 +25,23 @@ abstract class AbstractDynamicFormElement extends AbstractFormElement
     }
 
     /**
+     * Returns raw value (array in case of multiselect elements)
+     *
      * @return mixed
      */
     public function getValue()
     {
         return $this->value;
+    }
+
+    /**
+     * Element's value as string
+     *
+     * @return string
+     */
+    public function getValueString()
+    {
+        return is_string($this->value) ? $this->value : implode(', ', $this->value);
     }
 
     /**

@@ -15,7 +15,7 @@ var dataField = wrapper.querySelector("input");
 
 if (wrapper && canvas) {
     var signatureData = dataField.value;
-    var signaturePad = new SignaturePad(canvas);
+    var signaturePad = new SignaturePad(canvas, { backgroundColor: "rgb(255,255,255)" });
 
     if (signatureData !== '') {
         signaturePad.fromDataURL(signatureData);
