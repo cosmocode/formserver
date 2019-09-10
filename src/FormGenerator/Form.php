@@ -14,6 +14,8 @@ use Slim\Psr7\UploadedFile;
 
 class Form
 {
+    const DATA_DIR = __DIR__ . '/../../data/';
+
     /**
      * @var string
      */
@@ -70,7 +72,7 @@ class Form
     }
 
     public function getFormDirectory() {
-        return __DIR__ . '/../../data/' . $this->id . '/';
+        return self::DATA_DIR . $this->id . '/';
     }
 
     public function getId() {
