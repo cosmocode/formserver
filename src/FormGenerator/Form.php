@@ -20,6 +20,11 @@ class Form
     protected $formDirectory;
 
     /**
+     * @var string
+     */
+    protected $id;
+
+    /**
      * @var array
      */
     protected $meta;
@@ -29,6 +34,7 @@ class Form
 
     public function __construct(string $formId)
     {
+        $this->id = $formId;
         $this->formDirectory = __DIR__ . "/../../data/$formId/";
         $config = YamlHelper::parseYaml($this->formDirectory . 'config.yaml');
         $this->meta = $config['meta'] ?? [];
@@ -66,6 +72,10 @@ class Form
 
     public function getFormDirectory() {
         return $this->formDirectory;
+    }
+
+    public function getId() {
+        return $this->id;
     }
 
     public function submit(array $data, array $files)
@@ -200,9 +210,7 @@ class Form
     {
         if ($formElement instanceof InputFormElement || $formElement instanceof UploadFormElement) {
             $value = $this->getFormElementValueFromArray($formElement, $values);
-            if (!empty($value)) {
                 $formElement->setValue($value);
-            }
         }
     }
 

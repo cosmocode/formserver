@@ -186,32 +186,34 @@
 
 
 {%- block upload -%}
-<div class="field file {%- if errors %} is-error{% endif %}">
-    <div class="control">
-        <label class="label">{{ label }}</label>
-        {% if is_uploaded %}
-            <a href="{{ original_file }}" target="_blank">Gespeicherte Datei</a><br>
-        {% endif %}
-        <label class="file-label">
-            {% for error in errors %}
-                <span>{{ error }}</span><br />
-            {% endfor %}
-            <input type="file" class="file-input" id="{{ id }}" name="{{ id }}" {{ allowed_extensions is defined ? ('accept=".'~allowed_extensions|join(',.')~'"')|raw }} />
-            <span class="file-cta">
-                <span class="file-label">
-                    {{ is_uploaded ? 'Datei ersetzen' : 'Datei hochladen' }}
+    {% from 'macros.twig' import fileUrl as fileUrl %}
+    <div class="field file {%- if errors %} is-error{% endif %}">
+        <div class="control">
+            <label class="label">{{ label }}</label>
+            {% if is_uploaded %}
+                <a href="{{ fileUrl(form_id, value) }}" target="_blank">Gespeicherte Datei</a><br>
+            {% endif %}
+            <label class="file-label">
+                {% for error in errors %}
+                    <span>{{ error }}</span><br />
+                {% endfor %}
+                <input type="file" class="file-input" id="{{ id }}" name="{{ id }}" {{ allowed_extensions is defined ? ('accept=".'~allowed_extensions|join(',.')~'"')|raw }} />
+                <span class="file-cta">
+                    <span class="file-label">
+                        {{ is_uploaded ? 'Datei ersetzen' : 'Datei hochladen' }}
+                    </span>
                 </span>
-            </span>
-        </label>
+            </label>
+        </div>
     </div>
-</div>
 {%- endblock -%}
 
 
 {%- block download -%}
+    {% from 'macros.twig' import fileUrl %}
     <div class="field">
         <div class="control">
-            <a href="{{ href }}" target="_blank">{{ label }}</a>
+            <a href="{{ fileUrl(form_id, href)  }}" target="_blank">{{ label }}</a>
         </div>
     </div>
 {%- endblock -%}

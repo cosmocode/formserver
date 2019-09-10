@@ -95,6 +95,9 @@ class FormRenderer
             throw new TwigException("Template block for form element type '$block' not found.");
         }
 
+        // Global variables
+        $variables['form_id'] = $this->form->getId();
+
         try {
             return $this->twig->renderBlock($block, $variables);
         } catch (\Throwable $e) {
