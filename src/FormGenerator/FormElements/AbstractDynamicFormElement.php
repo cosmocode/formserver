@@ -104,4 +104,8 @@ abstract class AbstractDynamicFormElement extends AbstractFormElement
     {
         return $this->errors;
     }
+
+    public function isValid() {
+        return empty($this->errors);
+    }
 }
