@@ -8,6 +8,7 @@ use CosmoCode\Formserver\FormGenerator\FormElements\AbstractFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\InputFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\FieldsetFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\MarkDownFormElement;
+use CosmoCode\Formserver\FormGenerator\FormElements\SignatureFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\StaticFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\UploadFormElement;
 
@@ -38,6 +39,8 @@ class FormElementFactory
             case 'checklist':
             case 'dropdown':
                 return self::createInputFormElement($id, $config, $parent);
+            case 'signature':
+                return self::createSignatureFormElement($id, $config, $parent);
             default:
                 throw new FormException("Could not build FormElement with id $id. Undefined type ($formType)");
         }
@@ -76,5 +79,9 @@ class FormElementFactory
     protected static function createUploadFormElement(string $id, array $config, AbstractFormElement $parent = null)
     {
         return new UploadFormElement($id, $config, $parent);
+    }
+    protected static function createSignatureFormElement(string $id, array $config, AbstractFormElement $parent = null)
+    {
+        return new SignatureFormElement($id, $config, $parent);
     }
 }
