@@ -88,3 +88,6 @@ form:
       markdown0:
         type: markdown
         markdown: Hello _Markdown_!
+      signature:
+        type: signature
+        label: Unterschrift
