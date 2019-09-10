@@ -43,7 +43,7 @@ class FormAction extends AbstractAction
                 $form->persist();
                 //TODO cleam up if
                 if ($form->isValid() && isset($this->request->getParsedBody()['formcontrol']['send'])) {
-                    $this->mailer->sendForm($form->getMeta('email'), $form->getData());
+                    $this->mailer->sendForm($form);
                 }
             } elseif ($this->request->getMethod() === 'GET') {
                 $form->restore();

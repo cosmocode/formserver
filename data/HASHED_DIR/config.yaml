@@ -54,6 +54,7 @@ form:
           - Dritte Auswahl
       testfrage9:
         type: dropdown
+        label: Hier kann man auch mehr auswählen
         size: 1
         multiselect: false
         default: Bitte wählen
