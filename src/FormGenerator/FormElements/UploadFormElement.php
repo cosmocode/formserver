@@ -8,14 +8,28 @@ namespace CosmoCode\Formserver\FormGenerator\FormElements;
 class UploadFormElement extends AbstractDynamicFormElement
 {
 
-    public function getAllowedExtensions() {
+    /**
+     * Get allowed extension for this upload
+     *
+     * @return string
+     */
+    public function getAllowedExtensionsAsString() {
         return strtolower(
             $this->getConfig()['validation']['fileext'] ?? ''
         );
     }
 
+    /**
+     * Get allowed extension for this upload (as array)
+     * @return array
+     */
     public function getAllowedExtensionsAsArray() {
-        return explode(',', $this->getAllowedExtensions());
+        $allowedExtensions = explode(',', $this->getAllowedExtensionsAsString());
+        // remove possible whitespaces after comma (e.g. "pdf, txt, png")
+        foreach ($allowedExtensions as &$allowedExtension) {
+            $allowedExtension = trim($allowedExtension);
+        }
+        return $allowedExtensions;
     }
 
     /**
@@ -29,6 +43,7 @@ class UploadFormElement extends AbstractDynamicFormElement
                 'id' => $this->getFormElementId(),
                 'is_uploaded' => $this->hasValue(),
                 'errors' => $this->getErrors(),
+                'allowed_extensions' => $this->getAllowedExtensionsAsArray()
             ]
         );
     }

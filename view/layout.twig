@@ -195,7 +195,7 @@
             {% for error in errors %}
                 <span>{{ error }}</span><br />
             {% endfor %}
-            <input type="file" class="file-input" id="{{ id }}" name="{{ id }}" {{ fileext is defined ? 'accept='~fileext }} />
+            <input type="file" class="file-input" id="{{ id }}" name="{{ id }}" {{ allowed_extensions is defined ? ('accept=".'~allowed_extensions|join(',.')~'"')|raw }} />
             <span class="file-cta">
                 <span class="file-label">
                     {{ is_uploaded ? 'Datei ersetzen' : 'Datei hochladen' }}

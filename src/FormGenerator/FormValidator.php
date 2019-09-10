@@ -85,7 +85,7 @@ class FormValidator
                             $validators[] = Validator::extension(trim($ext));
                         }
                         if (!Validator::oneOf($validators)->validate($value)) {
-                            $formElement->addError('Fehler: erlaubte Formate ' . $formElement->getAllowedExtensions());
+                            $formElement->addError('Fehler: erlaubte Formate ' . $formElement->getAllowedExtensionsAsString());
                             $this->dropFile($formElement);
 
                             return;
