@@ -19,11 +19,6 @@ class Form
     /**
      * @var string
      */
-    protected $formDirectory;
-
-    /**
-     * @var string
-     */
     protected $id;
 
     /**
@@ -110,13 +105,13 @@ class Form
         }
 
         if (!empty($values)) {
-            YamlHelper::persistYaml($values, $this->formDirectory . 'values.yaml');
+            YamlHelper::persistYaml($values, $this->getFormDirectory() . 'values.yaml');
         }
     }
 
     public function restore()
     {
-        $values = YamlHelper::parseYaml($this->formDirectory . 'values.yaml');
+        $values = YamlHelper::parseYaml($this->getFormDirectory() . 'values.yaml');
 
         foreach ($this->formElements as $formElement) {
             if ($formElement instanceof FieldsetFormElement) {
@@ -187,7 +182,7 @@ class Form
             : $formElement->getId();
         $fileName = sprintf('%s.%0.8s', $baseName, $extension);
 
-        $filePath = $this->formDirectory . $fileName;
+        $filePath = $this->getFormDirectory() . $fileName;
         $uploadedFile->moveTo($filePath);
 
         return $fileName;
@@ -199,7 +194,7 @@ class Form
      * @param UploadFormElement $formElement
      */
     protected function deleteFileFromFormElement(UploadFormElement $formElement) {
-        $filePath = $this->formDirectory . $formElement->getValue();
+        $filePath = $this->getFormDirectory() . $formElement->getValue();
         if(is_file($filePath)) {
             unlink($filePath);
         } else {
