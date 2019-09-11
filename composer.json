@@ -15,6 +15,7 @@
   ],
   "require": {
     "php": ">=7.2",
+    "ext-fileinfo": "*",
     "php-di/php-di": "^6.0",
     "monolog/monolog": "^1.24",
     "slim/psr7": "^0.5",
@@ -28,20 +29,19 @@
   "config": {
     "platform": {
       "php": "7.2"
-    },
-    "process-timeout": 900
+    }
   },
   "require-dev": {
-    "squizlabs/php_codesniffer": "^3.4",
-    "phpunit/phpunit": "^7.5"
+    "squizlabs/php_codesniffer": "^3.4"
   },
   "autoload": {
     "psr-4": {
-      "CosmoCode\\Formserver\\": "src",
-      "CosmoCode\\Tests\\Formserver\\": "tests"
+      "CosmoCode\\Formserver\\": "src"
     }
   },
   "scripts": {
-    "start": "php -S localhost:8181 -t public"
+    "start": "php -S localhost:8181 -t public",
+    "check": "phpcs -p src",
+    "fix": "phpcbf src"
   }
 }
