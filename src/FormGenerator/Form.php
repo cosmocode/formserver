@@ -12,6 +12,11 @@ use CosmoCode\Formserver\FormGenerator\FormElements\UploadFormElement;
 use CosmoCode\Formserver\Helper\YamlHelper;
 use Slim\Psr7\UploadedFile;
 
+/**
+ * Contains the form and provides basic functionality
+ *
+ * @package CosmoCode\Formserver\FormGenerator
+ */
 class Form
 {
     const DATA_DIR = __DIR__ . '/../../data/';
@@ -26,9 +31,16 @@ class Form
      */
     protected $meta;
 
-    /** @var AbstractFormElement[] */
+    /**
+     * @var AbstractFormElement[]
+     */
     protected $formElements = [];
 
+    /**
+     * Build a form from YAML
+     *
+     * @param string $formId
+     */
     public function __construct(string $formId)
     {
         $this->id = $formId;
@@ -36,16 +48,31 @@ class Form
         $this->meta = $config['meta'] ?? [];
 
         foreach ($config['form'] as $formElementId => $formElementConfig) {
-            $this->formElements[] = FormElementFactory::createFormElement($formElementId, $formElementConfig);
+            $this->formElements[] = FormElementFactory::createFormElement(
+                $formElementId,
+                $formElementConfig
+            );
         }
     }
 
+    /**
+     * Returns all form elements
+     *
+     * @return AbstractFormElement[]
+     */
     public function getFormElements()
     {
         return $this->formElements;
     }
 
-    public function getData() {
+    /**
+     * Returns the user entered data of all form elements
+     * TODO: obsolete?
+     *
+     * @return array
+     */
+    public function getData()
+    {
         $data = [];
 
         foreach ($this->formElements as $formElement) {
@@ -61,23 +88,49 @@ class Form
         return $data;
     }
 
+    /**
+     * Get the meta config
+     *
+     * @param string $key
+     * @return mixed|null
+     */
     public function getMeta(string $key)
     {
         return $this->meta[$key] ?? null;
     }
 
-    public function getFormDirectory() {
+    /**
+     * Get the directory path of current form
+     *
+     * @return string
+     */
+    public function getFormDirectory()
+    {
         return self::DATA_DIR . $this->id . '/';
     }
 
-    public function getId() {
+    /**
+     * Get the id of current form
+     *
+     * @return string
+     */
+    public function getId()
+    {
         return $this->id;
     }
 
+    /**
+     * Submit data to the form
+     *
+     * @param array $data $_POST
+     * @param array $files $_FILES
+     * @return void
+     */
     public function submit(array $data, array $files)
     {
-        // Important! Restore persisted data first to determine if UploadFormElements have already an uploaded file
-        // (They have a value which containts the file name)
+        // Important! Restore persisted data first to determine if UploadFormElements
+        // have already an uploaded file (They have a value which containts the file
+        // name)
         $this->restore();
 
         foreach ($this->formElements as $formElement) {
@@ -91,6 +144,11 @@ class Form
         }
     }
 
+    /**
+     * Persist all submitted data to YAML
+     *
+     * @return void
+     */
     public function persist()
     {
         $values = [];
@@ -104,11 +162,19 @@ class Form
             }
         }
 
-        if (!empty($values)) {
-            YamlHelper::persistYaml($values, $this->getFormDirectory() . 'values.yaml');
+        if (! empty($values)) {
+            YamlHelper::persistYaml(
+                $values,
+                $this->getFormDirectory() . 'values.yaml'
+            );
         }
     }
 
+    /**
+     * Restore all persisted data
+     *
+     * @return void
+     */
     public function restore()
     {
         $values = YamlHelper::parseYaml($this->getFormDirectory() . 'values.yaml');
@@ -124,15 +190,25 @@ class Form
         }
     }
 
-    public function isValid() {
+    /**
+     * Returns boolean if all form elements of this form are valid
+     *
+     * @return bool
+     */
+    public function isValid()
+    {
         foreach ($this->formElements as $formElement) {
             if ($formElement instanceof FieldsetFormElement) {
                 foreach ($formElement->getChildren() as $fieldsetChild) {
-                    if ($fieldsetChild instanceof AbstractDynamicFormElement && !$fieldsetChild->isValid()) {
+                    if ($fieldsetChild instanceof AbstractDynamicFormElement
+                        && ! $fieldsetChild->isValid()
+                    ) {
                         return false;
                     }
                 }
-            } elseif ($formElement instanceof AbstractDynamicFormElement && !$formElement->isValid()) {
+            } elseif ($formElement instanceof AbstractDynamicFormElement
+                && ! $formElement->isValid()
+            ) {
                 return false;
             }
         }
@@ -140,14 +216,27 @@ class Form
         return true;
     }
 
-    protected function submitFormElement(AbstractFormElement $formElement, array $data, array $files)
-    {
+    /**
+     * Helper function to submit data to a form element
+     *
+     * @param AbstractFormElement $formElement
+     * @param array $data
+     * @param array $files
+     * @return void
+     */
+    protected function submitFormElement(
+        AbstractFormElement $formElement,
+        array $data,
+        array $files
+    ) {
         if ($formElement instanceof UploadFormElement) {
-            /** @var UploadedFile $file */
+            /**
+             * @var UploadedFile $file
+             */
             $file = $this->getFormElementValueFromArray($formElement, $files);
 
             if ($file !== null && $file->getError() === UPLOAD_ERR_OK) {
-                if (!empty($formElement->getValue())) {
+                if (! empty($formElement->getValue())) {
                     $this->deleteFileFromFormElement($formElement);
                 }
                 $fileName = $this->moveUploadedFile($file, $formElement);
@@ -168,8 +257,10 @@ class Form
      * @param UploadFormElement $formElement
      * @return string
      */
-    protected function moveUploadedFile(UploadedFile $uploadedFile, UploadFormElement $formElement)
-    {
+    protected function moveUploadedFile(
+        UploadedFile $uploadedFile,
+        UploadFormElement $formElement
+    ) {
         $extension = strtolower(
             pathinfo(
                 $uploadedFile->getClientFilename(),
@@ -192,39 +283,76 @@ class Form
      * Deletes a file (in favor of another uploaded one)
      *
      * @param UploadFormElement $formElement
+     * @return void
      */
-    protected function deleteFileFromFormElement(UploadFormElement $formElement) {
+    protected function deleteFileFromFormElement(UploadFormElement $formElement)
+    {
         $filePath = $this->getFormDirectory() . $formElement->getValue();
-        if(is_file($filePath)) {
+        if (is_file($filePath)) {
             unlink($filePath);
         } else {
             throw new FormException("Could not delete file: '$filePath'");
         }
     }
 
+    /**
+     * Helper function to restore a specific value to a form element
+     *
+     * @param array $values
+     * @param AbstractFormElement $formElement
+     * @return void
+     */
     protected function restoreValue(array $values, AbstractFormElement $formElement)
     {
-        if ($formElement instanceof InputFormElement || $formElement instanceof UploadFormElement) {
+        if ($formElement instanceof InputFormElement
+            || $formElement instanceof UploadFormElement
+        ) {
             $value = $this->getFormElementValueFromArray($formElement, $values);
                 $formElement->setValue($value);
         }
     }
 
-    protected function getFormElementValueFromArray(AbstractFormElement $formElement, array $array) {
+    /**
+     * Helper function to get the value of a form element from provided array
+     * This can be used for $_FILES and $_POST as they have the same structure
+     *
+     * @param AbstractFormElement $formElement
+     * @param array $array
+     * @return mixed|null
+     */
+    protected function getFormElementValueFromArray(
+        AbstractFormElement $formElement,
+        array $array
+    ) {
+        $formElementId = $formElement->getId();
         return $formElement->hasParent()
-            ? $array[$formElement->getParent()->getId()][$formElement->getId()] ?? null
-            : $array[$formElement->getId()] ?? null;
+            ? $array[$formElement->getParent()->getId()][$formElementId] ?? null
+            : $array[$formElementId] ?? null;
     }
 
-    protected function insertFormElementValueInArray(AbstractFormElement $formElement, array &$array) {
-        if ($formElement instanceof InputFormElement || $formElement instanceof UploadFormElement) {
+    /**
+     * Helper function  to fill a array with values from form element
+     * The given array parameter is a pointer
+     *
+     * @param AbstractFormElement $formElement
+     * @param array $array
+     * @return void
+     */
+    protected function insertFormElementValueInArray(
+        AbstractFormElement $formElement,
+        array &$array
+    ) {
+        if ($formElement instanceof InputFormElement
+            || $formElement instanceof UploadFormElement
+        ) {
             // Dont need to persist an empty value
             if (empty($formElement->getValue())) {
                 return;
             }
 
             if ($formElement->hasParent()) {
-                $array[$formElement->getParent()->getId()][$formElement->getId()] = $formElement->getValue();
+                $array[$formElement->getParent()->getId()][$formElement->getId()]
+                    = $formElement->getValue();
             } else {
                 $array[$formElement->getId()] = $formElement->getValue();
             }

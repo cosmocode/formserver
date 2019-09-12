@@ -7,11 +7,15 @@ use CosmoCode\Formserver\FormGenerator\Form;
 use CosmoCode\Formserver\FormGenerator\FormRenderer;
 use CosmoCode\Formserver\FormGenerator\FormValidator;
 use CosmoCode\Formserver\Service\Mailer;
-use CosmoCode\Formserver\Helper\YamlHelper;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Log\LoggerInterface;
 use Slim\Exception\HttpBadRequestException;
 
+/**
+ * Handles form requests
+ *
+ * @package CosmoCode\Formserver\Actions
+ */
 class FormAction extends AbstractAction
 {
     /**
@@ -19,6 +23,12 @@ class FormAction extends AbstractAction
      */
     protected $mailer;
 
+    /**
+     * Constructor to inject dependencies
+     *
+     * @param LoggerInterface $logger
+     * @param Mailer $mailer
+     */
     public function __construct(LoggerInterface $logger, Mailer $mailer)
     {
         parent::__construct($logger);
@@ -26,7 +36,9 @@ class FormAction extends AbstractAction
     }
 
     /**
-     * @inheritDoc
+     * Action to provide a form
+     *
+     * @return Response
      */
     protected function action(): Response
     {
@@ -38,11 +50,16 @@ class FormAction extends AbstractAction
 
 
             if ($this->request->getMethod() === 'POST') {
-                $form->submit($this->request->getParsedBody(), $this->request->getUploadedFiles());
+                $form->submit(
+                    $this->request->getParsedBody(),
+                    $this->request->getUploadedFiles()
+                );
                 $formValidator->validate();
                 $form->persist();
-                //TODO cleam up if
-                if ($form->isValid() && isset($this->request->getParsedBody()['formcontrol']['send'])) {
+                //TODO clean up if
+                if ($form->isValid()
+                    && isset($this->request->getParsedBody()['formcontrol']['send'])
+                ) {
                     $this->mailer->sendForm($form);
                 }
             } elseif ($this->request->getMethod() === 'GET') {

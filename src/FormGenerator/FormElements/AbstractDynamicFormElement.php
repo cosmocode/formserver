@@ -19,11 +19,13 @@ abstract class AbstractDynamicFormElement extends AbstractFormElement
     protected $errors = [];
 
     /**
+     * Returns true if this form element has a value
+     *
      * @return bool
      */
     public function hasValue()
     {
-        return !empty($this->value);
+        return ! empty($this->value);
     }
 
     /**
@@ -50,6 +52,7 @@ abstract class AbstractDynamicFormElement extends AbstractFormElement
      * Sets the value and triggers validation
      *
      * @param string|null $value
+     * @return void
      */
     public function setValue($value)
     {
@@ -66,14 +69,22 @@ abstract class AbstractDynamicFormElement extends AbstractFormElement
         return $this->getConfigValue('validation') ?? [];
     }
 
-    public function isRequired() {
-        return isset($this->getValidationRules()['required']) && $this->getValidationRules()['required'];
+    /**
+     * Return true if this form element is required
+     *
+     * @return bool
+     */
+    public function isRequired()
+    {
+        return isset($this->getValidationRules()['required'])
+            && $this->getValidationRules()['required'];
     }
 
     /**
      * Attaches an error to the form element
      *
      * @param string $error
+     * @return void
      */
     public function addError($error)
     {
@@ -90,7 +101,13 @@ abstract class AbstractDynamicFormElement extends AbstractFormElement
         return $this->errors;
     }
 
-    public function isValid() {
+    /**
+     * Return true if the value of this form element is marked as valid
+     *
+     * @return bool
+     */
+    public function isValid()
+    {
         return empty($this->errors);
     }
 }

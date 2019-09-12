@@ -7,14 +7,19 @@ use DI\NotFoundException;
 use Psr\Http\Message\ResponseInterface as Response;
 use Slim\Psr7\Stream;
 
+/**
+ * Action to download files from form data directory
+ */
 class DownloadAction extends AbstractAction
 {
     const DATA_DIRECTORY = __DIR__ . '/../../data/';
 
     /**
-     * Main action method
+     * Action to download file
      *
      * @return Response
+     * @throws NotFoundException
+     * @throws \Slim\Exception\HttpBadRequestException
      */
     protected function action(): Response
     {
@@ -22,7 +27,7 @@ class DownloadAction extends AbstractAction
         $directory = $this->resolveArg('id');
         $filePath = self::DATA_DIRECTORY . $directory . '/' . $file;
 
-        if (!file_exists($filePath)) {
+        if (! file_exists($filePath)) {
             throw new NotFoundException();
         }
 
