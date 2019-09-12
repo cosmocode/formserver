@@ -22,8 +22,18 @@ abstract class AbstractFormElement
      */
     protected $parent;
 
-    public function __construct($id, array $config, AbstractFormElement $parent = null)
-    {
+    /**
+     * Inheriting child elements must call this constructor
+     *
+     * @param string $id
+     * @param array $config
+     * @param AbstractFormElement|null $parent
+     */
+    public function __construct(
+        string $id,
+        array $config,
+        AbstractFormElement $parent = null
+    ) {
         $this->id = $id;
         $this->config = $config;
         $this->parent = $parent;
@@ -53,33 +63,60 @@ abstract class AbstractFormElement
         return $this->getId();
     }
 
+    /**
+     * Get the type of the form element
+     *
+     * @return mixed|null
+     */
     public function getType()
     {
         return $this->getConfigValue('type');
     }
 
+    /**
+     * Get the complete config of this form element
+     * 
+     * @return array
+     */
     public function getConfig()
     {
         return $this->config;
     }
 
+    /**
+     * Get a specific value of the config
+     *
+     * @param string $key
+     * @return mixed|null
+     */
     public function getConfigValue(string $key)
     {
         return $this->config[$key] ?? null;
     }
 
+    /**
+     * Get the parent of this form element
+     * If none is set return null
+     *
+     * @return AbstractFormElement|null
+     */
     public function getParent()
     {
         return $this->parent;
     }
 
+    /**
+     * Return boolean if the form element has a parent
+     *
+     * @return bool
+     */
     public function hasParent()
     {
         return $this->parent !== null;
     }
 
     /**
-     * Variables needed to render the element
+     * Prepare variables array for twig view
      *
      * @return array
      */

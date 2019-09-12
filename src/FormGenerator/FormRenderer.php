@@ -6,17 +6,28 @@ namespace CosmoCode\Formserver\FormGenerator;
 use CosmoCode\Formserver\Exceptions\TwigException;
 use CosmoCode\Formserver\FormGenerator\FormElements\FieldsetFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\AbstractFormElement;
+use Twig\TemplateWrapper;
 
 /**
  * Renders twig blocks
  */
 class FormRenderer
 {
-    /** @var \Twig\TemplateWrapper */
+    /**
+     * @var TemplateWrapper
+     */
     protected $twig;
 
+    /**
+     * @var Form
+     */
     protected $form;
 
+    /**
+     * Pass the form which later should be rendered
+     *
+     * @param Form $form
+     */
     public function __construct(Form $form)
     {
         $this->form = $form;
@@ -26,14 +37,15 @@ class FormRenderer
         try {
             $this->twig = $twigEnvironment->load('layout.twig');
         } catch (\Twig\Error\Error $e) {
-            throw new TwigException("Could not load twig layout file 'layout.twig':" . $e->getMessage());
+            throw new TwigException(
+                "Could not load twig layout file:" . $e->getMessage()
+            );
         }
     }
 
     /**
      * Renders the complete Form
      *
-     * @param AbstractFormElement[] $formElements
      * @return string
      * @throws TwigException
      */
@@ -49,7 +61,13 @@ class FormRenderer
             }
         }
 
-        return $this->renderBlock('form', ['formHtml' => $formHtml, 'title' => $title]);
+        return $this->renderBlock(
+            'form',
+            [
+                'formHtml' => $formHtml,
+                'title' => $title
+            ]
+        );
     }
 
     /**
@@ -59,8 +77,9 @@ class FormRenderer
      * @return string
      * @throws TwigException
      */
-    protected function renderFieldsetFormElement(FieldsetFormElement $fieldsetFormElement)
-    {
+    protected function renderFieldsetFormElement(
+        FieldsetFormElement $fieldsetFormElement
+    ) {
         foreach ($fieldsetFormElement->getChildren() as $childFormElement) {
             $fieldsetFormElement->addRenderedChildView(
                 $this->renderFormElement($childFormElement)
@@ -78,21 +97,26 @@ class FormRenderer
      */
     protected function renderFormElement(AbstractFormElement $formElement)
     {
-        return $this->renderBlock($formElement->getType(), $formElement->getViewVariables());
+        return $this->renderBlock(
+            $formElement->getType(),
+            $formElement->getViewVariables()
+        );
     }
 
     /**
      * Helper function to render a twig block
      *
-     * @param $block
-     * @param $variables
+     * @param string $block
+     * @param array $variables
      * @return string
      * @throws TwigException
      */
-    protected function renderBlock($block, $variables)
+    protected function renderBlock(string $block, array $variables)
     {
-        if (!$this->twig->hasBlock($block)) {
-            throw new TwigException("Template block for form element type '$block' not found.");
+        if (! $this->twig->hasBlock($block)) {
+            throw new TwigException(
+                "Template block for form element type '$block' not found."
+            );
         }
 
         // Global variables
@@ -101,7 +125,9 @@ class FormRenderer
         try {
             return $this->twig->renderBlock($block, $variables);
         } catch (\Throwable $e) {
-            throw new TwigException("Could not render block '$block': " . $e->getMessage());
+            throw new TwigException(
+                "Could not render block '$block': " . $e->getMessage()
+            );
         }
     }
 }

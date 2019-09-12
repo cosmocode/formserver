@@ -13,7 +13,8 @@ class UploadFormElement extends AbstractDynamicFormElement
      *
      * @return string
      */
-    public function getAllowedExtensionsAsString() {
+    public function getAllowedExtensionsAsString()
+    {
         return strtolower(
             $this->getConfig()['validation']['fileext'] ?? ''
         );
@@ -21,9 +22,11 @@ class UploadFormElement extends AbstractDynamicFormElement
 
     /**
      * Get allowed extension for this upload (as array)
+     *
      * @return array
      */
-    public function getAllowedExtensionsAsArray() {
+    public function getAllowedExtensionsAsArray()
+    {
         $allowedExtensions = explode(',', $this->getAllowedExtensionsAsString());
         // remove possible whitespaces after comma (e.g. "pdf, txt, png")
         foreach ($allowedExtensions as &$allowedExtension) {
@@ -34,6 +37,7 @@ class UploadFormElement extends AbstractDynamicFormElement
 
     /**
      * @inheritDoc
+     * @return void
      */
     public function getViewVariables()
     {

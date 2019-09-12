@@ -9,6 +9,7 @@ class SignatureFormElement extends InputFormElement
 {
     /**
      * @inheritDoc
+     * @return void
      */
     public function getViewVariables()
     {

@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<ruleset name="Custom Sniffer Rules" namespace="CosmoCode\Formserver\CS\Standard">
+    <description>A custom coding standard to exclude excessive rules</description>
+
+    <arg name="colors"/>
+    <arg value="sp"/>
+
+    <ini name="memory_limit" value="64M"/>
+
+    <rule ref="PEAR">
+        <!-- Exclude checks for file comment completely -->
+        <exclude name="PEAR.Commenting.FileComment.Missing"/>
+        <!-- Exclude checks for class comment tags -->
+        <exclude name="PEAR.Commenting.ClassComment.MissingCategoryTag"/>
+        <exclude name="PEAR.Commenting.ClassComment.MissingPackageTag"/>
+        <exclude name="PEAR.Commenting.ClassComment.MissingAuthorTag"/>
+        <exclude name="PEAR.Commenting.ClassComment.MissingLicenseTag"/>
+        <exclude name="PEAR.Commenting.ClassComment.MissingLinkTag"/>
+        <!-- Exclude checks for @param comment -->
+        <exclude name="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+        <!-- Exclude checks for spacing of surrounding @param tags -->
+        <exclude name="PEAR.Commenting.FunctionComment.SpacingAfterParamType"/>
+        <exclude name="PEAR.Commenting.FunctionComment.SpacingAfterParamName"/>
+        <!-- Exclude checks for scope indent (overlapping with switch indent checks) -->
+        <exclude name="PEAR.WhiteSpace.ScopeIndent.IncorrectExact"/>
+    </rule>
+
+    <rule ref="Generic">
+        <!-- Exclude checks for short doc comment to bypass /** @var */ errors -->
+        <exclude name="Generic.Commenting.DocComment.MissingShort"/>
+        <!-- Exclude checks for lower case class name -->
+        <exclude name="Generic.Files.LowercasedFilename.NotFound"/>
+        <!-- Exclude checks for PHP close tag -->
+        <exclude name="Generic.PHP.ClosingPHPTag.NotFound"/>
+        <!-- Exclude checks that a PHP file must not end with newline -->
+        <exclude name="Generic.Files.EndFileNoNewline.Found"/>
+        <!-- Exclude checks for not allowed space indent -->
+        <exclude name="Generic.WhiteSpace.DisallowSpaceIndent.SpacesUsed"/>
+        <!-- Exclude checks that opening class brace must be on the same line on class and function declarations -->
+        <exclude name="Generic.Classes.OpeningBraceSameLine.BraceOnNewLine"/>
+        <exclude name="Generic.Functions.OpeningFunctionBraceKernighanRitchie.BraceOnNewLine"/>
+        <!-- Exclude checks that surrounding assignments have the same aligned space -->
+        <exclude name="Generic.Formatting.MultipleStatementAlignment.NotSameWarning"/>
+        <!-- Exclude checks for uppercase TRUE, FALSE and NULL -->
+        <exclude name="Generic.PHP.UpperCaseConstant.Found"/>
+        <!-- Exclude checks for spacing of surrounding @param tags -->
+        <exclude name="Generic.Commenting.DocComment.NonParamGroup"/>
+        <exclude name="Generic.Commenting.DocComment.TagValueIndent"/>
+        <!-- Exclude checks for not allowed short array syntax -->
+        <exclude name="Generic.Arrays.DisallowShortArraySyntax.Found"/>
+        <!-- Exclude checks that open braces after multiline function definition closing brackets must be on new line -->
+        <exclude name="Generic.Functions.OpeningFunctionBraceBsdAllman.BraceOnSameLine"/>
+        <!--Exclude checks for complex functions (e.g. because of big switch statement) -->
+        <exclude name="Generic.Metrics.CyclomaticComplexity.TooHigh"/>
+    </rule>
+</ruleset>

@@ -3,17 +3,21 @@
 namespace CosmoCode\Formserver\FormGenerator\FormElements;
 
 /**
- * Static form elements have no user input (e.g. hidden, simple text, image, download)
+ * Static form elements have no user input
  */
 class StaticFormElement extends AbstractFormElement
 {
     /**
-     * Prepare variables array for twig view.
-     *
+     * @inheritdoc
      * @return array
      */
     public function getViewVariables()
     {
-        return array_merge($this->getConfig(),[ 'id' => $this->getFormElementId()]);
+        return array_merge(
+            $this->getConfig(),
+            [
+                'id' => $this->getFormElementId()
+            ]
+        );
     }
 }

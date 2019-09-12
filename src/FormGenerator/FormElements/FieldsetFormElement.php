@@ -4,7 +4,8 @@ namespace CosmoCode\Formserver\FormGenerator\FormElements;
 
 
 /**
- * FieldsetFormElement is a special StaticFormElement, since it contains child formElements
+ * FieldsetFormElement is a special AbstractFormElement.
+ * It contains child formElements
  */
 class FieldsetFormElement extends AbstractFormElement
 {
@@ -19,13 +20,23 @@ class FieldsetFormElement extends AbstractFormElement
      */
     protected $renderedChildViews = [];
 
-    public function __construct($id, array $config, AbstractFormElement $parent = null)
-    {
+    /**
+     * @param string $id
+     * @param array $config
+     * @param AbstractFormElement|null $parent
+     * @inheritdoc
+     */
+    public function __construct(
+        string $id, array $config,
+        AbstractFormElement $parent = null
+    ) {
         unset($config['children']); // Children config not needed
         parent::__construct($id, $config, $parent);
     }
 
     /**
+     * Get a list of containing child form elements
+     *
      * @return AbstractFormElement[]
      */
     public function getChildren()
@@ -33,6 +44,12 @@ class FieldsetFormElement extends AbstractFormElement
         return $this->children;
     }
 
+    /**
+     * Add a form element to this fieldet form element
+     *
+     * @param AbstractFormElement $child
+     * @return void
+     */
     public function addChild(AbstractFormElement $child)
     {
         $this->children[] = $child;
@@ -40,6 +57,8 @@ class FieldsetFormElement extends AbstractFormElement
 
 
     /**
+     * Get the rendered form element views
+     *
      * @return string[]
      */
     public function getRenderedChildViews()
@@ -48,17 +67,24 @@ class FieldsetFormElement extends AbstractFormElement
     }
 
     /**
+     * Add a rendered form element view
+     *
      * @param string $renderedView
+     * @return void
      */
     public function addRenderedChildView(string $renderedView)
     {
         $this->renderedChildViews[] = $renderedView;
     }
 
-
+    /**
+     * @inheritdoc
+     * @return array
+     */
     public function getViewVariables()
     {
-        return array_merge($this->getConfig(),
+        return array_merge(
+            $this->getConfig(),
             [
                 'id' => $this->getFormElementId(),
                 'rendered_child_views' => $this->renderedChildViews,

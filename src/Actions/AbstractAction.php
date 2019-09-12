@@ -9,6 +9,11 @@ use Psr\Log\LoggerInterface;
 use Slim\Exception\HttpBadRequestException;
 use Slim\Exception\HttpNotFoundException;
 
+/**
+ * Abstract action class which holds basic properties for all descendants
+ *
+ * @package CosmoCode\Formserver\Actions
+ */
 abstract class AbstractAction
 {
     /**
@@ -32,6 +37,8 @@ abstract class AbstractAction
     protected $args;
 
     /**
+     * Constructor to inject dependencies
+     *
      * @param LoggerInterface $logger
      */
     public function __construct(LoggerInterface $logger)
@@ -40,9 +47,9 @@ abstract class AbstractAction
     }
 
     /**
-     * @param Request  $request
+     * @param Request $request
      * @param Response $response
-     * @param array    $args
+     * @param array $args
      * @return Response
      * @throws HttpNotFoundException
      */
@@ -75,8 +82,10 @@ abstract class AbstractAction
      */
     protected function resolveArg(string $name)
     {
-        if (!isset($this->args[$name])) {
-            throw new HttpBadRequestException($this->request, "Could not resolve argument `{$name}`.");
+        if (! isset($this->args[$name])) {
+            throw new HttpBadRequestException(
+                $this->request, "Could not resolve argument `{$name}`."
+            );
         }
 
         return $this->args[$name];
