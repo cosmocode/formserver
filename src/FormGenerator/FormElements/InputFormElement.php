@@ -9,7 +9,7 @@ class InputFormElement extends AbstractDynamicFormElement
 {
     /**
      * @inheritDoc
-     * @return void
+     * @return array
      */
     public function getViewVariables()
     {

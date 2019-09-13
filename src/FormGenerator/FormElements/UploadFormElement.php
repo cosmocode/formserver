@@ -37,7 +37,7 @@ class UploadFormElement extends AbstractDynamicFormElement
 
     /**
      * @inheritDoc
-     * @return void
+     * @return array
      */
     public function getViewVariables()
     {
