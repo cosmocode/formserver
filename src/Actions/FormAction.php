@@ -56,10 +56,8 @@ class FormAction extends AbstractAction
                 );
                 $formValidator->validate();
                 $form->persist();
-                //TODO clean up if
-                if ($form->isValid()
-                    && isset($this->request->getParsedBody()['formcontrol']['send'])
-                ) {
+
+                if ($form->isValid() && $form->getMode() === Form::MODE_SEND) {
                     $this->mailer->sendForm($form);
                 }
             } elseif ($this->request->getMethod() === 'GET') {

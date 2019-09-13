@@ -21,6 +21,10 @@ class Form
 {
     const DATA_DIR = __DIR__ . '/../../data/';
 
+    const MODE_SHOW = 'show';
+    const MODE_SAVE = 'save';
+    const MODE_SEND = 'send';
+
     /**
      * @var string
      */
@@ -35,6 +39,11 @@ class Form
      * @var AbstractFormElement[]
      */
     protected $formElements = [];
+
+    /**
+     * @var string
+     */
+    protected $mode = self::MODE_SHOW;
 
     /**
      * Build a form from YAML
@@ -120,6 +129,33 @@ class Form
     }
 
     /**
+     * Returns the current mode (user intend)
+     *
+     * @return string
+     */
+    public function getMode()
+    {
+        return $this->mode;
+    }
+
+    /**
+     * Sets the current mode
+     *
+     * @param array $data
+     * @return void
+     */
+    protected function setMode(array $data)
+    {
+        if (isset($data['formcontrol']['send'])) {
+            $this->mode = self::MODE_SEND;
+        } elseif (isset($data['formcontrol']['save'])) {
+            $this->mode = self::MODE_SAVE;
+        } else {
+            $this->mode = self::MODE_SHOW;
+        }
+    }
+
+    /**
      * Submit data to the form
      *
      * @param array $data $_POST
@@ -142,6 +178,8 @@ class Form
                 $this->submitFormElement($formElement, $data, $files);
             }
         }
+
+        $this->setMode($data);
     }
 
     /**

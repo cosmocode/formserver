@@ -4,6 +4,7 @@ namespace CosmoCode\Formserver\Actions;
 
 
 use DI\NotFoundException;
+use Mimey\MimeTypes;
 use Psr\Http\Message\ResponseInterface as Response;
 use Slim\Psr7\Stream;
 
@@ -31,7 +32,15 @@ class DownloadAction extends AbstractAction
             throw new NotFoundException();
         }
 
-        $mimeType = mime_content_type($filePath);
+        $mimes = new MimeTypes();
+        $extension = strtolower(
+            pathinfo(
+                $filePath,
+                PATHINFO_EXTENSION
+            )
+        );
+        $mimeType = $mimes->getMimeType($extension);
+
         $file = fopen($filePath, 'rb');
         $fileStream = new Stream($file);
         $fileSize = filesize($filePath);

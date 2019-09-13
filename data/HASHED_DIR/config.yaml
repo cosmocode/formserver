@@ -1,5 +1,7 @@
 meta:
   title: 'Formular #1'
+  css: custom.css
+  logo: logo.png
   email:
     subject: 'Formular #1 ausgefüllt'
     recipients:
@@ -9,7 +11,8 @@ meta:
 form:
   testfrage1:
     type: textinput
-    label: Wie finden Sie diese Frage?
+    label: Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+    width: 75%
     validation:
       match: /^sehr gut$/
 
@@ -19,7 +22,7 @@ form:
     children:
       testfrage1:
         type: numberinput
-        label: Ist diese Frage besser? (number 3-6)
+        label: Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. (number 3-6)
         validation:
           min: 3
           max: 6
@@ -35,19 +38,24 @@ form:
       testfrage5:
         type: textarea
         label: Und diese? (textarea)
-        cols: 50
-        rows: 8
+        width: 75%
+        rows: 10
         validation:
           match: /[a-zA-Z0-9]/
       testfrage6:
         type: email
         label: Und diese? (email)
+        validation:
+          required: true
       testfrage7_hidden:
         type: hidden
         value: "Ich bin versteckt"
       testfrage8:
         type: radioset
         label: Hier kann man mal mehr auswählen
+        alignment: vertical
+        validation:
+          required: true
         choices:
           - Erste Auswahl
           - Zweite Auswahl
@@ -55,9 +63,10 @@ form:
       testfrage9:
         type: dropdown
         label: Hier kann man auch mehr auswählen
-        size: 1
-        multiselect: false
         default: Bitte wählen
+        width: 100%
+        validation:
+          required: true
         choices:
           - Erste Auswahl
           - Zweite Auswahl
@@ -65,6 +74,9 @@ form:
       testfrage10:
         type: checklist
         label: Hier kann man mal mehr auswählen
+        alignment: vertical
+        validation:
+          required: true
         choices:
           - Erste Auswahl
           - Zweite Auswahl
@@ -92,3 +104,7 @@ form:
       signature:
         type: signature
         label: Unterschrift
+        height: 400
+        width: 900
+        validation:
+          required: true

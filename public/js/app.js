@@ -1,7 +1,7 @@
 // Inject flatpickr
-flatpickr('[data-calender-type="date"]', {'dateFormat' : 'd.m.Y', 'allowInput' : true});
-flatpickr('[data-calender-type="time"]', {'noCalendar' : true, 'enableTime' : true, 'time_24hr' : true, 'allowInput' : true});
-flatpickr('[data-calender-type="datetime"]', {'enableTime' : true, 'time_24hr' : true, 'dateFormat' : 'd.m.Y H:i', 'allowInput' : true});
+flatpickr('[data-calendar-type="date"]', {'dateFormat' : 'd.m.Y', 'allowInput' : true});
+flatpickr('[data-calendar-type="time"]', {'noCalendar' : true, 'enableTime' : true, 'time_24hr' : true, 'allowInput' : true});
+flatpickr('[data-calendar-type="datetime"]', {'enableTime' : true, 'time_24hr' : true, 'dateFormat' : 'd.m.Y H:i', 'allowInput' : true});
 
 /**
  * Signature Pad
@@ -29,4 +29,13 @@ if (wrapper && canvas) {
     form.addEventListener("submit", function (event) {
         dataField.value = signaturePad.toDataURL();
     });
+
+    width = wrapper.dataset.width;
+    if (width) {
+        canvas.width = width;
+    }
+    height = wrapper.dataset.height;
+    if (height) {
+        canvas.height = height;
+    }
 }
