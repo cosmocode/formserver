@@ -19,6 +19,7 @@ class SignatureFormElement extends InputFormElement
                 'id' => $this->getFormElementId(),
                 'value' => $this->getValue(),
                 'errors' => $this->getErrors(),
+                'is_required' => $this->isRequired()
             ]
         );
     }

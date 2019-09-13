@@ -61,7 +61,7 @@
 
 {%- block textinput -%}
     <div class="field">
-        <label class="label" for="{{ id }}">{{ label }}</label>
+        <label class="label" for="{{ id }}">{{ label }} {{ is_required ? '*' }}</label>
         <div class="control">
             <input
                 type="text"
@@ -78,7 +78,7 @@
 
 {%- block numberinput -%}
     <div class="field">
-        <label class="label" for="{{ id }}">{{ label }}</label>
+        <label class="label" for="{{ id }}">{{ label }} {{ is_required ? '*' }}</label>
         <div class="control">
             <input
                 type="number"
@@ -95,7 +95,7 @@
 
 {%- block date -%}
     <div class="field">
-        <label class="label" for="{{ id }}">{{ label }}</label>
+        <label class="label" for="{{ id }}">{{ label }} {{ is_required ? '*' }}</label>
         <div class="control">
             <input
                 type="text"
@@ -113,7 +113,7 @@
 
 {%- block time -%}
     <div class="field">
-        <label class="label" for="{{ id }}">{{ label }}</label>
+        <label class="label" for="{{ id }}">{{ label }} {{ is_required ? '*' }}</label>
         <div class="control">
             <input
                 type="text"
@@ -131,7 +131,7 @@
 
 {%- block datetime -%}
     <div class="field">
-        <label class="label" for="{{ id }}">{{ label }}</label>
+        <label class="label" for="{{ id }}">{{ label }} {{ is_required ? '*' }}</label>
         <div class="control">
             <input
                 type="text"
@@ -149,7 +149,7 @@
 
 {%- block email -%}
     <div class="field">
-        <label class="label" for="{{ id }}">{{ label }}</label>
+        <label class="label" for="{{ id }}">{{ label }} {{ is_required ? '*' }}</label>
         <div class="control">
             <input
                 type="email"
@@ -171,7 +171,7 @@
 
 {%- block textarea -%}
     <div class="field">
-        <label class="label" for="{{ id }}">{{ label }}</label>
+        <label class="label" for="{{ id }}">{{ label }} {{ is_required ? '*' }}</label>
         <div class="control">
             <textarea
                 id="{{ id }}"
@@ -193,7 +193,7 @@
 {%- block radioset -%}
     <div class="field">
         <div class="control">
-            <div class="label">{{ label }}</div>
+            <div class="label">{{ label }} {{ is_required ? '*' }}</div>
             {%- for choice in choices -%}
                 <label class="radio">
                     <input
@@ -217,7 +217,7 @@
 {%- block checklist -%}
     <div class="field">
         <div class="control">
-            <div class="label">{{ label }}</div>
+            <div class="label">{{ label }} {{ is_required ? '*' }}</div>
             {%- for choice in choices -%}
                 <label class="checkbox">
                     <input
@@ -241,7 +241,7 @@
 
 {%- block dropdown -%}
     <div class="field">
-        <label class="label" for="{{ id }}">{{ label }}</label>
+        <label class="label" for="{{ id }}">{{ label }} {{ is_required ? '*' }}</label>
         <div class="control">
             <div class="select {{ multiselect is defined and multiselect ? 'is-multiple' }} {{ errors is not empty ? 'is-danger' }}" {{ width is defined ? ('style="width:'~width~';"') | raw }} >
                 <select
@@ -267,7 +267,7 @@
     {% from 'macros.twig' import fileUrl as fileUrl %}
     <div class="field file {{ errors is not empty ? 'is-danger' }}">
         <div class="control">
-            <label class="label">{{ label }}</label>
+            <label class="label">{{ label }} {{ is_required ? '*' }}</label>
             {% if is_uploaded %}
                 <a href="{{ fileUrl(form_id, value) }}" target="_blank">Gespeicherte Datei</a><br />
             {% endif %}
@@ -318,7 +318,7 @@
     <div id="signature-pad" {{ width is defined ? ('data-width="'~width~'"') | raw }} {{ height is defined ? ('data-height="'~height~'"') | raw }}>
         <div class="field">
             <div class="control">
-                <div class="label">{{ label }}</div>
+                <div class="label">{{ label }} {{ is_required ? '*' }}</div>
                 <input type="hidden" id="{{ id }}" name="{{ id }}" value="{{ value }}" />
                 <canvas />
             </div>
