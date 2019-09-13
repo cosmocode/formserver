@@ -280,7 +280,7 @@ class Form
                 $fileName = $this->moveUploadedFile($file, $formElement);
                 $formElement->setValue($fileName);
             }
-        } elseif ($formElement instanceof InputFormElement) {
+        } elseif ($formElement instanceof AbstractDynamicFormElement) {
             $value = $this->getFormElementValueFromArray($formElement, $data);
             // Important! Value must be set, even if empty. User can unset fields
             $formElement->setValue($value);
@@ -342,9 +342,7 @@ class Form
      */
     protected function restoreValue(array $values, AbstractFormElement $formElement)
     {
-        if ($formElement instanceof InputFormElement
-            || $formElement instanceof UploadFormElement
-        ) {
+        if ($formElement instanceof AbstractDynamicFormElement) {
             $value = $this->getFormElementValueFromArray($formElement, $values);
                 $formElement->setValue($value);
         }
