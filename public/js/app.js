@@ -17,19 +17,7 @@ if (wrapper && canvas) {
     var signatureData = dataField.value;
     var signaturePad = new SignaturePad(canvas, { backgroundColor: "rgb(255,255,255)" });
 
-    if (signatureData !== '') {
-        signaturePad.fromDataURL(signatureData);
-    }
-
-    clearButton.addEventListener("click", function (event) {
-        signaturePad.clear();
-        dataField.value = "";
-    });
-
-    form.addEventListener("submit", function (event) {
-        dataField.value = signaturePad.toDataURL();
-    });
-
+    // Set height and width
     width = wrapper.dataset.width;
     if (width) {
         canvas.width = width;
@@ -38,4 +26,19 @@ if (wrapper && canvas) {
     if (height) {
         canvas.height = height;
     }
+
+    // Insert stored data
+    if (signatureData !== '') {
+        signaturePad.fromDataURL(signatureData);
+    }
+
+    // Add event listener
+    clearButton.addEventListener("click", function (event) {
+        signaturePad.clear();
+        dataField.value = "";
+    });
+
+    form.addEventListener("submit", function (event) {
+        dataField.value = signaturePad.toDataURL();
+    });
 }
