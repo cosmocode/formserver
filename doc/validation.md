@@ -8,16 +8,18 @@ User input fields can be validated using the following syntax:
       <rule>: <value>
 ```
 
+We use [Respect Validation](https://github.com/Respect/Validation) under the hood.
+
 Currently supported rules are:
 
- * required: `true`
+ * required: `false` (by default all fields are required)
  * min: `<integer>`
  * max: `<integer>`
  * match: `<regex>`
  * filesize: `<xB|KB|MB|GB>`
  * fileext: `<case-insensitive comma-separated list of file extensions>`
  
-Example for a text input:
+Example for a text or textarea input:
  
  ```
     validation:
@@ -32,5 +34,3 @@ Example for an upload:
       filesize: 2MB
       fileext: jpg, pdf, PNG
 ```
-
-If the input is not required, no further validation rules will be applied.

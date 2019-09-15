@@ -2,14 +2,13 @@
 
 ## App configuration
 
- * settings
- * language
+[App settings](app.md) offer a few options to adjust the defaults, including messages displayed to the user.
 
 ## Form configuration
 
 The form description must be placed in a subdirectory of `data` in a file named `config.yaml`. The file must contain two sections: `meta` and `form`
 
-```
+```yaml
 meta:
   title: <headline>
 form:
@@ -28,4 +27,4 @@ See [element definitions](formelements.md) for configuration details.
 
 ### Input validation
 
-
+See [details](validation.md).

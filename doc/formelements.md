@@ -1,8 +1,8 @@
 # Form element types
 
-Each form element must be declared using a unique id and the element definition. All elements except hidden fields should have a label.
+Each form element must be declared using a unique id (unique at least in a fieldset) and the element definition. All elements except hidden fields should have a label.
 
-```
+```yaml
 <id>:
     type: textinput
     label: Enter some data
@@ -12,13 +12,24 @@ The element id will be used in HTML as is, so mind the standards: no spaces, sta
 
 ## Fieldsets
 
+Fieldsets can contain all types of elements, including fieldsets. The label will be displayed as a legend. 
+
+```yaml
+<id>:
+    type: fieldset
+    label: <label>
+    children:
+      <id>:
+        ...
+```
+
 ## Static fields
 
 ### markdown
 
-The provided value will be rendered as Markdown.
+The provided value will be rendered as Markdown. We use [PHP Markdown Extra](https://michelf.ca/projects/php-markdown/extra/), which supports some additional syntax.
 
-```
+```yaml
 <id>:
     type: markdown
     markdown: Hello _Markdown_!
@@ -30,7 +41,7 @@ If the required `src` starts with `/` the included file is supposed to be placed
 
 The optional `width` and `height` attributes will direct the browser to scale the image accordingly.
 
-```
+```yaml
   <id>:
     type: image
     label: image label text
@@ -43,7 +54,7 @@ The optional `width` and `height` attributes will direct the browser to scale th
 
 If the required `href` starts with `/` the included file is supposed to be placed directly in the document root of the app (`public`). Otherwise the link points to the form directory.
 
-```
+```yaml
   <id>:
     type: download
     label: download label text
@@ -62,22 +73,26 @@ Simple text input
 
 Multiline text input field with optional size attributes
 
-```
-    cols: 50
-    rows: 8
+```yaml
+    width: 50%
+    rows: 4
 ```
 
 ### date
 
-Text input that expects a date and provides a calendar picker
+Text input that expects a date and provides a calendar picker.
 
 ### time
 
-Text input that expects a time and provides a time picker
+Text input that expects a time and provides a time picker.
 
 ### datetime
 
+Text input that expects a date and a time and provides a combined picker.
+
 ### email
+
+Text input that expects a valid email (the HTML5 validation is handled by the browser).
 
 ### hidden
 
@@ -87,7 +102,7 @@ Text input that expects a time and provides a time picker
 
 Define available options with `choices`
 
-```
+```yaml
     choices:
       - first choice
       - second choice
@@ -101,7 +116,7 @@ Optionally set the `default` option
 
 Optionally enable `multiselect`
 
-```        
+```yaml
     multiselect: false
     default: choose an option
     choices:
@@ -113,20 +128,16 @@ Optionally enable `multiselect`
 
 Define available options with `choices`
 
-```
+```yaml
     choices:
       - first choice
       - second choice
 ```
 
-### email
-
 ### upload
 
-The uploaded file will be stored with the form element's id as filename. The file extension is preserved, but the original file name is not. It will be sent as attachment if the form data is configured to be sent by email. 
+The uploaded file will be stored with the form element's id as filename. The file extension is preserved, but the original file name is not. It will be sent as an attachment if the form data is configured to be sent by email. 
 
 ### signature
 
-This element lets a user draw a signature on screen to sign the form. If the form data is configured to be sent by email, a JPG image of the signature will be attached. Otherwise it is simply stored along with the rest of inputs  as data points to be processed as you wish.
-
-**Note:** At this point only a single signature per form will work. 
+This element lets a user draw a signature on screen to sign the form. If the form data is configured to be sent by email, a JPG image of the signature will be attached. Otherwise it is simply stored along with the rest of inputs  as data points to be processed as you wish. 
