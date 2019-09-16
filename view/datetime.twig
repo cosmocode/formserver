@@ -1,0 +1,15 @@
+{% from '_macros' import renderError %}
+<div class="field">
+    <label class="label" for="{{ id }}">{{ label }} {{ is_required ? '*' }}</label>
+    <div class="control">
+        <input
+            type="text"
+            id="{{ id }}"
+            name="{{ id }}"
+            value="{{ value }}"
+            class="input form-input {{ errors is not empty ? 'is-danger' }}"
+            {{ width is defined ? ('style="width:'~width~';"') | raw }}
+            data-calendar-type="datetime" />
+    </div>
+    {{ renderError(errors) }}
+</div>

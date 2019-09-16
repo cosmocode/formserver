@@ -1,0 +1,18 @@
+{% from '_macros' import renderError %}
+<div class="field">
+    <label class="label" for="{{ id }}">{{ label }} {{ is_required ? '*' }}</label>
+    <div class="control">
+            <textarea
+                    id="{{ id }}"
+                    name="{{ id }}"
+                {{ cols is defined ? 'cols='~cols }}
+                    {{ rows is defined ? 'rows='~rows }}
+                class="textarea form-input {{ errors is not empty ? 'is-danger' }}"
+                {{ width is defined ? ('style="width:'~width~';"') | raw }}>
+
+                {{- value -}}
+
+            </textarea>
+    </div>
+    {{ renderError(errors) }}
+</div>

@@ -1,9 +1,0 @@
-{%- macro fileUrl(form_id, value) -%}
-    {%- if value starts with 'http' -%}
-        {{ value }}
-    {%- elseif value starts with '/' -%}
-        {{ value }}
-    {%- else -%}
-        /download/{{ form_id }}?file={{ value }}
-    {%- endif -%}
-{%- endmacro -%}

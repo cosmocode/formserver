@@ -13,6 +13,8 @@ use Twig\TemplateWrapper;
  */
 class FormRenderer
 {
+    const TEMPLATE_DIR = __DIR__ . '/../../view/';
+
     /**
      * @var TemplateWrapper
      */
@@ -32,15 +34,21 @@ class FormRenderer
     {
         $this->form = $form;
 
-        $twigLoader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/../../view/');
-        $twigEnvironment = new \Twig\Environment($twigLoader);
-        try {
-            $this->twig = $twigEnvironment->load('layout.twig');
-        } catch (\Twig\Error\Error $e) {
-            throw new TwigException(
-                "Could not load twig layout file:" . $e->getMessage()
-            );
+        $templates = array_diff(scandir(self::TEMPLATE_DIR), array('..', '.'));
+        $loadedTemplates = [];
+
+        foreach ($templates as $formElementTemplate) {
+            $templateName = str_replace('.twig', '', $formElementTemplate);
+            $loadedTemplates[$templateName]
+                = file_get_contents(self::TEMPLATE_DIR . $formElementTemplate);
         }
+
+        $arrayLoader = new \Twig\Loader\ArrayLoader($loadedTemplates);
+
+        $this->twig = new \Twig\Environment($arrayLoader);
+
+        // Global variables available in all templates and macros
+        $this->twig->addGlobal('form_id', $this->form->getId());
     }
 
     /**
@@ -57,12 +65,12 @@ class FormRenderer
             if ($formElement instanceof FieldsetFormElement) {
                 $formHtml .= $this->renderFieldsetFormElement($formElement);
             } else {
-                $formHtml .= $this->renderFormElement($formElement);
+                $formHtml .= $this->renderBlock($formElement->getType(), $formElement->getViewVariables());
             }
         }
 
         return $this->renderBlock(
-            'form',
+            '_form',
             [
                 'formHtml' => $formHtml,
                 'title' => $title,
@@ -86,52 +94,35 @@ class FormRenderer
         FieldsetFormElement $fieldsetFormElement
     ) {
         foreach ($fieldsetFormElement->getChildren() as $childFormElement) {
-            $fieldsetFormElement->addRenderedChildView(
-                $this->renderFormElement($childFormElement)
+            $renderedChildView = $this->renderBlock(
+                $childFormElement->getType(),
+                $childFormElement->getViewVariables()
             );
+
+            $fieldsetFormElement->addRenderedChildView($renderedChildView);
         }
 
-        return $this->renderFormElement($fieldsetFormElement);
-    }
-
-    /**
-     * Helper function to render a FormElement
-     *
-     * @param AbstractFormElement $formElement
-     * @return string
-     */
-    protected function renderFormElement(AbstractFormElement $formElement)
-    {
         return $this->renderBlock(
-            $formElement->getType(),
-            $formElement->getViewVariables()
+            $fieldsetFormElement->getType(),
+            $fieldsetFormElement->getViewVariables()
         );
     }
 
     /**
      * Helper function to render a twig block
      *
-     * @param string $block
+     * @param string $template
      * @param array $variables
      * @return string
      * @throws TwigException
      */
-    protected function renderBlock(string $block, array $variables)
+    protected function renderBlock(string $template, array $variables)
     {
-        if (! $this->twig->hasBlock($block)) {
-            throw new TwigException(
-                "Template block for form element type '$block' not found."
-            );
-        }
-
-        // Global variables
-        $variables['form_id'] = $this->form->getId();
-
         try {
-            return $this->twig->renderBlock($block, $variables);
+            return $this->twig->render($template, $variables);
         } catch (\Throwable $e) {
             throw new TwigException(
-                "Could not render block '$block': " . $e->getMessage()
+                "Could not render form element '$template': " . $e->getMessage()
             );
         }
     }
