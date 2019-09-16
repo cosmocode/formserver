@@ -112,7 +112,8 @@ form:
     type: fieldset
     label: Das Label des Fieldsets
     toggle:
-      group1.testfrage5: s
+      field: group1.testfrage5
+      value: s
     children:
       testfrage5:
         type: textarea
@@ -123,7 +124,8 @@ form:
     type: fieldset
     label: Das Label des Fieldsets
     toggle:
-      group2.testfrage5: s
+      field: group2.testfrage5
+      value: s
     children:
       testfrage5:
         type: textarea

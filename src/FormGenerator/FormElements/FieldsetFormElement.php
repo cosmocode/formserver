@@ -82,9 +82,9 @@ class FieldsetFormElement extends AbstractFormElement
     }
 
     public function getToggle() {
-        $toggleFormElement = $this->getConfigValue('toggle');
-        $toggleId = key($toggleFormElement);
-        $toggleValue = $toggleFormElement[$toggleId];
+        $toggleConfig = $this->getConfigValue('toggle');
+        $toggleId = $toggleConfig['field'];
+        $toggleValue = $toggleConfig['value'];
         if (strpos($toggleId, '.')) {
             $toggleId = str_replace('.', '[', $toggleId) . ']';
         }
