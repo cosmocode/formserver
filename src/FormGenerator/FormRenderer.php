@@ -157,9 +157,9 @@ class FormRenderer
                     return LangManager::getString('send_success');
                 }
 
-                return '';
-            case Form::MODE_SHOW:
                 return LangManager::getString('send_failed');
+            case Form::MODE_SHOW:
+                return null;
         }
     }
 }
