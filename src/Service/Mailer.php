@@ -81,8 +81,8 @@ class Mailer
     public function sendForm(Form $form)
     {
         $recipients = $form->getMeta('email')['recipients'];
-        $subject = $emailConf['subject'] ?? 'Formular ausgefüllt';
-
+        $subject = $form->getMeta('email')['subject'] ?? 'Formular ausgefüllt';
+        $subject = $this->injectFormValues($subject, $form);
 
         $this->formToMessage(
             $form->getFormElements(),
@@ -122,7 +122,7 @@ class Mailer
         $textHeadline = "\n\n%s\n\n";
 
         $htmlLine = '<p><strong>%s:</strong></p><p>%s</p>';
-        $textLine = "\n%s:\n%s\n";
+        $textLine = "\n%s\n%s\n";
 
         if ($title) {
             $this->textBody .= sprintf("\n\n%s\n\n", $title);
@@ -170,5 +170,22 @@ class Mailer
             $this->htmlBody .= sprintf($htmlLine, $label, $value);
 
         }
+    }
+
+    /**
+     * Replaces {{fieldId}} placeholders with form values
+     *
+     * @param string $string
+     * @param Form $form
+     * @return string
+     */
+    protected function injectFormValues(string $string, Form $form)
+    {
+        return preg_replace_callback(
+            '~{{([a-zA-Z0-9 \.\-\_]*?)}}~',
+            function ($matches) use ($form) {
+                return $form->getFormElementValue($matches[1]);
+            },
+            $string);
     }
 }
