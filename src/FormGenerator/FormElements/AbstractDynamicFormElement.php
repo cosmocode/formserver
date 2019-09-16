@@ -2,11 +2,10 @@
 
 namespace CosmoCode\Formserver\FormGenerator\FormElements;
 
-
 use CosmoCode\Formserver\Service\LangManager;
 
 /**
- * Base class for every InputFormElement
+ * Dynamic form elements have an input which the user can fill out
  */
 abstract class AbstractDynamicFormElement extends AbstractFormElement
 {
@@ -115,5 +114,22 @@ abstract class AbstractDynamicFormElement extends AbstractFormElement
     public function isValid()
     {
         return empty($this->errors);
+    }
+
+    /**
+     * @inheritDoc
+     * @return array
+     */
+    public function getViewVariables()
+    {
+        return array_merge(
+            $this->getConfig(),
+            [
+                'id' => $this->getFormElementId(),
+                'value' => $this->getValue(),
+                'errors' => $this->getErrors(),
+                'is_required' => $this->isRequired()
+            ]
+        );
     }
 }

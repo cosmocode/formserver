@@ -6,7 +6,6 @@ namespace CosmoCode\Formserver\FormGenerator;
 use CosmoCode\Formserver\Exceptions\FormException;
 use CosmoCode\Formserver\FormGenerator\FormElements\AbstractDynamicFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\AbstractFormElement;
-use CosmoCode\Formserver\FormGenerator\FormElements\InputFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\FieldsetFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\UploadFormElement;
 use CosmoCode\Formserver\Helper\YamlHelper;
@@ -403,7 +402,7 @@ class Form
         AbstractFormElement $formElement,
         array &$array
     ) {
-        if ($formElement instanceof InputFormElement
+        if ($formElement instanceof AbstractDynamicFormElement
             || $formElement instanceof UploadFormElement
         ) {
             // Dont need to persist an empty value
