@@ -27,7 +27,7 @@ abstract class AbstractDynamicFormElement extends AbstractFormElement
      */
     public function hasValue()
     {
-        return ! empty($this->value);
+        return $this->value !== null;
     }
 
     /**
