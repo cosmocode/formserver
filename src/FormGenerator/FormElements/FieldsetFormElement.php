@@ -78,6 +78,61 @@ class FieldsetFormElement extends AbstractFormElement
     }
 
     /**
+     * Return bool indicating if this fieldset can be toggled
+     *
+     * @return bool
+     */
+    public function hasToggle() {
+        return !empty($this->getConfigValue('toggle'));
+    }
+
+    /**
+     * Get toggle configuration
+     *
+     * @return array
+     */
+    public function getToggleVariables() {
+        if ($this->hasToggle()) {
+            $toggleId = $this->getToggleFieldId();
+            $toggleValue = $this->getToggleValue();
+            if (strpos($toggleId, '.')) {
+                $toggleId = str_replace('.', '[', $toggleId) . ']';
+            }
+
+            return [
+                'toggle' => [
+                    'id' => $toggleId,
+                    'value' => $toggleValue
+                ]
+            ];
+        }
+
+        return ['toggle' => null];
+    }
+
+    /**
+     * Get id of the form element which toggles this fieldset
+     *
+     * @return string
+     */
+    public function getToggleFieldId() {
+        $toggleConfig = $this->getConfigValue('toggle');
+
+        return $toggleConfig['field'];
+    }
+
+    /**
+     * Value which triggeres the toggle (show)
+     *
+     * @return mixed
+     */
+    public function getToggleValue() {
+        $toggleConfig = $this->getConfigValue('toggle');
+
+        return $toggleConfig['value'];
+    }
+
+    /**
      * @inheritdoc
      * @return array
      */
@@ -88,7 +143,8 @@ class FieldsetFormElement extends AbstractFormElement
             [
                 'id' => $this->getFormElementId(),
                 'rendered_child_views' => $this->renderedChildViews,
-            ]
+            ],
+            $this->getToggleVariables()
         );
     }
 }

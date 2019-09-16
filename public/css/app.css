@@ -11,7 +11,6 @@ canvas {
     background: #ffffff;
 }
 
-
 .textarea {
     min-width: 0;
     width: 100%;
@@ -36,4 +35,9 @@ form {
 
 select {
     width: 100%;
+}
+
+
+.hidden {
+    display: none;
 }
