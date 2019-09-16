@@ -77,22 +77,59 @@ class FieldsetFormElement extends AbstractFormElement
         $this->renderedChildViews[] = $renderedView;
     }
 
+    /**
+     * Return bool if this fieldset can be toggled
+     *
+     * @return bool
+     */
     public function hasToggle() {
         return !empty($this->getConfigValue('toggle'));
     }
 
-    public function getToggle() {
-        $toggleConfig = $this->getConfigValue('toggle');
-        $toggleId = $toggleConfig['field'];
-        $toggleValue = $toggleConfig['value'];
-        if (strpos($toggleId, '.')) {
-            $toggleId = str_replace('.', '[', $toggleId) . ']';
+    /**
+     * Get toggle configuration
+     *
+     * @return array
+     */
+    public function getToggleVariables() {
+        if ($this->hasToggle()) {
+            $toggleId = $this->getToggleFieldId();
+            $toggleValue = $this->getToggleValue();
+            if (strpos($toggleId, '.')) {
+                $toggleId = str_replace('.', '[', $toggleId) . ']';
+            }
+
+            return [
+                'toggle' => [
+                    'id' => $toggleId,
+                    'value' => $toggleValue
+                ]
+            ];
         }
 
-        return [
-            'id' => $toggleId,
-            'value' => $toggleValue
-        ];
+        return ['toggle' => null];
+    }
+
+    /**
+     * Get id of the form element which toggles this fieldset
+     *
+     * @return string
+     */
+    public function getToggleFieldId() {
+        $toggleConfig = $this->getConfigValue('toggle');
+
+        return $toggleConfig['field'];
+    }
+
+    /**
+     * Value which triggeres the toggle (show)
+     *
+     * @return mixed
+     */
+    public function getToggleValue() {
+        $toggleConfig = $this->getConfigValue('toggle');
+
+        return $toggleConfig['value'];
     }
 
     /**
@@ -106,8 +143,8 @@ class FieldsetFormElement extends AbstractFormElement
             [
                 'id' => $this->getFormElementId(),
                 'rendered_child_views' => $this->renderedChildViews,
-                'toggle' => $this->hasToggle() ? $this->getToggle() : null
-            ]
+            ],
+            $this->getToggleVariables()
         );
     }
 }

@@ -75,26 +75,32 @@ class Form
     }
 
     /**
-     * Returns the user entered data of all form elements
-     * TODO: obsolete?
+     * Returns the value of a form element
      *
      * @return array
      */
-    public function getData()
+    public function getFormElementValue(string $fieldId)
     {
-        $data = [];
+        $fieldPath = explode('.', $fieldId);
+        $rootElementId = array_shift($fieldPath);
 
         foreach ($this->formElements as $formElement) {
-            if ($formElement instanceof FieldsetFormElement) {
-                foreach ($formElement->getChildren() as $fieldsetChild) {
-                    $this->insertFormElementValueInArray($fieldsetChild, $data);
+            if ($formElement->getId() === $rootElementId) {
+                if ($formElement instanceof FieldsetFormElement) {
+                    $childElementId = array_shift($fieldPath);
+                    foreach ($formElement->getChildren() as $fieldsetChild) {
+                        if ($fieldsetChild instanceof AbstractDynamicFormElement
+                            && $fieldsetChild->getId() === $childElementId) {
+                            return $fieldsetChild->getValue();
+                        }
+                    }
+                } elseif ($formElement instanceof AbstractDynamicFormElement) {
+                    return $formElement->getValue();
                 }
-            } else {
-                $this->insertFormElementValueInArray($formElement, $data);
             }
         }
 
-        return $data;
+        throw new FormException("Cant get value of $fieldId. It does not exist.");
     }
 
     /**

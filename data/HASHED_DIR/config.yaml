@@ -120,6 +120,8 @@ form:
         label: Und diese? (textarea)
         cols: 50
         rows: 8
+        validation:
+          required: true
   group3:
     type: fieldset
     label: Das Label des Fieldsets
