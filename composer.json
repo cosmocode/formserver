@@ -15,7 +15,6 @@
   ],
   "require": {
     "php": ">=7.2",
-    "ext-fileinfo": "*",
     "php-di/php-di": "^6.0",
     "monolog/monolog": "^1.24",
     "slim/psr7": "^0.5",
@@ -24,7 +23,8 @@
     "michelf/php-markdown": "~1.8.0",
     "mustangostang/spyc": "~0.6.2",
     "respect/validation": "^1.1",
-    "swiftmailer/swiftmailer": "^6.2"
+    "swiftmailer/swiftmailer": "^6.2",
+    "ralouphie/mimey": "^2.1"
   },
   "config": {
     "platform": {

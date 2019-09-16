@@ -65,7 +65,12 @@ class FormRenderer
             'form',
             [
                 'formHtml' => $formHtml,
-                'title' => $title
+                'title' => $title,
+                'is_valid' => $this->form->isValid(),
+                'notification' => $this->generateNotification(),
+                'css' => $this->form->getMeta('css'),
+                'form_id' => $this->form->getId(),
+                'logo' => $this->form->getMeta('logo')
             ]
         );
     }
@@ -128,6 +133,35 @@ class FormRenderer
             throw new TwigException(
                 "Could not render block '$block': " . $e->getMessage()
             );
+        }
+    }
+
+    /**
+     * Generate global form notification, to indicate to the user what happened
+     * TODO: No hardcoded texts
+     *
+     * @return string|null
+     */
+    protected function generateNotification()
+    {
+        $formMode = $this->form->getMode();
+        $formValid = $this->form->isValid();
+
+        switch ($formMode) {
+            case Form::MODE_SAVE:
+                if ($formValid) {
+                    return 'Formular wurde erfolgreich gespeichert.';
+                }
+
+                return 'Das Formular wurde erfolgreich gespeichert. Es enthält jedoch noch Fehler.';
+            case Form::MODE_SEND:
+                if ($formValid) {
+                    return 'Das Formular wurde erfolgreich abgeschickt.';
+                }
+
+                return 'Das Formular konnte nicht abgeschickt werden. Bitte korrigieren Sie die fehlerhaften Felder';
+            case Form::MODE_SHOW:
+                return null;
         }
     }
 }

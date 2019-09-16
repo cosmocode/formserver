@@ -39,7 +39,8 @@ class FormValidator
     public function validate()
     {
         foreach ($this->form->getFormElements() as $formElement) {
-            if ($formElement instanceof FieldsetFormElement) {
+            if ($formElement instanceof FieldsetFormElement
+                && $this->fieldsetValidatable($formElement)) {
                 foreach ($formElement->getChildren() as $fieldsetChild) {
                     $this->validateFormElement($fieldsetChild);
                 }
@@ -135,5 +136,18 @@ class FormValidator
         $filePath = $this->form->getFormDirectory() . $formElement->getValue();
         unlink($filePath);
         $formElement->setValue(null);
+    }
+
+    protected function fieldsetValidatable(FieldsetFormElement $formElement) {
+        if ($formElement->hasToggle()) {
+            $toggleValue = $this->form->getFormElementValue(
+                $formElement->getToggleFieldId()
+            );
+            $requiredToggleValue = $formElement->getToggleValue();
+
+            return $toggleValue === $requiredToggleValue;
+        }
+
+        return true;
     }
 }

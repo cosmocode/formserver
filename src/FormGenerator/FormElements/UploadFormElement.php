@@ -37,7 +37,7 @@ class UploadFormElement extends AbstractDynamicFormElement
 
     /**
      * @inheritDoc
-     * @return void
+     * @return array
      */
     public function getViewVariables()
     {
@@ -48,7 +48,8 @@ class UploadFormElement extends AbstractDynamicFormElement
                 'is_uploaded' => $this->hasValue(),
                 'errors' => $this->getErrors(),
                 'allowed_extensions' => $this->getAllowedExtensionsAsArray(),
-                'value' => $this->getValue()
+                'value' => $this->getValue(),
+                'is_required' => $this->isRequired()
             ]
         );
     }
