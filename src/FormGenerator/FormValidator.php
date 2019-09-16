@@ -40,7 +40,8 @@ class FormValidator
     {
         foreach ($this->form->getFormElements() as $formElement) {
             if ($formElement instanceof FieldsetFormElement
-                && $this->fieldsetValidatable($formElement)) {
+                && $this->fieldsetValidatable($formElement)
+            ) {
                 foreach ($formElement->getChildren() as $fieldsetChild) {
                     $this->validateFormElement($fieldsetChild);
                 }
@@ -52,7 +53,6 @@ class FormValidator
 
     /**
      * Helper function to validate a form element
-     * TODO: no hardcoded texts
      *
      * @param AbstractFormElement $formElement
      * @return void
@@ -115,7 +115,8 @@ class FormValidator
                         }
                         if (! Validator::oneOf($validators)->validate($value)) {
                             $formElement->addError(
-                                'error_fileext', $formElement->getAllowedExtensionsAsString()
+                                'error_fileext',
+                                $formElement->getAllowedExtensionsAsString()
                             );
                             $this->dropFile($formElement);
                         }
@@ -138,7 +139,16 @@ class FormValidator
         $formElement->setValue(null);
     }
 
-    protected function fieldsetValidatable(FieldsetFormElement $formElement) {
+    /**
+     * Check if fieldset should be validated.
+     * If it is not visiable (toggle condition not matching) then it
+     * should not be validated.
+     *
+     * @param FieldsetFormElement $formElement
+     * @return bool
+     */
+    protected function fieldsetValidatable(FieldsetFormElement $formElement)
+    {
         if ($formElement->hasToggle()) {
             $toggleValue = $this->form->getFormElementValue(
                 $formElement->getToggleFieldId()

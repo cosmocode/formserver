@@ -77,6 +77,7 @@ class Form
     /**
      * Returns the value of a form element
      *
+     * @param string $fieldId
      * @return array
      */
     public function getFormElementValue(string $fieldId)
@@ -90,7 +91,8 @@ class Form
                     $childElementId = array_shift($fieldPath);
                     foreach ($formElement->getChildren() as $fieldsetChild) {
                         if ($fieldsetChild instanceof AbstractDynamicFormElement
-                            && $fieldsetChild->getId() === $childElementId) {
+                            && $fieldsetChild->getId() === $childElementId
+                        ) {
                             return $fieldsetChild->getValue();
                         }
                     }

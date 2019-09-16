@@ -6,6 +6,7 @@ namespace CosmoCode\Formserver\FormGenerator;
 use CosmoCode\Formserver\Exceptions\TwigException;
 use CosmoCode\Formserver\FormGenerator\FormElements\FieldsetFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\AbstractFormElement;
+use CosmoCode\Formserver\Service\LangManager;
 use Twig\TemplateWrapper;
 
 /**
@@ -34,7 +35,10 @@ class FormRenderer
     {
         $this->form = $form;
 
-        $templates = array_diff(scandir(self::TEMPLATE_DIR), array('..', '.'));
+        $templates = array_diff(
+            scandir(self::TEMPLATE_DIR),
+            ['..', '.']
+        );
         $loadedTemplates = [];
 
         foreach ($templates as $formElementTemplate) {
@@ -65,7 +69,10 @@ class FormRenderer
             if ($formElement instanceof FieldsetFormElement) {
                 $formHtml .= $this->renderFieldsetFormElement($formElement);
             } else {
-                $formHtml .= $this->renderBlock($formElement->getType(), $formElement->getViewVariables());
+                $formHtml .= $this->renderBlock(
+                    $formElement->getType(),
+                    $formElement->getViewVariables()
+                );
             }
         }
 
@@ -141,18 +148,18 @@ class FormRenderer
         switch ($formMode) {
             case Form::MODE_SAVE:
                 if ($formValid) {
-                    return 'Formular wurde erfolgreich gespeichert.';
+                    return LangManager::getString('form_valid');
                 }
 
-                return 'Das Formular wurde erfolgreich gespeichert. Es enthält jedoch noch Fehler.';
+                return LangManager::getString('form_invalid');
             case Form::MODE_SEND:
                 if ($formValid) {
-                    return 'Das Formular wurde erfolgreich abgeschickt.';
+                    return LangManager::getString('send_success');
                 }
 
-                return 'Das Formular konnte nicht abgeschickt werden. Bitte korrigieren Sie die fehlerhaften Felder';
+                return '';
             case Form::MODE_SHOW:
-                return null;
+                return LangManager::getString('send_failed');
         }
     }
 }

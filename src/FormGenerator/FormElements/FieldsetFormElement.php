@@ -82,8 +82,9 @@ class FieldsetFormElement extends AbstractFormElement
      *
      * @return bool
      */
-    public function hasToggle() {
-        return !empty($this->getConfigValue('toggle'));
+    public function hasToggle()
+    {
+        return ! empty($this->getConfigValue('toggle'));
     }
 
     /**
@@ -91,7 +92,8 @@ class FieldsetFormElement extends AbstractFormElement
      *
      * @return array
      */
-    public function getToggleVariables() {
+    public function getToggleVariables()
+    {
         if ($this->hasToggle()) {
             $toggleId = $this->getToggleFieldId();
             $toggleValue = $this->getToggleValue();
@@ -115,7 +117,8 @@ class FieldsetFormElement extends AbstractFormElement
      *
      * @return string
      */
-    public function getToggleFieldId() {
+    public function getToggleFieldId()
+    {
         $toggleConfig = $this->getConfigValue('toggle');
 
         return $toggleConfig['field'];
@@ -126,7 +129,8 @@ class FieldsetFormElement extends AbstractFormElement
      *
      * @return mixed
      */
-    public function getToggleValue() {
+    public function getToggleValue()
+    {
         $toggleConfig = $this->getConfigValue('toggle');
 
         return $toggleConfig['value'];
