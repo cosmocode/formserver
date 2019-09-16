@@ -47,7 +47,7 @@
 
 
 {%- block fieldset -%}
-    <fieldset {{ disabled is defined and disabled ? 'disabled' }}>
+    <fieldset {{ toggle is not empty ? ('data-toggle-id="'~toggle.id~'" data-toggle-value="'~toggle.value~'"') | raw }}>
         <legend class="label fieldset-label">
             {{ label }}
         </legend>
@@ -68,7 +68,7 @@
                 id="{{ id }}"
                 name="{{ id }}"
                 value="{{ value }}"
-                class="input {{ errors is not empty ? 'is-danger' }}"
+                class="input form-input {{ errors is not empty ? 'is-danger' }}"
                 {{ width is defined ? ('style="width:'~width~';"') | raw }} />
         </div>
         {{ block('error') }}
@@ -85,7 +85,7 @@
                 id="{{ id }}"
                 name="{{ id }}"
                 value="{{ value }}"
-                class="input {{ errors is not empty ? 'is-danger' }}"
+                class="input form-input {{ errors is not empty ? 'is-danger' }}"
                 {{ width is defined ? ('style="width:'~width~';"') | raw }} />
         </div>
         {{ block('error') }}
@@ -102,7 +102,7 @@
                 id="{{ id }}"
                 name="{{ id }}"
                 value="{{ value }}"
-                class="input {{ errors is not empty ? 'is-danger' }}"
+                class="input form-input {{ errors is not empty ? 'is-danger' }}"
                 {{ width is defined ? ('style="width:'~width~';"') | raw }}
                 data-calendar-type="date" />
         </div>
@@ -120,7 +120,7 @@
                 id="{{ id }}"
                 name="{{ id }}"
                 value="{{ value }}"
-                class="input {{ errors is not empty ? 'is-danger' }}"
+                class="input form-input {{ errors is not empty ? 'is-danger' }}"
                 {{ width is defined ? ('style="width:'~width~';"') | raw }}
                 data-calendar-type="time" />
         </div>
@@ -138,7 +138,7 @@
                 id="{{ id }}"
                 name="{{ id }}"
                 value="{{ value }}"
-                class="input {{ errors is not empty ? 'is-danger' }}"
+                class="input form-input {{ errors is not empty ? 'is-danger' }}"
                 {{ width is defined ? ('style="width:'~width~';"') | raw }}
                 data-calendar-type="datetime" />
         </div>
@@ -156,7 +156,7 @@
                 id="{{ id }}"
                 name="{{ id }}"
                 value="{{ value }}"
-                class="input {{ errors is not empty ? 'is-danger' }}"
+                class="input form-input {{ errors is not empty ? 'is-danger' }}"
                 {{ width is defined ? ('style="width:'~width~';"') | raw }} />
         </div>
         {{ block('error') }}
@@ -178,7 +178,7 @@
                 name="{{ id }}"
                 {{ cols is defined ? 'cols='~cols }}
                 {{ rows is defined ? 'rows='~rows }}
-                class="textarea {{ errors is not empty ? 'is-danger' }}"
+                class="textarea form-input {{ errors is not empty ? 'is-danger' }}"
                 {{ width is defined ? ('style="width:'~width~';"') | raw }}>
 
                 {{- value -}}
@@ -200,6 +200,7 @@
                         type="radio"
                         id="{{ id~'['~loop.index0~']' }}"
                         name="{{ id }}"
+                        class="form-input"
                         value="{{ choice }}"
                         {{ value == choice ? 'checked' }} />
                     {{ choice }}
@@ -226,7 +227,7 @@
                         name="{{ id~'['~loop.index0~']' }}"
                         value="{{ choice }}"
                         {{ choice in value ? 'checked' }}
-                        class="checkbox-input" />
+                        class="checkbox-input form-input" />
                         {{- choice -}}
                 </label>
                 {%- if alignment is defined and alignment == 'vertical' -%}
@@ -247,6 +248,7 @@
                 <select
                     id="{{ id }}"
                     name="{{ id }}"
+                    class="form-input"
                     {{ size is defined ? 'size='~size }}
                     {{ multiselect is defined and multiselect ? 'multiple' }}>
 
@@ -272,7 +274,7 @@
                 <a href="{{ fileUrl(form_id, value) }}" target="_blank">Gespeicherte Datei</a><br />
             {% endif %}
             <label class="file-label">
-                <input type="file" class="file-input" id="{{ id }}" name="{{ id }}" {{ allowed_extensions is defined ? ('accept=".'~allowed_extensions|join(',.')~'"')|raw }} />
+                <input type="file" class="file-input form-input" id="{{ id }}" name="{{ id }}" {{ allowed_extensions is defined ? ('accept=".'~allowed_extensions|join(',.')~'"')|raw }} />
                 <span class="file-cta">
                     <span class="file-label">
                         {{ is_uploaded ? 'Datei ersetzen' : 'Datei hochladen' }}
@@ -319,7 +321,7 @@
         <div class="field">
             <div class="control">
                 <div class="label">{{ label }} {{ is_required ? '*' }}</div>
-                <input type="hidden" id="{{ id }}" name="{{ id }}" value="{{ value }}" />
+                <input type="hidden" id="{{ id }}" name="{{ id }}" value="{{ value }}" class="form-input"/>
                 <canvas />
             </div>
         </div>

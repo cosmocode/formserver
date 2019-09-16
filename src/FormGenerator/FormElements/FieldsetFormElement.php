@@ -77,6 +77,24 @@ class FieldsetFormElement extends AbstractFormElement
         $this->renderedChildViews[] = $renderedView;
     }
 
+    public function hasToggle() {
+        return !empty($this->getConfigValue('toggle'));
+    }
+
+    public function getToggle() {
+        $toggleFormElement = $this->getConfigValue('toggle');
+        $toggleId = key($toggleFormElement);
+        $toggleValue = $toggleFormElement[$toggleId];
+        if (strpos($toggleId, '.')) {
+            $toggleId = str_replace('.', '[', $toggleId) . ']';
+        }
+
+        return [
+            'id' => $toggleId,
+            'value' => $toggleValue
+        ];
+    }
+
     /**
      * @inheritdoc
      * @return array
@@ -88,6 +106,7 @@ class FieldsetFormElement extends AbstractFormElement
             [
                 'id' => $this->getFormElementId(),
                 'rendered_child_views' => $this->renderedChildViews,
+                'toggle' => $this->hasToggle() ? $this->getToggle() : null
             ]
         );
     }

@@ -108,3 +108,25 @@ form:
         width: 900
         validation:
           required: true
+  group2:
+    type: fieldset
+    label: Das Label des Fieldsets
+    toggle:
+      group1.testfrage5: s
+    children:
+      testfrage5:
+        type: textarea
+        label: Und diese? (textarea)
+        cols: 50
+        rows: 8
+  group3:
+    type: fieldset
+    label: Das Label des Fieldsets
+    toggle:
+      group2.testfrage5: s
+    children:
+      testfrage5:
+        type: textarea
+        label: Und diese? (textarea)
+        cols: 50
+        rows: 8

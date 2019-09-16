@@ -42,3 +42,42 @@ if (wrapper && canvas) {
         dataField.value = signaturePad.toDataURL();
     });
 }
+
+
+// Toggle
+var fieldsetsWithToggle = document.querySelectorAll('[data-toggle-id]');
+
+// Add event listener for every fieldset with toggle
+Array.from(fieldsetsWithToggle).forEach(function(fieldset) {
+    var formInput = document.getElementById(fieldset.getAttribute('data-toggle-id'));
+
+    formInput.addEventListener('change', function(e) {
+        var formInput = e.target;
+        var toggleValue = fieldset.getAttribute('data-toggle-value');
+
+        // Target form input has correct value. Fieldset with children will be shown
+        if (formInput.value == toggleValue) {
+            fieldset.removeAttribute('disabled');
+            fieldset.classList.remove('hidden');
+            Array.from(fieldset.querySelectorAll('.form-input')).forEach(function(fieldsetFormElements) {
+                fieldsetFormElements.dispatchEvent(new Event("change"));
+            });
+        // Target form input has another value. Disable and hide fieldset. Also clear its childrens value
+        } else {
+            fieldset.setAttribute('disabled', '');
+            fieldset.classList.add('hidden');
+            Array.from(fieldset.querySelectorAll('.form-input')).forEach(function(fieldsetFormElements) {
+                fieldsetFormElements.value = '';
+                fieldsetFormElements.dispatchEvent(new Event("change"));
+            });
+        }
+    });
+});
+
+// Trigger event listener above to init fieldset states
+Array.from(fieldsetsWithToggle).forEach(function(fieldset) {
+    Array.from(fieldset.querySelectorAll('.form-input')).forEach(function (fieldsetFormElements) {
+        console.log(fieldset);
+        fieldsetFormElements.dispatchEvent(new Event("change"));
+    });
+});
