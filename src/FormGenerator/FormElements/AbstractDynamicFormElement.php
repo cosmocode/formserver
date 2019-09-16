@@ -78,8 +78,7 @@ abstract class AbstractDynamicFormElement extends AbstractFormElement
      */
     public function isRequired()
     {
-        return isset($this->getValidationRules()['required'])
-            && $this->getValidationRules()['required'];
+        return $this->getValidationRules()['required'] ?? true;
     }
 
     /**

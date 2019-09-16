@@ -15,6 +15,7 @@ form:
     width: 75%
     validation:
       match: /^sehr gut$/
+      required: false
 
   group1:
     type: fieldset
