@@ -177,6 +177,7 @@ class Form
         // name)
         $this->restore();
 
+        // submit data
         foreach ($this->formElements as $formElement) {
             if ($formElement instanceof FieldsetFormElement) {
                 foreach ($formElement->getChildren() as $fieldsetChild) {
@@ -184,6 +185,22 @@ class Form
                 }
             } else {
                 $this->submitFormElement($formElement, $data, $files);
+            }
+        }
+
+        // en-/disable fieldsets depending on toggle value
+        foreach ($this->formElements as $formElement) {
+            if ($formElement instanceof FieldsetFormElement
+                && $formElement->hasToggle()
+            ) {
+                $toggleValue = $this->getFormElementValue(
+                    $formElement->getToggleFieldId()
+                );
+                $requiredToggleValue = $formElement->getToggleValue();
+
+                $formElement->setDisabled(
+                    $toggleValue !== $requiredToggleValue
+                );
             }
         }
 
@@ -244,7 +261,7 @@ class Form
     public function isValid()
     {
         foreach ($this->formElements as $formElement) {
-            if ($formElement instanceof FieldsetFormElement) {
+            if ($formElement instanceof FieldsetFormElement && ! $formElement->isDisabled()) {
                 foreach ($formElement->getChildren() as $fieldsetChild) {
                     if ($fieldsetChild instanceof AbstractDynamicFormElement
                         && ! $fieldsetChild->isValid()

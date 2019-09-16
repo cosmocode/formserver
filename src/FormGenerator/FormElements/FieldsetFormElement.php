@@ -21,6 +21,11 @@ class FieldsetFormElement extends AbstractFormElement
     protected $renderedChildViews = [];
 
     /**
+     * @var bool
+     */
+    protected $disabled;
+
+    /**
      * @param string $id
      * @param array $config
      * @param AbstractFormElement|null $parent
@@ -86,6 +91,24 @@ class FieldsetFormElement extends AbstractFormElement
     {
         return ! empty($this->getConfigValue('toggle'));
     }
+
+    /**
+     * @return bool
+     */
+    public function isDisabled()
+    {
+        return $this->disabled;
+    }
+
+    /**
+     * @param bool $disabled
+     * @return void
+     */
+    public function setDisabled(bool $disabled)
+    {
+        $this->disabled = $disabled;
+    }
+
 
     /**
      * Get toggle configuration

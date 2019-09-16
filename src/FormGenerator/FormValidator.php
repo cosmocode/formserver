@@ -40,12 +40,12 @@ class FormValidator
     {
         foreach ($this->form->getFormElements() as $formElement) {
             if ($formElement instanceof FieldsetFormElement
-                && $this->fieldsetValidatable($formElement)
+                && ! $formElement->isDisabled()
             ) {
                 foreach ($formElement->getChildren() as $fieldsetChild) {
                     $this->validateFormElement($fieldsetChild);
                 }
-            } else {
+            } elseif ($formElement instanceof AbstractDynamicFormElement) {
                 $this->validateFormElement($formElement);
             }
         }
@@ -137,27 +137,5 @@ class FormValidator
         $filePath = $this->form->getFormDirectory() . $formElement->getValue();
         unlink($filePath);
         $formElement->setValue(null);
-    }
-
-    /**
-     * Check if fieldset should be validated.
-     * If it is not visiable (toggle condition not matching) then it
-     * should not be validated.
-     *
-     * @param FieldsetFormElement $formElement
-     * @return bool
-     */
-    protected function fieldsetValidatable(FieldsetFormElement $formElement)
-    {
-        if ($formElement->hasToggle()) {
-            $toggleValue = $this->form->getFormElementValue(
-                $formElement->getToggleFieldId()
-            );
-            $requiredToggleValue = $formElement->getToggleValue();
-
-            return $toggleValue === $requiredToggleValue;
-        }
-
-        return true;
     }
 }

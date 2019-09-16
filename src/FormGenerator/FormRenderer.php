@@ -53,6 +53,7 @@ class FormRenderer
 
         // Global variables available in all templates and macros
         $this->twig->addGlobal('form_id', $this->form->getId());
+        $this->twig->addGlobal('form_is_valid', $this->form->isValid());
     }
 
     /**
@@ -81,7 +82,6 @@ class FormRenderer
             [
                 'formHtml' => $formHtml,
                 'title' => $title,
-                'is_valid' => $this->form->isValid(),
                 'notification' => $this->generateNotification(),
                 'css' => $this->form->getMeta('css'),
                 'form_id' => $this->form->getId(),

@@ -20,7 +20,7 @@
 
 {%- macro renderNotification(notification) -%}
     {%- if notification is not empty -%}
-        <div class="notification {{ is_valid ? 'is-success' : 'is-danger' -}}">
+        <div class="notification {{ form_is_valid ? 'is-success' : 'is-danger' -}}">
             {{ notification }}
         </div>
     {%- endif -%}
