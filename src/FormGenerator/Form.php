@@ -260,7 +260,9 @@ class Form
     public function isValid()
     {
         foreach ($this->formElements as $formElement) {
-            if ($formElement instanceof FieldsetFormElement && ! $formElement->isDisabled()) {
+            if ($formElement instanceof FieldsetFormElement
+                && ! $formElement->isDisabled()
+            ) {
                 foreach ($formElement->getChildren() as $fieldsetChild) {
                     if ($fieldsetChild instanceof AbstractDynamicFormElement
                         && ! $fieldsetChild->isValid()
