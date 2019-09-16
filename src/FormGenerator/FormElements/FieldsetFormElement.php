@@ -78,7 +78,7 @@ class FieldsetFormElement extends AbstractFormElement
     }
 
     /**
-     * Return bool if this fieldset can be toggled
+     * Return bool indicating if this fieldset can be toggled
      *
      * @return bool
      */
