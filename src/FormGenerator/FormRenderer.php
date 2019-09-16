@@ -50,10 +50,6 @@ class FormRenderer
         $arrayLoader = new \Twig\Loader\ArrayLoader($loadedTemplates);
 
         $this->twig = new \Twig\Environment($arrayLoader);
-
-        // Global variables available in all templates and macros
-        $this->twig->addGlobal('form_id', $this->form->getId());
-        $this->twig->addGlobal('form_is_valid', $this->form->isValid());
     }
 
     /**
@@ -66,6 +62,11 @@ class FormRenderer
     {
         $formHtml = '';
         $title = $this->form->getMeta('title');
+
+        // Global variables available in all templates and macros
+        $this->twig->addGlobal('form_id', $this->form->getId());
+        $this->twig->addGlobal('form_is_valid', $this->form->isValid());
+
         foreach ($this->form->getFormElements() as $formElement) {
             if ($formElement instanceof FieldsetFormElement) {
                 $formHtml .= $this->renderFieldsetFormElement($formElement);
