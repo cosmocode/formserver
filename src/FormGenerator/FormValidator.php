@@ -66,26 +66,26 @@ class FormValidator
                 switch ($validation) {
                     case 'required':
                         if (! Validator::notEmpty()->validate($value)) {
-                            $formElement->addError('value is required');
+                            $formElement->addError('error_required');
                             return;
                         }
                         break;
                     case 'min':
                         if (! Validator::intVal()->min($allowed)->validate($value)) {
-                            $formElement->addError('value smaller than ' . $allowed);
+                            $formElement->addError('error_min', $allowed);
                             return;
                         }
                         break;
                     case 'max':
                         if (! Validator::intVal()->max($allowed)->validate($value)) {
-                            $formElement->addError('value larger than ' . $allowed);
+                            $formElement->addError('error_max', $allowed);
                             return;
                         }
                         break;
                     case 'match':
                         if (! Validator::regex($allowed)->validate($value)) {
                             $formElement->addError(
-                                'value does not match ' . $allowed
+                                'error_match', $allowed
                             );
                             return;
                         }
@@ -97,11 +97,10 @@ class FormValidator
                         $filePath = $this->form->getFormDirectory() . $value;
                         if (! Validator::size(null, $allowed)->validate($filePath)) {
                             $formElement->addError(
-                                'Fehler: erlaubte Dateigröße ' . $allowed
+                                'error_filesize', $allowed
                             );
                             $this->dropFile($formElement);
                         }
-
                         break;
                     case 'fileext':
                         /**
@@ -115,12 +114,10 @@ class FormValidator
                         }
                         if (! Validator::oneOf($validators)->validate($value)) {
                             $formElement->addError(
-                                'Fehler: erlaubte Formate '
-                                . $formElement->getAllowedExtensionsAsString()
+                                'error_fileext', $formElement->getAllowedExtensionsAsString()
                             );
                             $this->dropFile($formElement);
                         }
-
                         break;
                 }
             }

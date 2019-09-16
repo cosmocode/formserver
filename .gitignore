@@ -11,3 +11,6 @@ vendor
 
 # logs
 /logs
+
+# local conf
+/conf/*.local.yaml

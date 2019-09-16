@@ -3,6 +3,8 @@
 namespace CosmoCode\Formserver\FormGenerator\FormElements;
 
 
+use CosmoCode\Formserver\Service\LangManager;
+
 /**
  * Base class for every InputFormElement
  */
@@ -84,11 +86,16 @@ abstract class AbstractDynamicFormElement extends AbstractFormElement
      * Attaches an error to the form element
      *
      * @param string $error
+     * @param string $allowed
      * @return void
      */
-    public function addError($error)
+    public function addError($error, $allowed = '')
     {
-        $this->errors[] = $error;
+        $format = '%s';
+        if ($allowed) {
+            $format .= ': "%s"';
+        }
+        $this->errors[] = sprintf($format, LangManager::getString($error), $allowed);
     }
 
     /**

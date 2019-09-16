@@ -1,0 +1,6 @@
+error_required: This is a required field
+error_min: Value must be at least
+error_max: Value must not exceed
+error_match: Value must match
+error_fileext: Allowed file types are
+error_filesize: Maximum file size is
