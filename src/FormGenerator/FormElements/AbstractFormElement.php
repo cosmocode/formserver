@@ -32,12 +32,12 @@ abstract class AbstractFormElement
      *
      * @param string $id
      * @param array $config
-     * @param AbstractFormElement|null $parent
+     * @param FieldsetFormElement|null $parent
      */
     public function __construct(
         string $id,
         array $config,
-        AbstractFormElement $parent = null
+        FieldsetFormElement $parent = null
     ) {
         $this->id = $id;
         $this->config = $config;

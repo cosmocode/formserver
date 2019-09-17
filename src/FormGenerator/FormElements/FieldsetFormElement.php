@@ -3,6 +3,8 @@
 namespace CosmoCode\Formserver\FormGenerator\FormElements;
 
 
+use CosmoCode\Formserver\Exceptions\FormException;
+
 /**
  * Representation of a fieldset.
  * This is a special form element. It contains other form elements in $children.
@@ -24,7 +26,7 @@ class FieldsetFormElement extends AbstractFormElement
     /**
      * @var bool
      */
-    protected $disabled;
+    protected $disabled = false;
 
     /**
      * @param string $id
@@ -48,6 +50,25 @@ class FieldsetFormElement extends AbstractFormElement
     public function getChildren()
     {
         return $this->children;
+    }
+
+    /**
+     * Get child by id
+     *
+     * @param string $id
+     * @return AbstractFormElement
+     */
+    public function getChild(string $id)
+    {
+        foreach ($this->getChildren() as $fieldsetChild) {
+            if ($fieldsetChild->getId() === $id) {
+                return $fieldsetChild;
+            }
+        }
+
+        throw new FormException(
+            "Could not get child '$id' in fieldset '" . $this->getId() . "'"
+        );
     }
 
     /**
@@ -120,14 +141,12 @@ class FieldsetFormElement extends AbstractFormElement
     {
         if ($this->hasToggle()) {
             $toggleId = $this->getToggleFieldId();
+            $toggleViewId = $this->dottetIdToFormId($toggleId);
             $toggleValue = $this->getToggleValue();
-            if (strpos($toggleId, '.')) {
-                $toggleId = str_replace('.', '[', $toggleId) . ']';
-            }
 
             return [
                 'toggle' => [
-                    'id' => $toggleId,
+                    'id' => $toggleViewId,
                     'value' => $toggleValue
                 ]
             ];
@@ -174,6 +193,26 @@ class FieldsetFormElement extends AbstractFormElement
             ],
             $this->getToggleVariables()
         );
+    }
+
+    /**
+     * Generate html form id from dotted id
+     * e.g. 'fieldset1.fieldset2.textarea1' --> 'fieldset1[fieldset2][textarea1]'
+     *
+     * @param string $id
+     * @return string
+     */
+    protected function dottetIdToFormId(string $id)
+    {
+        $toggleIdPath = explode('.', $id);
+        $togglePathCount = count($toggleIdPath);
+        $toggleViewId = $toggleIdPath[0];
+
+        for ($i = 1; $i < $togglePathCount; $i++) {
+            $toggleViewId .= '[' .$toggleIdPath[$i] . ']';
+        }
+
+        return $toggleViewId;
     }
 }
 

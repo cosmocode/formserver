@@ -6,6 +6,7 @@ namespace CosmoCode\Formserver\FormGenerator;
 use CosmoCode\Formserver\Exceptions\FormException;
 use CosmoCode\Formserver\FormGenerator\FormElements\AbstractDynamicFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\AbstractFormElement;
+use CosmoCode\Formserver\FormGenerator\FormElements\ChecklistFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\FieldsetFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\UploadFormElement;
 use CosmoCode\Formserver\Helper\YamlHelper;
@@ -81,21 +82,22 @@ class Form
      */
     public function getFormElementValue(string $fieldId)
     {
-        $fieldPath = explode('.', $fieldId);
-        $rootElementId = array_shift($fieldPath);
+        $formElementIdPath = explode('.', $fieldId);
+        $rootElementId = array_shift($formElementIdPath);
 
         foreach ($this->formElements as $formElement) {
             if ($formElement->getId() === $rootElementId) {
-                if ($formElement instanceof FieldsetFormElement) {
-                    $childElementId = array_shift($fieldPath);
-                    foreach ($formElement->getChildren() as $fieldsetChild) {
-                        if ($fieldsetChild instanceof AbstractDynamicFormElement
-                            && $fieldsetChild->getId() === $childElementId
-                        ) {
-                            return $fieldsetChild->getValue();
-                        }
+                foreach ($formElementIdPath as $formId) {
+                    if ($formElement instanceof FieldsetFormElement) {
+                        $formElement = $formElement->getChild($formId);
+                    } else {
+                        throw new FormException(
+                            "Cant get value of $fieldId. It does not exist."
+                        );
                     }
-                } elseif ($formElement instanceof AbstractDynamicFormElement) {
+                }
+
+                if ($formElement instanceof AbstractDynamicFormElement) {
                     return $formElement->getValue();
                 }
             }
@@ -178,29 +180,13 @@ class Form
 
         // submit data
         foreach ($this->formElements as $formElement) {
-            if ($formElement instanceof FieldsetFormElement) {
-                foreach ($formElement->getChildren() as $fieldsetChild) {
-                    $this->submitFormElement($fieldsetChild, $data, $files);
-                }
-            } else {
-                $this->submitFormElement($formElement, $data, $files);
-            }
+            $this->submitFormElement($formElement, $data, $files);
         }
 
-        // en-/disable fieldsets depending on toggle value
+        // En-/disable fieldsets depending on toggle value
+        // This must happen after all POST data was submitted
         foreach ($this->formElements as $formElement) {
-            if ($formElement instanceof FieldsetFormElement
-                && $formElement->hasToggle()
-            ) {
-                $toggleValue = $this->getFormElementValue(
-                    $formElement->getToggleFieldId()
-                );
-                $requiredToggleValue = $formElement->getToggleValue();
-
-                $formElement->setDisabled(
-                    $toggleValue !== $requiredToggleValue
-                );
-            }
+            $this->toggleFieldsets($formElement);
         }
 
         $this->setMode($data);
@@ -215,13 +201,7 @@ class Form
     {
         $values = [];
         foreach ($this->formElements as $formElement) {
-            if ($formElement instanceof FieldsetFormElement) {
-                foreach ($formElement->getChildren() as $fieldsetChild) {
-                    $this->insertFormElementValueInArray($fieldsetChild, $values);
-                }
-            } else {
-                $this->insertFormElementValueInArray($formElement, $values);
-            }
+            $this->injectValueToArray($values, $formElement);
         }
 
         if (! empty($values)) {
@@ -242,13 +222,7 @@ class Form
         $values = YamlHelper::parseYaml($this->getFormDirectory() . 'values.yaml');
 
         foreach ($this->formElements as $formElement) {
-            if ($formElement instanceof FieldsetFormElement) {
-                foreach ($formElement->getChildren() as $fieldsetChild) {
-                    $this->restoreValue($values, $fieldsetChild);
-                }
-            } else {
-                $this->restoreValue($values, $formElement);
-            }
+            $this->restoreValue($values, $formElement);
         }
     }
 
@@ -293,21 +267,28 @@ class Form
         array $data,
         array $files
     ) {
-        if ($formElement instanceof UploadFormElement) {
+        if ($formElement instanceof FieldsetFormElement) {
+            foreach ($formElement->getChildren() as $fieldsetChild) {
+                $subData = $data[$formElement->getId()] ?? [];
+                $subFiles = $files[$formElement->getId()] ?? [];
+                $this->submitFormElement($fieldsetChild, $subData, $subFiles);
+            }
+        } elseif ($formElement instanceof UploadFormElement) {
             /**
              * @var UploadedFile $file
              */
-            $file = $this->getFormElementValueFromArray($formElement, $files);
+            $file = $files[$formElement->getId()] ?? null;
 
             if ($file !== null && $file->getError() === UPLOAD_ERR_OK) {
                 if (! empty($formElement->getValue())) {
+                    // Reupload delete old file first
                     $this->deleteFileFromFormElement($formElement);
                 }
                 $fileName = $this->moveUploadedFile($file, $formElement);
                 $formElement->setValue($fileName);
             }
         } elseif ($formElement instanceof AbstractDynamicFormElement) {
-            $value = $this->getFormElementValueFromArray($formElement, $data);
+            $value = $data[$formElement->getId()] ?? null;
             // Important! Value must be set, even if empty. User can unset fields
             $formElement->setValue($value);
         }
@@ -368,55 +349,72 @@ class Form
      */
     protected function restoreValue(array $values, AbstractFormElement $formElement)
     {
-        if ($formElement instanceof AbstractDynamicFormElement) {
-            $value = $this->getFormElementValueFromArray($formElement, $values);
-                $formElement->setValue($value);
+        if ($formElement instanceof FieldsetFormElement) {
+            $subValues = $values[$formElement->getId()] ?? [];
+            foreach ($formElement->getChildren() as $fieldsetChild) {
+                $this->restoreValue($subValues, $fieldsetChild);
+            }
+        } elseif ($formElement instanceof AbstractDynamicFormElement) {
+            $value = $values[$formElement->getId()] ?? null;
+            $formElement->setValue($value);
         }
     }
 
     /**
-     * Helper function to get the value of a form element from provided array
-     * This can be used for $_FILES and $_POST as they have the same structure
+     * Helper function to restore a specific value to a form element
      *
+     * @param array $values
      * @param AbstractFormElement $formElement
-     * @param array $array
-     * @return mixed|null
+     * @return void
      */
-    protected function getFormElementValueFromArray(
-        AbstractFormElement $formElement,
-        array $array
+    protected function injectValueToArray(
+        array &$values,
+        AbstractFormElement $formElement
     ) {
-        $formElementId = $formElement->getId();
-        return $formElement->hasParent()
-            ? $array[$formElement->getParent()->getId()][$formElementId] ?? null
-            : $array[$formElementId] ?? null;
+        if ($formElement instanceof FieldsetFormElement) {
+            $tempValues = [];
+            foreach ($formElement->getChildren() as $fieldsetChild) {
+                $this->injectValueToArray($tempValues, $fieldsetChild);
+            }
+            $values[$formElement->getId()] = $tempValues;
+        } elseif ($formElement instanceof AbstractDynamicFormElement
+            && $formElement->hasValue()
+        ) {
+            $values[$formElement->getId()] = $formElement->getValue();
+        }
     }
 
     /**
-     * Helper function  to fill a array with values from form element
-     * The given array parameter is a pointer
+     * Helper function to en-/disable fieldsets depending on toggle value
      *
      * @param AbstractFormElement $formElement
-     * @param array $array
      * @return void
      */
-    protected function insertFormElementValueInArray(
-        AbstractFormElement $formElement,
-        array &$array
+    protected function toggleFieldsets(
+        AbstractFormElement $formElement
     ) {
-        if ($formElement instanceof AbstractDynamicFormElement
-            || $formElement instanceof UploadFormElement
-        ) {
-            // Dont need to persist an empty value
-            if (empty($formElement->getValue())) {
-                return;
+        if ($formElement instanceof FieldsetFormElement) {
+            if ($formElement->hasToggle()) {
+
+                $submittedValue = $this->getFormElementValue(
+                    $formElement->getToggleFieldId()
+                );
+                $toggleValue = $formElement->getToggleValue();
+
+                // Checklist can have multiple values
+                if (is_array($submittedValue)) {
+                    $disabled = ! in_array($toggleValue, $submittedValue);
+                } else {
+                    $disabled = $submittedValue !== $toggleValue;
+                }
+
+                $formElement->setDisabled($disabled);
             }
 
-            if ($formElement->hasParent()) {
-                $array[$formElement->getParent()->getId()][$formElement->getId()]
-                    = $formElement->getValue();
-            } else {
-                $array[$formElement->getId()] = $formElement->getValue();
+            if (! $formElement->isDisabled()) {
+                foreach ($formElement->getChildren() as $fieldsetChild) {
+                    $this->toggleFieldsets($fieldsetChild);
+                }
             }
         }
     }

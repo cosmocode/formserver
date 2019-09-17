@@ -57,7 +57,12 @@ abstract class AbstractDynamicFormElement extends AbstractFormElement
      */
     public function setValue($value)
     {
-        $this->value = $value;
+        // to check hasValue(
+        if ($value === '') {
+            $this->value = null;
+        } else {
+            $this->value = $value;
+        }
     }
 
     /**
@@ -67,7 +72,14 @@ abstract class AbstractDynamicFormElement extends AbstractFormElement
      */
     public function getValidationRules()
     {
-        return $this->getConfigValue('validation') ?? [];
+        $validationRules = $this->getConfigValue('validation') ?? [];
+
+        // Enforce required by default
+        if (! isset($validationRules['required'])) {
+            $validationRules['required'] = true;
+        }
+
+        return $validationRules;
     }
 
     /**
@@ -77,7 +89,7 @@ abstract class AbstractDynamicFormElement extends AbstractFormElement
      */
     public function isRequired()
     {
-        return $this->getValidationRules()['required'] ?? true;
+        return $this->getValidationRules()['required'];
     }
 
     /**

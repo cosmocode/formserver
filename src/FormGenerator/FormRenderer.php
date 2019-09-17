@@ -102,10 +102,17 @@ class FormRenderer
         FieldsetFormElement $fieldsetFormElement
     ) {
         foreach ($fieldsetFormElement->getChildren() as $childFormElement) {
-            $renderedChildView = $this->renderBlock(
-                $childFormElement->getType(),
-                $childFormElement->getViewVariables()
-            );
+            if ($childFormElement instanceof FieldsetFormElement) {
+                $renderedChildView = $this->renderFieldsetFormElement(
+                    $childFormElement
+                );
+            } else {
+                $renderedChildView = $this->renderBlock(
+                    $childFormElement->getType(),
+                    $childFormElement->getViewVariables()
+                );
+            }
+
 
             $fieldsetFormElement->addRenderedChildView($renderedChildView);
         }
