@@ -8,3 +8,4 @@ form_valid: Form was saved successfully
 form_invalid: Form was saved successfully, but it still contains errors
 send_success: The form was send successfully.
 send_failed: The form could not be send. It contains errors
+label_signature_delete: Delete signature
