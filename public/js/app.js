@@ -10,40 +10,43 @@ flatpickr('[data-calendar-type="datetime"]', {'enableTime' : true, 'time_24hr' :
  * Init Signature Pad
  */
 var form = document.getElementById("form");
-var wrapper = document.getElementById("signature-pad");
-var canvas = document.querySelector("canvas");
-var clearButton = wrapper.querySelector("[data-action=clear]");
-var dataField = wrapper.querySelector("input");
+var wrappers = document.querySelectorAll(".signature-pad");
 
-if (wrapper && canvas) {
-    var signatureData = dataField.value;
-    var signaturePad = new SignaturePad(canvas, { backgroundColor: "rgb(255,255,255)" });
+Array.from(wrappers).forEach(function(wrapper) {
+    var canvas = wrapper.querySelector("canvas");
+    var clearButton = wrapper.querySelector("[data-action=clear]");
+    var dataField = wrapper.querySelector("input");
 
-    // Set height and width
-    width = wrapper.dataset.width;
-    if (width) {
-        canvas.width = width;
+    if (wrapper && canvas) {
+        var signatureData = dataField.value;
+        var signaturePad = new SignaturePad(canvas, { backgroundColor: "rgb(255,255,255)" });
+
+        // Set height and width
+        width = wrapper.dataset.width;
+        if (width) {
+            canvas.width = width;
+        }
+        height = wrapper.dataset.height;
+        if (height) {
+            canvas.height = height;
+        }
+
+        // Insert stored data
+        if (signatureData !== '') {
+            signaturePad.fromDataURL(signatureData);
+        }
+
+        // Add event listener
+        clearButton.addEventListener("click", function (event) {
+            signaturePad.clear();
+            dataField.value = "";
+        });
+
+        form.addEventListener("submit", function (event) {
+            dataField.value = signaturePad.toDataURL("image/svg+xml");
+        });
     }
-    height = wrapper.dataset.height;
-    if (height) {
-        canvas.height = height;
-    }
-
-    // Insert stored data
-    if (signatureData !== '') {
-        signaturePad.fromDataURL(signatureData);
-    }
-
-    // Add event listener
-    clearButton.addEventListener("click", function (event) {
-        signaturePad.clear();
-        dataField.value = "";
-    });
-
-    form.addEventListener("submit", function (event) {
-        dataField.value = signaturePad.toDataURL();
-    });
-}
+});
 
 
 /**
@@ -71,7 +74,7 @@ Array.from(fieldsetsWithToggle).forEach(function(fieldset) {
 function toggleFieldset(fieldset, formInput) {
     var toggleValue = fieldset.getAttribute('data-toggle-value');
 
-    if (getFormInputValue(formInput) == toggleValue) {
+    if (getFormInputValue(formInput) === toggleValue) {
         fieldset.removeAttribute('disabled');
         fieldset.classList.remove('hidden');
         Array.from(fieldset.querySelectorAll('.form-input')).forEach(function(fieldsetFormElement) {
@@ -95,14 +98,14 @@ function getToggleFormInput(fieldset) {
     var toggleValue = fieldset.getAttribute('data-toggle-value');
 
     formInput = document.getElementById(toggleId);
-    if (formInput.tagName != 'DIV') {
+    if (formInput.tagName.toLowerCase() !== 'div') {
         return formInput;
     } else {
         var divFormInput;
         Array.from(formInput.querySelectorAll('.form-input')).forEach(function(formElement) {
-            if (formElement.value == toggleValue) {
+            if (formElement.value === toggleValue) {
                 divFormInput = formElement;
-            } else if (formElement.type == 'radio') {
+            } else if (formElement.type === 'radio') {
                 formElement.addEventListener('click', function(e) {
                     divFormInput.dispatchEvent(new Event("change"));
                 });
@@ -118,7 +121,7 @@ function getToggleFormInput(fieldset) {
 // This function is necessary for radios and checkboxes as they always have a value
 // which gets only returned if this formInput is checked
 function getFormInputValue(formInput) {
-    if (formInput.type == 'checkbox' || formInput.type == 'radio') {
+    if (formInput.type === 'checkbox' || formInput.type === 'radio') {
         if (formInput.checked) {
             return formInput.value;
         }
