@@ -217,19 +217,7 @@ class Form
     public function isValid()
     {
         foreach ($this->formElements as $formElement) {
-            if ($formElement instanceof FieldsetFormElement
-                && ! $formElement->isDisabled()
-            ) {
-                foreach ($formElement->getChildren() as $fieldsetChild) {
-                    if ($fieldsetChild instanceof AbstractDynamicFormElement
-                        && ! $fieldsetChild->isValid()
-                    ) {
-                        return false;
-                    }
-                }
-            } elseif ($formElement instanceof AbstractDynamicFormElement
-                && ! $formElement->isValid()
-            ) {
+            if (! $this->isFormElementValid($formElement)) {
                 return false;
             }
         }
@@ -417,5 +405,28 @@ class Form
         ) {
             $values[$formElement->getId()] = $formElement->getValue();
         }
+    }
+
+    /**
+     * Helper function to check form elements recursively if they are valid
+     *
+     * @param AbstractFormElement $formElement
+     * @return bool
+     */
+    protected function isFormElementValid(AbstractFormElement $formElement){
+        if ($formElement instanceof FieldsetFormElement
+            && ! $formElement->isDisabled()
+        ) {
+            foreach ($formElement->getChildren() as $fieldsetChild) {
+                if (! $this->isFormElementValid($fieldsetChild)) {
+                    return false;
+                }
+            }
+        } elseif ($formElement instanceof AbstractDynamicFormElement) {
+            return $formElement->isValid();
+        }
+
+        // AbstractStaticFormElements dont have an input they are always valid
+        return true;
     }
 }
