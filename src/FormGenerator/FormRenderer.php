@@ -71,14 +71,14 @@ class FormRenderer
             if ($formElement instanceof FieldsetFormElement) {
                 $formHtml .= $this->renderFieldsetFormElement($formElement);
             } else {
-                $formHtml .= $this->renderBlock(
+                $formHtml .= $this->renderTemplate(
                     $formElement->getType(),
                     $formElement->getViewVariables()
                 );
             }
         }
 
-        return $this->renderBlock(
+        return $this->renderTemplate(
             '_form',
             [
                 'formHtml' => $formHtml,
@@ -107,7 +107,7 @@ class FormRenderer
                     $childFormElement
                 );
             } else {
-                $renderedChildView = $this->renderBlock(
+                $renderedChildView = $this->renderTemplate(
                     $childFormElement->getType(),
                     $childFormElement->getViewVariables()
                 );
@@ -117,7 +117,7 @@ class FormRenderer
             $fieldsetFormElement->addRenderedChildView($renderedChildView);
         }
 
-        return $this->renderBlock(
+        return $this->renderTemplate(
             $fieldsetFormElement->getType(),
             $fieldsetFormElement->getViewVariables()
         );
@@ -131,7 +131,7 @@ class FormRenderer
      * @return string
      * @throws TwigException
      */
-    protected function renderBlock(string $template, array $variables)
+    protected function renderTemplate(string $template, array $variables)
     {
         try {
             return $this->twig->render($template, $variables);
