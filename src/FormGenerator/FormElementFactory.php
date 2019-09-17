@@ -42,12 +42,12 @@ class FormElementFactory
     public static function createFormElement(
         string $id,
         array $config,
-        AbstractFormElement $parent = null
+        FieldsetFormElement $parent = null
     ) {
         $formType = $config['type'];
         switch ($formType) {
             case 'fieldset':
-                return self::createFieldsetFormElement($id, $config);
+                return self::createFieldsetFormElement($id, $config, $parent);
             case 'markdown':
                 return new MarkDownFormElement($id, $config, $parent);
             case 'hidden':
@@ -92,24 +92,26 @@ class FormElementFactory
      *
      * @param string $id
      * @param array $config
+     * @param FieldsetFormElement|null $parent
      * @return FieldsetFormElement
      */
-    protected static function createFieldsetFormElement(string $id, array $config)
-    {
-        $listFormElement = new FieldsetFormElement($id, $config);
+    protected static function createFieldsetFormElement(
+        string $id,
+        array $config,
+        FieldsetFormElement $parent = null
+    ) {
+        $fieldsetFormElement = new FieldsetFormElement($id, $config, $parent);
 
         foreach ($config['children'] as $childId => $childConfig) {
-            $childFormElement
-                = self::createFormElement($childId, $childConfig, $listFormElement);
-            if ($childFormElement instanceof FieldsetFormElement) {
-                throw new FormException(
-                    'Fieldsets cannot be nested.'
-                    . "(Fieldset with id '$id' has child fieldset with id '$childId'"
-                );
-            }
-            $listFormElement->addChild($childFormElement);
+            $childFormElement = self::createFormElement(
+                $childId,
+                $childConfig,
+                $fieldsetFormElement
+            );
+
+            $fieldsetFormElement->addChild($childFormElement);
         }
 
-        return $listFormElement;
+        return $fieldsetFormElement;
     }
 }

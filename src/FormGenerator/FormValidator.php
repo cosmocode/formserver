@@ -39,15 +39,7 @@ class FormValidator
     public function validate()
     {
         foreach ($this->form->getFormElements() as $formElement) {
-            if ($formElement instanceof FieldsetFormElement
-                && ! $formElement->isDisabled()
-            ) {
-                foreach ($formElement->getChildren() as $fieldsetChild) {
-                    $this->validateFormElement($fieldsetChild);
-                }
-            } elseif ($formElement instanceof AbstractDynamicFormElement) {
-                $this->validateFormElement($formElement);
-            }
+            $this->validateFormElement($formElement);
         }
     }
 
@@ -59,7 +51,13 @@ class FormValidator
      */
     protected function validateFormElement(AbstractFormElement $formElement)
     {
-        if ($formElement instanceof  AbstractDynamicFormElement
+        if ($formElement instanceof FieldsetFormElement
+            && ! $formElement->isDisabled()
+        ) {
+            foreach ($formElement->getChildren() as $fieldsetChild) {
+                $this->validateFormElement($fieldsetChild);
+            }
+        } elseif ($formElement instanceof  AbstractDynamicFormElement
             && ($formElement->hasValue() || $formElement->isRequired())
         ) {
             $value = $formElement->getValue();

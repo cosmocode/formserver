@@ -83,6 +83,7 @@ class Mailer
         $recipients = $form->getMeta('email')['recipients'];
         $subject = $form->getMeta('email')['subject'] ?? 'Formular ausgefüllt';
         $subject = $this->injectFormValues($subject, $form);
+        $cc = $this->getCarbonCopyAddresses($form);
 
         $this->formToMessage(
             $form->getFormElements(),
@@ -97,6 +98,10 @@ class Mailer
             ->setTo($recipients)
             ->setBody($this->htmlBody, 'text/html')
             ->addPart($this->textBody, 'text/plain');
+
+        if (! empty($cc)) {
+            $message->setCc($cc);
+        }
 
         foreach ($this->attachments as $attachment) {
             $message->attach($attachment);
@@ -186,6 +191,28 @@ class Mailer
             function ($matches) use ($form) {
                 return $form->getFormElementValue($matches[1]);
             },
-            $string);
+            $string
+        );
+    }
+
+    /**
+     * Get carbon copy addresses from form fields
+     *
+     * @param Form $form
+     * @return array
+     */
+    protected function getCarbonCopyAddresses(Form $form)
+    {
+        $ccFields = $form->getMeta('email')['cc'] ?? [];
+
+        $cc = [];
+        foreach ($ccFields as $ccField) {
+            $address = $form->getFormElementValue($ccField);
+            if (! empty($address)) {
+                $cc[] = $address;
+            }
+        }
+
+        return $cc;
     }
 }
