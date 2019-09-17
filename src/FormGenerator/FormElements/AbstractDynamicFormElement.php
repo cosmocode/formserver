@@ -5,7 +5,7 @@ namespace CosmoCode\Formserver\FormGenerator\FormElements;
 use CosmoCode\Formserver\Service\LangManager;
 
 /**
- * Dynamic form elements have an input which the user can fill out
+ * Dynamic form elements have an input which the user can enter.
  */
 abstract class AbstractDynamicFormElement extends AbstractFormElement
 {

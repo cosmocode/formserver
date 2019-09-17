@@ -3,7 +3,12 @@
 namespace CosmoCode\Formserver\FormGenerator\FormElements;
 
 /**
- * Base class for every FormElement
+ * Base class for every FormElement.
+ * It has
+ *  - a unique $id (at least inside its $parent)
+ *  - a $config containing all params from config.yaml
+ *  - a $type defining which Twig View it will be rendered with
+ *  - a function getViewVariables() which passes parameters to the view
  */
 abstract class AbstractFormElement
 {

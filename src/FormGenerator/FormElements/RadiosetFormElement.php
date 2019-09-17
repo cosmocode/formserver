@@ -2,7 +2,10 @@
 
 namespace CosmoCode\Formserver\FormGenerator\FormElements;
 
-
-class RadiosetFormElement extends AbstractDynamicFormElement {
+/**
+ * Representation of a tradio group
+ */
+class RadiosetFormElement extends AbstractDynamicFormElement
+{
 
 }

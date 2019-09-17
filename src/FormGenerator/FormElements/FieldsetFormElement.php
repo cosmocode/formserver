@@ -4,8 +4,9 @@ namespace CosmoCode\Formserver\FormGenerator\FormElements;
 
 
 /**
- * FieldsetFormElement is a special AbstractFormElement.
- * It contains child formElements
+ * Representation of a fieldset.
+ * This is a special form element. It contains other form elements in $children.
+ * It also can be disabled (when the toggle condition does not match)
  */
 class FieldsetFormElement extends AbstractFormElement
 {
@@ -175,3 +176,4 @@ class FieldsetFormElement extends AbstractFormElement
         );
     }
 }
+
