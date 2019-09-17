@@ -3,10 +3,10 @@
 namespace CosmoCode\Formserver\FormGenerator\FormElements;
 
 
-use Michelf\Markdown;
+use Michelf\MarkdownExtra;
 
 /**
- * Renders markdown
+ * Representation of a html rendered from markdown
  */
 class MarkDownFormElement extends AbstractFormElement
 {
@@ -27,7 +27,7 @@ class MarkDownFormElement extends AbstractFormElement
      */
     public function getViewVariables()
     {
-        $markdown = Markdown::defaultTransform($this->getMarkdown());
+        $markdown = MarkdownExtra::defaultTransform($this->getMarkdown());
 
         return array_merge(
             $this->getConfig(),

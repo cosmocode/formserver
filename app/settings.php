@@ -21,7 +21,11 @@ return function (ContainerBuilder $containerBuilder) {
         ]
     );
 
+    // merge local app settings
+    $localSettings = __DIR__ . '/../conf/settings.local.yaml';
+    if(is_file($localSettings)) {
+        $settings = array_replace_recursive($settings, YamlHelper::parseYaml($localSettings));
+    }
+
     $containerBuilder->addDefinitions($settings);
 };
-
-

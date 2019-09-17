@@ -2,9 +2,10 @@
 
 namespace CosmoCode\Formserver\FormGenerator\FormElements;
 
+use CosmoCode\Formserver\Service\LangManager;
 
 /**
- * Base class for every InputFormElement
+ * Dynamic form elements have an input which the user can enter.
  */
 abstract class AbstractDynamicFormElement extends AbstractFormElement
 {
@@ -25,7 +26,7 @@ abstract class AbstractDynamicFormElement extends AbstractFormElement
      */
     public function hasValue()
     {
-        return ! empty($this->value);
+        return $this->value !== null;
     }
 
     /**
@@ -76,19 +77,23 @@ abstract class AbstractDynamicFormElement extends AbstractFormElement
      */
     public function isRequired()
     {
-        return isset($this->getValidationRules()['required'])
-            && $this->getValidationRules()['required'];
+        return $this->getValidationRules()['required'] ?? true;
     }
 
     /**
      * Attaches an error to the form element
      *
      * @param string $error
+     * @param string $allowed
      * @return void
      */
-    public function addError($error)
+    public function addError($error, $allowed = '')
     {
-        $this->errors[] = $error;
+        $format = '%s';
+        if ($allowed) {
+            $format .= ': "%s"';
+        }
+        $this->errors[] = sprintf($format, LangManager::getString($error), $allowed);
     }
 
     /**
@@ -109,5 +114,22 @@ abstract class AbstractDynamicFormElement extends AbstractFormElement
     public function isValid()
     {
         return empty($this->errors);
+    }
+
+    /**
+     * @inheritDoc
+     * @return array
+     */
+    public function getViewVariables()
+    {
+        return array_merge(
+            $this->getConfig(),
+            [
+                'id' => $this->getFormElementId(),
+                'value' => $this->getValue(),
+                'errors' => $this->getErrors(),
+                'is_required' => $this->isRequired()
+            ]
+        );
     }
 }

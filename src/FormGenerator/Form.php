@@ -6,7 +6,6 @@ namespace CosmoCode\Formserver\FormGenerator;
 use CosmoCode\Formserver\Exceptions\FormException;
 use CosmoCode\Formserver\FormGenerator\FormElements\AbstractDynamicFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\AbstractFormElement;
-use CosmoCode\Formserver\FormGenerator\FormElements\InputFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\FieldsetFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\UploadFormElement;
 use CosmoCode\Formserver\Helper\YamlHelper;
@@ -20,6 +19,10 @@ use Slim\Psr7\UploadedFile;
 class Form
 {
     const DATA_DIR = __DIR__ . '/../../data/';
+
+    const MODE_SHOW = 'show';
+    const MODE_SAVE = 'save';
+    const MODE_SEND = 'send';
 
     /**
      * @var string
@@ -35,6 +38,11 @@ class Form
      * @var AbstractFormElement[]
      */
     protected $formElements = [];
+
+    /**
+     * @var string
+     */
+    protected $mode = self::MODE_SHOW;
 
     /**
      * Build a form from YAML
@@ -66,26 +74,34 @@ class Form
     }
 
     /**
-     * Returns the user entered data of all form elements
-     * TODO: obsolete?
+     * Returns the value of a form element
      *
+     * @param string $fieldId
      * @return array
      */
-    public function getData()
+    public function getFormElementValue(string $fieldId)
     {
-        $data = [];
+        $fieldPath = explode('.', $fieldId);
+        $rootElementId = array_shift($fieldPath);
 
         foreach ($this->formElements as $formElement) {
-            if ($formElement instanceof FieldsetFormElement) {
-                foreach ($formElement->getChildren() as $fieldsetChild) {
-                    $this->insertFormElementValueInArray($fieldsetChild, $data);
+            if ($formElement->getId() === $rootElementId) {
+                if ($formElement instanceof FieldsetFormElement) {
+                    $childElementId = array_shift($fieldPath);
+                    foreach ($formElement->getChildren() as $fieldsetChild) {
+                        if ($fieldsetChild instanceof AbstractDynamicFormElement
+                            && $fieldsetChild->getId() === $childElementId
+                        ) {
+                            return $fieldsetChild->getValue();
+                        }
+                    }
+                } elseif ($formElement instanceof AbstractDynamicFormElement) {
+                    return $formElement->getValue();
                 }
-            } else {
-                $this->insertFormElementValueInArray($formElement, $data);
             }
         }
 
-        return $data;
+        throw new FormException("Cant get value of $fieldId. It does not exist.");
     }
 
     /**
@@ -120,6 +136,33 @@ class Form
     }
 
     /**
+     * Returns the current mode (user intend)
+     *
+     * @return string
+     */
+    public function getMode()
+    {
+        return $this->mode;
+    }
+
+    /**
+     * Sets the current mode
+     *
+     * @param array $data
+     * @return void
+     */
+    protected function setMode(array $data)
+    {
+        if (isset($data['formcontrol']['send'])) {
+            $this->mode = self::MODE_SEND;
+        } elseif (isset($data['formcontrol']['save'])) {
+            $this->mode = self::MODE_SAVE;
+        } else {
+            $this->mode = self::MODE_SHOW;
+        }
+    }
+
+    /**
      * Submit data to the form
      *
      * @param array $data $_POST
@@ -133,6 +176,7 @@ class Form
         // name)
         $this->restore();
 
+        // submit data
         foreach ($this->formElements as $formElement) {
             if ($formElement instanceof FieldsetFormElement) {
                 foreach ($formElement->getChildren() as $fieldsetChild) {
@@ -142,6 +186,24 @@ class Form
                 $this->submitFormElement($formElement, $data, $files);
             }
         }
+
+        // en-/disable fieldsets depending on toggle value
+        foreach ($this->formElements as $formElement) {
+            if ($formElement instanceof FieldsetFormElement
+                && $formElement->hasToggle()
+            ) {
+                $toggleValue = $this->getFormElementValue(
+                    $formElement->getToggleFieldId()
+                );
+                $requiredToggleValue = $formElement->getToggleValue();
+
+                $formElement->setDisabled(
+                    $toggleValue !== $requiredToggleValue
+                );
+            }
+        }
+
+        $this->setMode($data);
     }
 
     /**
@@ -198,7 +260,9 @@ class Form
     public function isValid()
     {
         foreach ($this->formElements as $formElement) {
-            if ($formElement instanceof FieldsetFormElement) {
+            if ($formElement instanceof FieldsetFormElement
+                && ! $formElement->isDisabled()
+            ) {
                 foreach ($formElement->getChildren() as $fieldsetChild) {
                     if ($fieldsetChild instanceof AbstractDynamicFormElement
                         && ! $fieldsetChild->isValid()
@@ -242,7 +306,7 @@ class Form
                 $fileName = $this->moveUploadedFile($file, $formElement);
                 $formElement->setValue($fileName);
             }
-        } elseif ($formElement instanceof InputFormElement) {
+        } elseif ($formElement instanceof AbstractDynamicFormElement) {
             $value = $this->getFormElementValueFromArray($formElement, $data);
             // Important! Value must be set, even if empty. User can unset fields
             $formElement->setValue($value);
@@ -304,9 +368,7 @@ class Form
      */
     protected function restoreValue(array $values, AbstractFormElement $formElement)
     {
-        if ($formElement instanceof InputFormElement
-            || $formElement instanceof UploadFormElement
-        ) {
+        if ($formElement instanceof AbstractDynamicFormElement) {
             $value = $this->getFormElementValueFromArray($formElement, $values);
                 $formElement->setValue($value);
         }
@@ -342,7 +404,7 @@ class Form
         AbstractFormElement $formElement,
         array &$array
     ) {
-        if ($formElement instanceof InputFormElement
+        if ($formElement instanceof AbstractDynamicFormElement
             || $formElement instanceof UploadFormElement
         ) {
             // Dont need to persist an empty value

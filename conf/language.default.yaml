@@ -1,0 +1,10 @@
+error_required: This is a required field
+error_min: Value must be at least
+error_max: Value must not exceed
+error_match: Value must match
+error_fileext: Allowed file types are
+error_filesize: Maximum file size is
+form_valid: Form was saved successfully
+form_invalid: Form was saved successfully, but it still contains errors
+send_success: The form was send successfully.
+send_failed: The form could not be send. It contains errors

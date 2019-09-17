@@ -4,8 +4,9 @@ namespace CosmoCode\Formserver\FormGenerator\FormElements;
 
 
 /**
- * FieldsetFormElement is a special AbstractFormElement.
- * It contains child formElements
+ * Representation of a fieldset.
+ * This is a special form element. It contains other form elements in $children.
+ * It also can be disabled (when the toggle condition does not match)
  */
 class FieldsetFormElement extends AbstractFormElement
 {
@@ -19,6 +20,11 @@ class FieldsetFormElement extends AbstractFormElement
      * @var string[]
      */
     protected $renderedChildViews = [];
+
+    /**
+     * @var bool
+     */
+    protected $disabled;
 
     /**
      * @param string $id
@@ -78,6 +84,83 @@ class FieldsetFormElement extends AbstractFormElement
     }
 
     /**
+     * Return bool indicating if this fieldset can be toggled
+     *
+     * @return bool
+     */
+    public function hasToggle()
+    {
+        return ! empty($this->getConfigValue('toggle'));
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDisabled()
+    {
+        return $this->disabled;
+    }
+
+    /**
+     * @param bool $disabled
+     * @return void
+     */
+    public function setDisabled(bool $disabled)
+    {
+        $this->disabled = $disabled;
+    }
+
+
+    /**
+     * Get toggle configuration
+     *
+     * @return array
+     */
+    public function getToggleVariables()
+    {
+        if ($this->hasToggle()) {
+            $toggleId = $this->getToggleFieldId();
+            $toggleValue = $this->getToggleValue();
+            if (strpos($toggleId, '.')) {
+                $toggleId = str_replace('.', '[', $toggleId) . ']';
+            }
+
+            return [
+                'toggle' => [
+                    'id' => $toggleId,
+                    'value' => $toggleValue
+                ]
+            ];
+        }
+
+        return ['toggle' => null];
+    }
+
+    /**
+     * Get id of the form element which toggles this fieldset
+     *
+     * @return string
+     */
+    public function getToggleFieldId()
+    {
+        $toggleConfig = $this->getConfigValue('toggle');
+
+        return $toggleConfig['field'];
+    }
+
+    /**
+     * Value which triggeres the toggle (show)
+     *
+     * @return mixed
+     */
+    public function getToggleValue()
+    {
+        $toggleConfig = $this->getConfigValue('toggle');
+
+        return $toggleConfig['value'];
+    }
+
+    /**
      * @inheritdoc
      * @return array
      */
@@ -88,7 +171,9 @@ class FieldsetFormElement extends AbstractFormElement
             [
                 'id' => $this->getFormElementId(),
                 'rendered_child_views' => $this->renderedChildViews,
-            ]
+            ],
+            $this->getToggleVariables()
         );
     }
 }
+
