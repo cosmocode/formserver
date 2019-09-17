@@ -8,14 +8,22 @@ Each form is accessed via a direct link, which contains the form ID.
 
 ## Usage
 
-All forms are served from subdirectories of `data/`. Create a
+All forms are served from subdirectories of `data/`.
+
+Create a `config.yaml` file in a `<directory>` and the form will be available at: `http://your.server/forms/<directory>`
+
+When the user submits the form, all input values are saved in the form directory as `values.yaml` If the user clicked on `send` and all the inputs are valid, an email is sent to configured addresses.
 
 The [reference](doc/index.md) details all available options.
 
+## Requirements
+
+* PHP 7.2
+* mail server
+
 ## Current limitations
 
- * The YAML files are not validated. If your configuration cannot be translated into an HTML form, you will simply see an error on the form page.
- * Only one signature field per form will work.
+ * The YAML files are not validated. You will see no warnings if your configuration cannot be translated into an HTML form.
 
 ## Install
 
