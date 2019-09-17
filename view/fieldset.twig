@@ -1,0 +1,9 @@
+{% from '_macros' import renderError %}
+<fieldset {{ toggle is not empty ? ('data-toggle-id="'~toggle.id~'" data-toggle-value="'~toggle.value~'"') | raw }}>
+    <legend class="label fieldset-label">
+        {{ label }}
+    </legend>
+    {% for rendered_child_view in rendered_child_views %}
+        {{ rendered_child_view | raw }}
+    {% endfor %}
+</fieldset>

@@ -1,0 +1,22 @@
+{% from '_macros' import renderError %}
+<div class="field">
+    <label class="label" for="{{ id }}">{{ label }} {{ is_required ? '*' }}</label>
+    <div class="control">
+        <div class="select {{ multiselect is defined and multiselect ? 'is-multiple' }} {{ errors is not empty ? 'is-danger' }}" {{ width is defined ? ('style="width:'~width~';"') | raw }} >
+            <select
+                    id="{{ id }}"
+                    name="{{ id }}"
+                    class="form-input"
+                    {{ size is defined ? 'size='~size }}
+                    {{ multiselect is defined and multiselect ? 'multiple' }}>
+
+                <option value="">{{ default is defined ? default }}</option>
+                {%- for choice in choices -%}
+                    <option {{ choice in value ? 'selected' }}>{{ choice }}</option>
+                {%- endfor -%}
+
+            </select>
+        </div>
+    </div>
+    {{ renderError(errors) }}
+</div>

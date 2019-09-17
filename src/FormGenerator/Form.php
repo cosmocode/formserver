@@ -6,7 +6,6 @@ namespace CosmoCode\Formserver\FormGenerator;
 use CosmoCode\Formserver\Exceptions\FormException;
 use CosmoCode\Formserver\FormGenerator\FormElements\AbstractDynamicFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\AbstractFormElement;
-use CosmoCode\Formserver\FormGenerator\FormElements\InputFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\FieldsetFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\UploadFormElement;
 use CosmoCode\Formserver\Helper\YamlHelper;
@@ -77,6 +76,7 @@ class Form
     /**
      * Returns the value of a form element
      *
+     * @param string $fieldId
      * @return array
      */
     public function getFormElementValue(string $fieldId)
@@ -90,7 +90,8 @@ class Form
                     $childElementId = array_shift($fieldPath);
                     foreach ($formElement->getChildren() as $fieldsetChild) {
                         if ($fieldsetChild instanceof AbstractDynamicFormElement
-                            && $fieldsetChild->getId() === $childElementId) {
+                            && $fieldsetChild->getId() === $childElementId
+                        ) {
                             return $fieldsetChild->getValue();
                         }
                     }
@@ -175,6 +176,7 @@ class Form
         // name)
         $this->restore();
 
+        // submit data
         foreach ($this->formElements as $formElement) {
             if ($formElement instanceof FieldsetFormElement) {
                 foreach ($formElement->getChildren() as $fieldsetChild) {
@@ -182,6 +184,22 @@ class Form
                 }
             } else {
                 $this->submitFormElement($formElement, $data, $files);
+            }
+        }
+
+        // en-/disable fieldsets depending on toggle value
+        foreach ($this->formElements as $formElement) {
+            if ($formElement instanceof FieldsetFormElement
+                && $formElement->hasToggle()
+            ) {
+                $toggleValue = $this->getFormElementValue(
+                    $formElement->getToggleFieldId()
+                );
+                $requiredToggleValue = $formElement->getToggleValue();
+
+                $formElement->setDisabled(
+                    $toggleValue !== $requiredToggleValue
+                );
             }
         }
 
@@ -242,7 +260,9 @@ class Form
     public function isValid()
     {
         foreach ($this->formElements as $formElement) {
-            if ($formElement instanceof FieldsetFormElement) {
+            if ($formElement instanceof FieldsetFormElement
+                && ! $formElement->isDisabled()
+            ) {
                 foreach ($formElement->getChildren() as $fieldsetChild) {
                     if ($fieldsetChild instanceof AbstractDynamicFormElement
                         && ! $fieldsetChild->isValid()
@@ -384,7 +404,7 @@ class Form
         AbstractFormElement $formElement,
         array &$array
     ) {
-        if ($formElement instanceof InputFormElement
+        if ($formElement instanceof AbstractDynamicFormElement
             || $formElement instanceof UploadFormElement
         ) {
             // Dont need to persist an empty value

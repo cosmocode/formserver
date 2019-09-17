@@ -5,13 +5,13 @@ namespace CosmoCode\Formserver\Service;
 use CosmoCode\Formserver\Helper\YamlHelper;
 
 /**
- * Class LangManager
- * @package CosmoCode\Formserver\Service
- *
  * Provides access to language strings
  */
 class LangManager
 {
+    const LANG_FILE_PATH_GLOBAL = __DIR__ . '/../../conf/language.default.yaml';
+    const LANG_FILE_PATH_LOCAL = __DIR__ . '/../../conf/language.local.yaml';
+    
     /**
      * Language strings.
      * All defaults from conf/language.default.yaml can be overridden
@@ -30,9 +30,9 @@ class LangManager
     public static function getString($id)
     {
         if (! self::$translations) {
-            self::$translations = YamlHelper::parseYaml(__DIR__ . '/../../conf/language.default.yaml');
+            self::$translations = YamlHelper::parseYaml(self::LANG_FILE_PATH_GLOBAL);
             // allow overriding of app defaults
-            $localFile = __DIR__ . '/../../conf/language.local.yaml';
+            $localFile = self::LANG_FILE_PATH_LOCAL;
             if (is_file($localFile)) {
                 self::$translations = array_replace_recursive(
                     self::$translations,

@@ -5,7 +5,7 @@ namespace CosmoCode\Formserver\FormGenerator\FormElements;
 /**
  * Static form elements have no user input
  */
-class StaticFormElement extends AbstractFormElement
+abstract class AbstractStaticFormElement extends AbstractFormElement
 {
     /**
      * @inheritdoc

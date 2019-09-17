@@ -3,24 +3,8 @@
 namespace CosmoCode\Formserver\FormGenerator\FormElements;
 
 /**
- * Dynamic form elements have an input which the user can fill out
+ * Representation of a signature
  */
-class SignatureFormElement extends InputFormElement
+class SignatureFormElement extends AbstractDynamicFormElement
 {
-    /**
-     * @inheritDoc
-     * @return array
-     */
-    public function getViewVariables()
-    {
-        return array_merge(
-            $this->getConfig(),
-            [
-                'id' => $this->getFormElementId(),
-                'value' => $this->getValue(),
-                'errors' => $this->getErrors(),
-                'is_required' => $this->isRequired()
-            ]
-        );
-    }
 }

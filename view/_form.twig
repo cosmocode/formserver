@@ -1,0 +1,44 @@
+{% from '_macros' import fileUrl, renderNotification %}
+<!DOCTYPE html>
+<html lang="de">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{{ title is defined ? title : 'Form'}}</title>
+        <link rel="stylesheet" href="/css/bulma.min.css" />
+        <link rel="stylesheet" href="/css/app.css" />
+        <link rel="stylesheet" href="/css/flatpickr.min.css" >
+        {%- if css is not empty -%}
+            <link rel="stylesheet" href={{ fileUrl(css) }} >
+        {% endif %}
+        <script src="/js/flatpickr.min.js"></script>
+        <script src="/js/signature_pad.min.js"></script>
+    </head>
+    <body>
+        <section class="section">
+            <div class="container">
+                {%- if logo is not empty -%}
+                    <img class="logo" src="{{ fileUrl(logo) }}">
+                {%- endif -%}
+                {%- if title is not empty  -%}
+                    <h1 class="title">{{ title }}</h1>
+                {%- endif -%}
+
+                {{ renderNotification(notification) }}
+                <form id="form" method="post" enctype="multipart/form-data">
+                    {{ formHtml | raw }}
+                    <div class="field is-grouped has-addons has-addons-centered">
+                        <div class="control">
+                            <button class="button is-link" type="submit" name="formcontrol[save]">Speichern</button>
+                        </div>
+                        <div class="control">
+                            <button class="button is-link" type="submit" name="formcontrol[send]">Absenden</button>
+                        </div>
+                    </div>
+                </form>
+                {{ renderNotification(notification) }}
+            </div>
+        </section>
+        <script src="/js/app.js"></script>
+    </body>
+</html>

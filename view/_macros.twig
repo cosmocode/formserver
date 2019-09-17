@@ -1,0 +1,27 @@
+{%- macro fileUrl(value) -%}
+    {%- if value starts with 'http' -%}
+        {{ value }}
+    {%- elseif value starts with '/' -%}
+        {{ value }}
+    {%- else -%}
+        /download/{{ form_id }}?file={{ value }}
+    {%- endif -%}
+{%- endmacro -%}
+
+{%- macro renderError(errors) -%}
+    {%- if errors is not empty -%}
+        <p class="help is-danger">
+            {% for error in errors %}
+                {{ error }} <br />
+            {% endfor %}
+        </p>
+    {%- endif -%}
+{%- endmacro -%}
+
+{%- macro renderNotification(notification) -%}
+    {%- if notification is not empty -%}
+        <div class="notification {{ form_is_valid ? 'is-success' : 'is-danger' -}}">
+            {{ notification }}
+        </div>
+    {%- endif -%}
+{%- endmacro -%}

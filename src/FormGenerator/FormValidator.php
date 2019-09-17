@@ -40,11 +40,12 @@ class FormValidator
     {
         foreach ($this->form->getFormElements() as $formElement) {
             if ($formElement instanceof FieldsetFormElement
-                && $this->fieldsetValidatable($formElement)) {
+                && ! $formElement->isDisabled()
+            ) {
                 foreach ($formElement->getChildren() as $fieldsetChild) {
                     $this->validateFormElement($fieldsetChild);
                 }
-            } else {
+            } elseif ($formElement instanceof AbstractDynamicFormElement) {
                 $this->validateFormElement($formElement);
             }
         }
@@ -52,7 +53,6 @@ class FormValidator
 
     /**
      * Helper function to validate a form element
-     * TODO: no hardcoded texts
      *
      * @param AbstractFormElement $formElement
      * @return void
@@ -115,7 +115,8 @@ class FormValidator
                         }
                         if (! Validator::oneOf($validators)->validate($value)) {
                             $formElement->addError(
-                                'error_fileext', $formElement->getAllowedExtensionsAsString()
+                                'error_fileext',
+                                $formElement->getAllowedExtensionsAsString()
                             );
                             $this->dropFile($formElement);
                         }
@@ -136,18 +137,5 @@ class FormValidator
         $filePath = $this->form->getFormDirectory() . $formElement->getValue();
         unlink($filePath);
         $formElement->setValue(null);
-    }
-
-    protected function fieldsetValidatable(FieldsetFormElement $formElement) {
-        if ($formElement->hasToggle()) {
-            $toggleValue = $this->form->getFormElementValue(
-                $formElement->getToggleFieldId()
-            );
-            $requiredToggleValue = $formElement->getToggleValue();
-
-            return $toggleValue === $requiredToggleValue;
-        }
-
-        return true;
     }
 }
