@@ -148,23 +148,6 @@ class Form
     }
 
     /**
-     * Sets the current mode
-     *
-     * @param array $data
-     * @return void
-     */
-    protected function setMode(array $data)
-    {
-        if (isset($data['formcontrol']['send'])) {
-            $this->mode = self::MODE_SEND;
-        } elseif (isset($data['formcontrol']['save'])) {
-            $this->mode = self::MODE_SAVE;
-        } else {
-            $this->mode = self::MODE_SHOW;
-        }
-    }
-
-    /**
      * Submit data to the form
      *
      * @param array $data $_POST
@@ -341,6 +324,58 @@ class Form
     }
 
     /**
+     * Helper function to en-/disable fieldsets depending on toggle value
+     *
+     * @param AbstractFormElement $formElement
+     * @return void
+     */
+    protected function toggleFieldsets(
+        AbstractFormElement $formElement
+    ) {
+        if ($formElement instanceof FieldsetFormElement) {
+            if ($formElement->hasToggle()) {
+
+                $submittedValue = $this->getFormElementValue(
+                    $formElement->getToggleFieldId()
+                );
+                $toggleValue = $formElement->getToggleValue();
+
+                // Checklist can have multiple values
+                if (is_array($submittedValue)) {
+                    $disabled = ! in_array($toggleValue, $submittedValue);
+                } else {
+                    $disabled = $submittedValue !== $toggleValue;
+                }
+
+                $formElement->setDisabled($disabled);
+            }
+
+            if (! $formElement->isDisabled()) {
+                foreach ($formElement->getChildren() as $fieldsetChild) {
+                    $this->toggleFieldsets($fieldsetChild);
+                }
+            }
+        }
+    }
+
+    /**
+     * Sets the current mode
+     *
+     * @param array $data
+     * @return void
+     */
+    protected function setMode(array $data)
+    {
+        if (isset($data['formcontrol']['send'])) {
+            $this->mode = self::MODE_SEND;
+        } elseif (isset($data['formcontrol']['save'])) {
+            $this->mode = self::MODE_SAVE;
+        } else {
+            $this->mode = self::MODE_SHOW;
+        }
+    }
+
+    /**
      * Helper function to restore a specific value to a form element
      *
      * @param array $values
@@ -381,41 +416,6 @@ class Form
             && $formElement->hasValue()
         ) {
             $values[$formElement->getId()] = $formElement->getValue();
-        }
-    }
-
-    /**
-     * Helper function to en-/disable fieldsets depending on toggle value
-     *
-     * @param AbstractFormElement $formElement
-     * @return void
-     */
-    protected function toggleFieldsets(
-        AbstractFormElement $formElement
-    ) {
-        if ($formElement instanceof FieldsetFormElement) {
-            if ($formElement->hasToggle()) {
-
-                $submittedValue = $this->getFormElementValue(
-                    $formElement->getToggleFieldId()
-                );
-                $toggleValue = $formElement->getToggleValue();
-
-                // Checklist can have multiple values
-                if (is_array($submittedValue)) {
-                    $disabled = ! in_array($toggleValue, $submittedValue);
-                } else {
-                    $disabled = $submittedValue !== $toggleValue;
-                }
-
-                $formElement->setDisabled($disabled);
-            }
-
-            if (! $formElement->isDisabled()) {
-                foreach ($formElement->getChildren() as $fieldsetChild) {
-                    $this->toggleFieldsets($fieldsetChild);
-                }
-            }
         }
     }
 }
