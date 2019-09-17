@@ -186,6 +186,7 @@ class Mailer
             function ($matches) use ($form) {
                 return $form->getFormElementValue($matches[1]);
             },
-            $string);
+            $string
+        );
     }
 }
