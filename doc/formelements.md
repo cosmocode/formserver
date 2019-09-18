@@ -1,16 +1,19 @@
 # Form element types
 
-Each form element must be declared using a unique id (unique at least in a fieldset) and the element definition. All elements except hidden fields should have a label.
-
+Each form element must be declared using a unique id (inside its group) and an element definition.  
+Form elements can be grouped visually and/or logically in [fieldsets](#fieldsets).  
+The element definition must contain at least the type of the form element.  
+All form elements but the [hidden form element](#hidden) have also following basic options in the element definition.  
 ```yaml
 <id>:
-    type: textinput
-    label: Enter some data
+    type: <type>
+    label: <label> *(optional)*
+    grid: <grid> *optional*
 ```
 
 The element id will be used in HTML as is, so mind the standards: no spaces, start with a letter, stick to ASCII characters and use - or _ as separators.
 
-## Fieldsets
+## fieldsets
 
 Fieldsets can contain all types of elements, including fieldsets. The label will be displayed as a legend. 
 
