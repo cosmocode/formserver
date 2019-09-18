@@ -35,7 +35,9 @@ class SignatureFormElement extends AbstractDynamicFormElement
         return array_merge(
             parent::getViewVariables(),
             [
-                'label_signature_delete' => LangManager::getString('label_signature_delete')
+                'label_signature_delete' => LangManager::getString(
+                    'label_signature_delete'
+                )
             ]
         );
     }
