@@ -37,7 +37,12 @@ select {
     width: 100%;
 }
 
-
 .hidden {
     display: none;
+}
+
+/** Required so fieldsets dont destroy bulmas column system */
+fieldset {
+    display: contents;
+
 }
