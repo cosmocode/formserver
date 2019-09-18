@@ -284,9 +284,13 @@ class Form
             )
         );
 
-        $baseName = $formElement->hasParent()
-            ? $formElement->getParent()->getId() . '_' . $formElement->getId()
-            : $formElement->getId();
+        $baseName = $formElement->getId();
+        $parent = $formElement->getParent();
+        while ($parent !== null) {
+            $baseName = $parent->getId() . ".$baseName";
+            $parent = $parent->getParent();
+        }
+
         $fileName = sprintf('%s.%0.8s', $baseName, $extension);
 
         $filePath = $this->getFormDirectory() . $fileName;
@@ -413,7 +417,8 @@ class Form
      * @param AbstractFormElement $formElement
      * @return bool
      */
-    protected function isFormElementValid(AbstractFormElement $formElement){
+    protected function isFormElementValid(AbstractFormElement $formElement)
+    {
         if ($formElement instanceof FieldsetFormElement
             && ! $formElement->isDisabled()
         ) {
