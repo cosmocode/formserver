@@ -1,5 +1,7 @@
-<div class="field">
-    <div class="control">
-        {{ markdown | raw }}
+<div class="column {{ column is not empty ? column : 'is-full' }}">
+    <div class="field">
+        <div class="control">
+            {{ markdown | raw }}
+        </div>
     </div>
 </div>

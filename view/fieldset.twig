@@ -1,9 +1,19 @@
 {% from '_macros' import renderError %}
+
 <fieldset {{ toggle is not empty ? ('data-toggle-id="'~toggle.id~'" data-toggle-value="'~toggle.value~'"') | raw }}>
-    <legend class="label fieldset-label">
-        {{ label }}
-    </legend>
-    {% for rendered_child_view in rendered_child_views %}
-        {{ rendered_child_view | raw }}
-    {% endfor %}
+    <fieldset class="hidden">{{ label }}</fieldset>
+    <div class="column {{ column is not empty ? column : 'is-full' }}">
+        <div class="label fieldset-label">
+            {{ label }}
+        </div>
+        <div class="columns is-multiline">
+            {% for rendered_child_view in rendered_child_views %}
+                {{ rendered_child_view | raw }}
+            {% endfor %}
+        </div>
+    </div>
+
+
 </fieldset>
+
+

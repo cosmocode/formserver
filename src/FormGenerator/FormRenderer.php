@@ -60,7 +60,7 @@ class FormRenderer
      */
     public function render()
     {
-        $formHtml = '';
+        $renderedFormElements = [];
         $title = $this->form->getMeta('title');
 
         // Global variables available in all templates and macros
@@ -69,9 +69,9 @@ class FormRenderer
 
         foreach ($this->form->getFormElements() as $formElement) {
             if ($formElement instanceof FieldsetFormElement) {
-                $formHtml .= $this->renderFieldsetFormElement($formElement);
+                $renderedFormElements[] = $this->renderFieldsetFormElement($formElement);
             } else {
-                $formHtml .= $this->renderTemplate(
+                $renderedFormElements[] = $this->renderTemplate(
                     $formElement->getType(),
                     $formElement->getViewVariables()
                 );
@@ -81,7 +81,7 @@ class FormRenderer
         return $this->renderTemplate(
             '_form',
             [
-                'formHtml' => $formHtml,
+                'rendered_form_elements' => $renderedFormElements,
                 'title' => $title,
                 'notification' => $this->generateNotification(),
                 'css' => $this->form->getMeta('css'),
@@ -112,8 +112,6 @@ class FormRenderer
                     $childFormElement->getViewVariables()
                 );
             }
-
-
             $fieldsetFormElement->addRenderedChildView($renderedChildView);
         }
 

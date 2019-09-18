@@ -1,24 +1,26 @@
 {% from '_macros' import renderError %}
-<div class="field">
-    <div class="control">
-        <div class="label">{{ label }} {{ is_required ? '*' }}</div>
-        <div class="grouped-form-elements" id="{{ id }}">
-            {%- for choice in choices -%}
-                <label class="radio">
-                    <input
-                            type="radio"
-                            id="{{ id~'['~loop.index0~']' }}"
-                            name="{{ id }}"
-                            class="form-input"
-                            value="{{ choice }}"
-                            {{ value == choice ? 'checked' }} />
-                    {{ choice }}
-                </label>
-                {%- if alignment is defined and alignment == 'vertical' -%}
-                    <br />
-                {% endif %}
-            {%- endfor -%}
+<div class="column {{ column is not empty ? column : 'is-full' }}">
+    <div class="field">
+        <div class="control">
+            <div class="label">{{ label }} {{ is_required ? '*' }}</div>
+            <div class="grouped-form-elements" id="{{ id }}">
+                {%- for choice in choices -%}
+                    <label class="radio">
+                        <input
+                                type="radio"
+                                id="{{ id~'['~loop.index0~']' }}"
+                                name="{{ id }}"
+                                class="form-input"
+                                value="{{ choice }}"
+                                {{ value == choice ? 'checked' }} />
+                        {{ choice }}
+                    </label>
+                    {%- if alignment is defined and alignment == 'vertical' -%}
+                        <br />
+                    {% endif %}
+                {%- endfor -%}
+            </div>
         </div>
+        {{ renderError(errors) }}
     </div>
-    {{ renderError(errors) }}
 </div>

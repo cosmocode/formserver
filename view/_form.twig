@@ -18,25 +18,40 @@
         <section class="section">
             <div class="container">
                 {%- if logo is not empty -%}
-                    <img class="logo" src="{{ fileUrl(logo) }}">
+                    <img class="logo" src="{{ fileUrl(logo) }}" alt="logo">
                 {%- endif -%}
+
                 {%- if title is not empty  -%}
                     <h1 class="title">{{ title }}</h1>
                 {%- endif -%}
 
-                {{ renderNotification(notification) }}
                 <form id="form" method="post" enctype="multipart/form-data">
-                    {{ formHtml | raw }}
-                    <div class="field is-grouped has-addons has-addons-centered">
-                        <div class="control">
-                            <button class="button is-link" type="submit" name="formcontrol[save]">Speichern</button>
+                    <div class="columns">
+                        <div class="column">
+                            {{ renderNotification(notification) }}
                         </div>
-                        <div class="control">
-                            <button class="button is-link" type="submit" name="formcontrol[send]">Absenden</button>
+                    </div>
+                    <div class="columns is-multiline">
+                        {% for rendered_form_element in rendered_form_elements %}
+                            {{ rendered_form_element | raw }}
+                        {% endfor %}
+                    </div>
+                    <div class="columns is-multiline">
+                        <div class="column is-full">
+                            <div class="field is-grouped has-addons has-addons-centered">
+                                <div class="control">
+                                    <button class="button is-link" type="submit" name="formcontrol[save]">Speichern</button>
+                                </div>
+                                <div class="control">
+                                    <button class="button is-link" type="submit" name="formcontrol[send]">Absenden</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column is-full">
+                            {{ renderNotification(notification) }}
                         </div>
                     </div>
                 </form>
-                {{ renderNotification(notification) }}
             </div>
         </section>
         <script src="/js/app.js"></script>

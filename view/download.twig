@@ -1,6 +1,8 @@
 {% from '_macros' import fileUrl %}
-<div class="field">
-    <div class="control">
-        <a href="{{ fileUrl(href)  }}" target="_blank">{{ label }}</a>
+<div class="column {{ column is not empty ? column : 'is-full' }}">
+    <div class="field">
+        <div class="control">
+            <a href="{{ fileUrl(href)  }}" target="_blank">{{ label }}</a>
+        </div>
     </div>
 </div>
