@@ -20,6 +20,7 @@ class SignatureFormElement extends AbstractDynamicFormElement
         if ($this->hasValue()) {
             $encodedImage = explode(",", $this->value)[1];
             $decodedImage = base64_decode($encodedImage);
+            // TODO requires ext-simplexml
             $xml = new \SimpleXMLElement($decodedImage);
             return $xml->children()->count() ? $this->value : null;
         }
