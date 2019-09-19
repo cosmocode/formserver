@@ -24,7 +24,8 @@
     "mustangostang/spyc": "~0.6.2",
     "respect/validation": "^1.1",
     "swiftmailer/swiftmailer": "^6.2",
-    "ralouphie/mimey": "^2.1"
+    "ralouphie/mimey": "^2.1",
+    "ext-simplexml": "*"
   },
   "config": {
     "platform": {

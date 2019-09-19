@@ -1,0 +1,10 @@
+html {
+    background: #d5f5ff
+}
+
+.logo {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+}

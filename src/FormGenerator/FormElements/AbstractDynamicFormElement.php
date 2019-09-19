@@ -61,7 +61,7 @@ abstract class AbstractDynamicFormElement extends AbstractFormElement
         if ($value === '') {
             $this->value = null;
         } else {
-            $this->value = $value;
+            $this->value = htmlspecialchars($value);
         }
     }
 

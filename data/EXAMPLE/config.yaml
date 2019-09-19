@@ -1,0 +1,124 @@
+meta:
+  title: 'Form example'
+  css: custom.css
+  logo: logo.png
+  email:
+    subject: 'Email subject'
+    recipients:
+      - recipient1@example.com
+      - recipient2@example.com
+    cc:
+      - email1
+  labels:
+    button_save : 'Save'
+    button_send : 'Send'
+    uploaded_file: 'Saved file'
+
+form:
+  textinput1:
+    type: textinput
+    label: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.'
+    validation:
+      match: /[a-zA-Z0-9]/
+      required: false
+  email1:
+    type: email
+    label: 'Where should the email copy be sent to?'
+  fieldset0:
+    type: fieldset
+    column: is-full
+    children:
+      fieldset1:
+        type: fieldset
+        column: is-half
+        label: 'Lorem ipsum (fieldset label)'
+        children:
+          dropdown1:
+            type: dropdown
+            label: 'At vero eos et accusam et justo duo dolores et ea rebum.'
+            default: Please select a choice
+            choices:
+              - First choice
+              - Second choice
+              - Third choice
+              - I will open fieldset2
+      fieldset2:
+        type: fieldset
+        column: is-half
+        label: 'At vero eos et accusam (fieldset label)'
+        toggle:
+          field: fieldset0.fieldset1.dropdown1
+          value: 'I will open fieldset2'
+        children:
+          numberinput1:
+            type: numberinput
+            label: 'Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'
+  fieldset3:
+    type: fieldset
+    column: is-half
+    label: 'Stet clita kasd gubergren (fieldset label)'
+    children:
+      numberinput1:
+        type: radioset
+        label: 'Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'
+        choices:
+          - First choice
+          - Second choice
+          - Third choice
+        validation:
+          required: false
+  fieldset4:
+    type: fieldset
+    column: is-full
+    label: 'fieldset with full width (4)'
+    children:
+      fieldset5:
+        type: fieldset
+        column: is-half
+        children:
+          fieldset5a:
+            type: fieldset
+            label: 'Fieldset with  2/6 width (5a)'
+            column: is-two-thirds
+            children:
+              textarea3:
+                type: textarea
+                validation:
+                  required: false
+          fieldset5b:
+            type: fieldset
+            label: 'Fieldset with  1/6 width (5b)'
+            column: is-one-third
+            children:
+              textarea4:
+                type: textarea
+                validation:
+                  required: false
+      fieldset6:
+        type: fieldset
+        column: is-half
+        children:
+          fieldset6a:
+            type: fieldset
+            label: 'Fieldset with  1/4 width (6a)'
+            column: is-half
+          fieldset6b:
+            type: fieldset
+            label: 'Fieldset with  1/4 width (6b)'
+            column: is-half
+  textarea1:
+    type: textarea
+    column: is-full
+    label: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.'
+    validation:
+      required: false
+  checklist1:
+    type: checklist
+    column: is-one-third
+    label: 'Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat'
+    validation:
+      required: false
+    choices:
+      - First choice
+      - Second choice
+      - Third choice

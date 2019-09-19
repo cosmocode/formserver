@@ -4,7 +4,7 @@
         <div class="control">
             <label class="label">{{ label }} {{ is_required ? '*' }}</label>
             {% if is_uploaded %}
-                <a href="{{ fileUrl(value) }}" target="_blank">Gespeicherte Datei</a><br />
+                <a href="{{ fileUrl(value) }}" target="_blank">{{ uploaded_file_label is not empty ? uploaded_file_label : 'Saved file' }}</a><br />
             {% endif %}
             <label class="file-label">
                 <input type="file" class="file-input form-input" id="{{ id }}" name="{{ id }}" {{ allowed_extensions is defined ? ('accept=".'~allowed_extensions|join(',.')~'"')|raw }} />

@@ -62,14 +62,23 @@ class FormRenderer
     {
         $renderedFormElements = [];
         $title = $this->form->getMeta('title');
+        $labels = $this->form->getMeta('labels');
+        $saveButtonLabel = $labels['button_save'] ?? null;
+        $sendButtonlabel = $labels['button_send'] ?? null;
+        $uploadedFileLabel = $labels['uploaded_file'] ?? null;
 
         // Global variables available in all templates and macros
         $this->twig->addGlobal('form_id', $this->form->getId());
         $this->twig->addGlobal('form_is_valid', $this->form->isValid());
+        $this->twig->addGlobal('button_save_label', $saveButtonLabel);
+        $this->twig->addGlobal('button_send_label', $sendButtonlabel);
+        $this->twig->addGlobal('uploaded_file_label', $uploadedFileLabel);
 
         foreach ($this->form->getFormElements() as $formElement) {
             if ($formElement instanceof FieldsetFormElement) {
-                $renderedFormElements[] = $this->renderFieldsetFormElement($formElement);
+                $renderedFormElements[] = $this->renderFieldsetFormElement(
+                    $formElement
+                );
             } else {
                 $renderedFormElements[] = $this->renderTemplate(
                     $formElement->getType(),
@@ -142,7 +151,6 @@ class FormRenderer
 
     /**
      * Generate global form notification, to indicate to the user what happened
-     * TODO: No hardcoded texts
      *
      * @return string|null
      */

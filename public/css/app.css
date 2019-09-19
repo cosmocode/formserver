@@ -11,11 +11,6 @@ canvas {
     background: #ffffff;
 }
 
-.textarea {
-    min-width: 0;
-    width: 100%;
-}
-
 .fieldset-label {
     font-size: 20pt;
 }
@@ -23,18 +18,6 @@ canvas {
 .checkbox {
     padding-left: 4px;
     padding-right: 4px;
-}
-
-fieldset {
-    padding-bottom: 14px;
-}
-
-form {
-    margin-bottom: 1.5rem;
-}
-
-select {
-    width: 100%;
 }
 
 .hidden {
