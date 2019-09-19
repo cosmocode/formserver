@@ -76,7 +76,9 @@ class FormRenderer
 
         foreach ($this->form->getFormElements() as $formElement) {
             if ($formElement instanceof FieldsetFormElement) {
-                $renderedFormElements[] = $this->renderFieldsetFormElement($formElement);
+                $renderedFormElements[] = $this->renderFieldsetFormElement(
+                    $formElement
+                );
             } else {
                 $renderedFormElements[] = $this->renderTemplate(
                     $formElement->getType(),
