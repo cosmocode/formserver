@@ -24,3 +24,13 @@ Your CSS file will be included after our basic styles, which are mostly plain [B
 ```
 
 An email with user input and attached uploads will be sent to configured addresses. A copy can be sent to an address from an email field if you provide the fieldId(s) in the `cc` section.   
+
+## Label options
+There are some labels which are defined in meta, because they are repetitive or cant be set in the [form element definitions](formelements.md)
+
+```yaml
+  labels:
+    button_save : <label of save button>
+    button_send : <label of send button>
+    uploaded_file: <label of download link>
+```

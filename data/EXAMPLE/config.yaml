@@ -9,6 +9,11 @@ meta:
       - dabrowska@cosmocode.de
     cc:
       - group1.group12.testfrage6
+  labels:
+    button_save : 'Save'
+    button_send : 'Send'
+    uploaded_file: 'Saved file'
+
 form:
   textinput1:
     type: textinput
