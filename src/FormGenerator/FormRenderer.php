@@ -149,7 +149,6 @@ class FormRenderer
 
     /**
      * Generate global form notification, to indicate to the user what happened
-     * TODO: No hardcoded texts
      *
      * @return string|null
      */
