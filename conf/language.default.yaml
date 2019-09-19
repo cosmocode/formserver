@@ -10,3 +10,6 @@ send_success: The form was send successfully.
 send_failed: The form could not be send. It contains errors
 label_signature_delete: Delete signature
 email_text_attachments: Look into the attachments
+button_save : Save
+button_send : Send
+uploaded_file: Saved file
