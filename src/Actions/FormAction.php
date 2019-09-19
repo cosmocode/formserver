@@ -8,7 +8,6 @@ use CosmoCode\Formserver\FormGenerator\FormRenderer;
 use CosmoCode\Formserver\FormGenerator\FormValidator;
 use CosmoCode\Formserver\Service\Mailer;
 use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Log\LoggerInterface;
 use Slim\Exception\HttpBadRequestException;
 
 /**
@@ -26,12 +25,10 @@ class FormAction extends AbstractAction
     /**
      * Constructor to inject dependencies
      *
-     * @param LoggerInterface $logger
      * @param Mailer $mailer
      */
-    public function __construct(LoggerInterface $logger, Mailer $mailer)
+    public function __construct(Mailer $mailer)
     {
-        parent::__construct($logger);
         $this->mailer = $mailer;
     }
 
@@ -66,11 +63,8 @@ class FormAction extends AbstractAction
 
             $formHtml = $formRenderer->render();
             $this->response->getBody()->write($formHtml);
-
-            $this->logger->info("Form $id was viewed");
         } catch (HttpBadRequestException $e) {
             $this->response->getBody()->write('Forbidden: no form ID!');
-            $this->logger->error("Missing form ID");
         }
 
         return $this->response;

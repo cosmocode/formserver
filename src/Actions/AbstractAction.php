@@ -5,7 +5,6 @@ namespace CosmoCode\Formserver\Actions;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Psr\Log\LoggerInterface;
 use Slim\Exception\HttpBadRequestException;
 use Slim\Exception\HttpNotFoundException;
 
@@ -16,11 +15,6 @@ use Slim\Exception\HttpNotFoundException;
  */
 abstract class AbstractAction
 {
-    /**
-     * @var LoggerInterface
-     */
-    protected $logger;
-
     /**
      * @var Request
      */
@@ -35,16 +29,6 @@ abstract class AbstractAction
      * @var array
      */
     protected $args;
-
-    /**
-     * Constructor to inject dependencies
-     *
-     * @param LoggerInterface $logger
-     */
-    public function __construct(LoggerInterface $logger)
-    {
-        $this->logger = $logger;
-    }
 
     /**
      * @param Request $request
