@@ -166,9 +166,8 @@ class Mailer
                     ->setContentType('image/jpeg')
                     ->setBody($decoded_image);
 
-                // FIXME no hardcoded text
                 // do not send the image source data
-                $value = 'Siehe Anhang';
+                $value = LangManager::getString('email_text_attachments');
             }
 
             $this->textBody .= sprintf($textLine, $label, $value);
