@@ -9,11 +9,6 @@ meta:
       - recipient2@example.com
     cc:
       - email1
-  labels:
-    button_save : 'Save'
-    button_send : 'Send'
-    uploaded_file: 'Saved file'
-
 form:
   textinput1:
     type: textinput

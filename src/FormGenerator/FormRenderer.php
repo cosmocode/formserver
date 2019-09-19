@@ -62,10 +62,9 @@ class FormRenderer
     {
         $renderedFormElements = [];
         $title = $this->form->getMeta('title');
-        $labels = $this->form->getMeta('labels');
-        $saveButtonLabel = $labels['button_save'] ?? null;
-        $sendButtonlabel = $labels['button_send'] ?? null;
-        $uploadedFileLabel = $labels['uploaded_file'] ?? null;
+        $saveButtonLabel = LangManager::getString('button_save');
+        $sendButtonlabel = LangManager::getString('button_send');
+        $uploadedFileLabel = LangManager::getString('uploaded_file');
 
         // Global variables available in all templates and macros
         $this->twig->addGlobal('form_id', $this->form->getId());
