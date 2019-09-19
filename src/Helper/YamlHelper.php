@@ -21,7 +21,7 @@ class YamlHelper
      */
     public static function parseYaml(string $yamlPath)
     {
-        if (!is_file($yamlPath)) {
+        if (! is_file($yamlPath)) {
             throw new YamlException("Could not load yaml: $yamlPath");
         }
 
