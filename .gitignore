@@ -7,8 +7,8 @@ vendor
 
 # data
 data/*
-!data/EXAMPLE
-data/EXAMPLE/values.yaml
+!data/EXAMPLE/config.yaml
+!data/EXAMPLE/logo.png
 
 # logs
 /logs
