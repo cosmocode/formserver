@@ -23,7 +23,7 @@ form:
       required: false
   email1:
     type: email
-    label: 'Where should an email copy sent to?'
+    label: 'Where should the email copy be sent to?'
   fieldset0:
     type: fieldset
     column: is-full
