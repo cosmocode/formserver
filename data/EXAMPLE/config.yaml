@@ -3,10 +3,10 @@ meta:
   css: custom.css
   logo: logo.png
   email:
-    subject: 'Formular #1 ausgefüllt'
+    subject: 'Email subject'
     recipients:
-      - aischmann@cosmocode.de
-      - dabrowska@cosmocode.de
+      - recipient1@example.com
+      - recipient2@example.com
     cc:
       - group1.group12.testfrage6
   labels:
