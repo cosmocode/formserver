@@ -21,15 +21,11 @@ class YamlHelper
      */
     public static function parseYaml(string $yamlPath)
     {
-        $config = \Spyc::YAMLLoad($yamlPath);
-        //TODO catch yaml parse exceptions
-        if (empty($config)) {
-            throw new YamlException(
-                "Could not parse config.yaml in directory: '$yamlPath'"
-            );
+        if (!is_file($yamlPath)) {
+            throw new YamlException("Could not load yaml: $yamlPath");
         }
 
-        return $config;
+        return \Spyc::YAMLLoad($yamlPath);
     }
 
     /**
