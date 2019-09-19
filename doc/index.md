@@ -2,7 +2,7 @@
 
 ## App configuration
 
-[App settings](app.md) offer a few options to adjust the defaults, including messages displayed to the user.
+[App settings](app.md) offer a few options to adjust the defaults, including mail server settings and the messages displayed to the user.
 
 ## Form configuration
 
@@ -17,7 +17,7 @@ form:
 
 ### General options
 
-See [form settings](meta.md) for customization and mailing options.
+See [form settings](meta.md) and the [config example](../data/EXAMPLE/config.yaml) for customization and mailing options.
 
 ### Form element types
 

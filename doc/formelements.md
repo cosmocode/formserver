@@ -22,7 +22,7 @@ Fieldsets group other form elements (including nested fieldsets).
 Options:
 * `children` _(required)_ - containing child form elements
 * `toggle` _(optional)_ - the fieldset is disabled and hidden until the toggle condition is met
-  * `field` - dotted path to the field which value will be evaluated to match the toggle condition
+  * `field` - dotted path to the field whose value will be evaluated to match the toggle condition
   * `value` - required value to toggle the fieldset on
 
 ```yaml
@@ -246,7 +246,7 @@ Options:
 * `choices` _(required)_ - defines available options
 * `default` _(optional)_ - the default text of the select if no value was choosen
 * `multiselect` _(optional)_ - enables selecting multiple options
-* `size` _(optional)_ - if multiselect is turned on this defines the size of rows shown
+* `size` _(optional)_ - if multiselect is turned on this defines the number of rows shown
 
 ```yaml
   <id>:
