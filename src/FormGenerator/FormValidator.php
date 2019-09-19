@@ -133,7 +133,7 @@ class FormValidator
     protected function dropFile(UploadFormElement $formElement)
     {
         $filePath = $this->form->getFormDirectory() . $formElement->getValue();
-        unlink($filePath);
+        is_file($filePath) && unlink($filePath);
         $formElement->setValue(null);
     }
 }
