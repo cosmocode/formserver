@@ -20,7 +20,7 @@ form:
         column: is-half
         alignment: vertical
         validation:
-          required: false;
+          required: false
         choices:
           - 'Static elements'
           - 'Dynamic elements'

@@ -1,7 +1,7 @@
 settings:
-  displayErrorDetails: true
+  displayErrorDetails: false
   email:
-    sender: formgenerator@cosmocode.de
+    sender: formgenerator@example.com
     host: 127.0.0.1
     port: 25
     encryption: ~
