@@ -1,0 +1,154 @@
+meta:
+  title: 'Formular #1'
+  css: custom.css
+  logo: logo.png
+  email:
+    subject: 'Formular #1 ausgefüllt'
+    recipients:
+      - aischmann@cosmocode.de
+      - dabrowska@cosmocode.de
+    cc:
+      - group1.group12.testfrage6
+form:
+  testfrage1:
+    type: textinput
+    label: Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+    column: is-full
+    validation:
+      match: /^sehr gut$/
+      required: false
+  group1:
+    type: fieldset
+    column: is-half
+    children:
+      group12:
+        type: fieldset
+        label: Das Label des Fieldsets
+        children:
+          testfrage1:
+            type: numberinput
+            label: Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. (number 3-6)
+            validation:
+              min: 3
+              max: 6
+          testfrage2:
+            type: date
+            label: Und diese? (date)
+          testfrage3:
+            type: time
+            label: Und diese? (time)
+          testfrage4:
+            type: datetime
+            label: Und diese? (datetime)
+          testfrage5:
+            type: textarea
+            label: Und diese? (textarea)
+            rows: 10
+            validation:
+              match: /[a-zA-Z0-9]/
+          testfrage6:
+            type: email
+            label: Und diese? (email)
+          testfrage7_hidden:
+            type: hidden
+            value: "Ich bin versteckt"
+          testfrage8:
+            type: radioset
+            label: Hier kann man mal mehr auswählen
+            alignment: vertical
+            choices:
+              - Erste Auswahl
+              - Zweite Auswahl
+              - Dritte Auswahl
+          testfrage9:
+            type: dropdown
+            label: Hier kann man auch mehr auswählen
+            default: Bitte wählen
+            choices:
+              - Erste Auswahl
+              - Zweite Auswahl
+              - Dritte Auswahl
+          testfrage10:
+            type: checklist
+            label: Hier kann man mal mehr auswählen
+            alignment: vertical
+            choices:
+              - Erste Auswahl
+              - Zweite Auswahl
+              - Dritte Auswahl
+          fileupload1:
+            type: upload
+            label: Relevante Datei hochladen
+            validation:
+              filesize: 2MB
+              fileext: jpg, pdf, txT
+          image0:
+            type: image
+            label: Hier ein kreatives Bild.
+            src: /test_image.png
+            width: 200
+            height: 200
+          filedownload:
+            type: download
+            href: /test_file.txt
+            label: Eine Datei zum herunterladen!
+          markdown0:
+            type: markdown
+            markdown: Hello _Markdown_!
+          signature:
+            type: signature
+            label: Unterschrift
+            height: 400
+            width: 900
+      group2:
+        type: fieldset
+        label: Das Label des Fieldsets
+        column: is-half
+        toggle:
+          field: group1.group12.testfrage9
+          value: Erste Auswahl
+        children:
+          testfrage5:
+            type: textarea
+            label: Und diese? (textarea)
+            cols: 50
+            rows: 8
+      group3:
+        type: fieldset
+        column: is-half
+        label: Das Label des Fieldsets
+        toggle:
+          field: group1.group12.testfrage10
+          value: Erste Auswahl
+        children:
+          testfrage5:
+            type: textarea
+            label: Und diese? (textarea)
+            cols: 50
+            rows: 8
+      group4:
+        type: fieldset
+        label: Das Label des Fieldsets
+        column: is-half
+        toggle:
+          field: group1.group12.testfrage10
+          value: Erste Auswahl
+        children:
+          testfrage5:
+            type: textarea
+            label: Und diese? (textarea)
+            cols: 50
+            rows: 8
+      group5:
+        type: fieldset
+        label: Das Label des Fieldsets
+        column: is-half
+        toggle:
+          field: group1.group12.testfrage10
+          value: Erste Auswahl
+        children:
+          testfrage5:
+            type: textarea
+            label: Und diese? (textarea)
+            cols: 50
+            rows: 8
