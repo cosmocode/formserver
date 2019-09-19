@@ -8,7 +8,7 @@ meta:
       - recipient1@example.com
       - recipient2@example.com
     cc:
-      - group1.group12.testfrage6
+      - email1
   labels:
     button_save : 'Save'
     button_send : 'Send'
@@ -21,6 +21,9 @@ form:
     validation:
       match: /[a-zA-Z0-9]/
       required: false
+  email1:
+    type: email
+    label: 'Where should an email copy sent to?'
   fieldset0:
     type: fieldset
     column: is-full
