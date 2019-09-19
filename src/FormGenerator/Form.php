@@ -202,6 +202,11 @@ class Form
      */
     public function restore()
     {
+        // values do not exist on first view
+        if (! is_file($this->getFormDirectory() . 'values.yaml')) {
+            return;
+        }
+
         $values = YamlHelper::parseYaml($this->getFormDirectory() . 'values.yaml');
 
         foreach ($this->formElements as $formElement) {
