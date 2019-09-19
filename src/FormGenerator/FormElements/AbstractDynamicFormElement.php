@@ -52,16 +52,16 @@ abstract class AbstractDynamicFormElement extends AbstractFormElement
     /**
      * Sets the value and triggers validation
      *
-     * @param string|null $value
+     * @param mixed $value
      * @return void
      */
     public function setValue($value)
     {
         // to check hasValue(
-        if ($value === '') {
+        if ($value === '' || (is_array($value) && empty($value))) {
             $this->value = null;
         } else {
-            $this->value = htmlspecialchars($value);
+            $this->value = $value;
         }
     }
 
