@@ -12,4 +12,6 @@ label_signature_delete: Delete signature
 email_text_attachments: Look into the attachments
 button_save : Save
 button_send : Send
+button_upload: Upload file
+button_upload_replace: Replace uploaded file
 uploaded_file: Saved file

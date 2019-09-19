@@ -10,7 +10,7 @@
                 <input type="file" class="file-input form-input" id="{{ id }}" name="{{ id }}" {{ allowed_extensions is defined ? ('accept=".'~allowed_extensions|join(',.')~'"')|raw }} />
                 <span class="file-cta">
                         <span class="file-label">
-                            {{ is_uploaded ? 'Datei ersetzen' : 'Datei hochladen' }}
+                            {{ is_uploaded ? button_upload_replace : button_upload_label }}
                         </span>
                     </span>
             </label>

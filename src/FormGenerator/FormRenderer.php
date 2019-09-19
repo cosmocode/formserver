@@ -64,6 +64,8 @@ class FormRenderer
         $title = $this->form->getMeta('title');
         $saveButtonLabel = LangManager::getString('button_save');
         $sendButtonlabel = LangManager::getString('button_send');
+        $uploadButtonLabel = LangManager::getString('button_upload');
+        $replaceUploadButtonLabel = LangManager::getString('button_upload_replace');
         $uploadedFileLabel = LangManager::getString('uploaded_file');
 
         // Global variables available in all templates and macros
@@ -71,6 +73,8 @@ class FormRenderer
         $this->twig->addGlobal('form_is_valid', $this->form->isValid());
         $this->twig->addGlobal('button_save_label', $saveButtonLabel);
         $this->twig->addGlobal('button_send_label', $sendButtonlabel);
+        $this->twig->addGlobal('button_upload_label', $uploadButtonLabel);
+        $this->twig->addGlobal('button_upload_replace', $replaceUploadButtonLabel);
         $this->twig->addGlobal('uploaded_file_label', $uploadedFileLabel);
 
         foreach ($this->form->getFormElements() as $formElement) {

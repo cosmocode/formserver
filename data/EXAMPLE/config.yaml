@@ -8,64 +8,121 @@ meta:
       - recipient1@example.com
       - recipient2@example.com
     cc:
-      - email1
+      - fieldset0.fieldset_dynamic.email1
 form:
-  textinput1:
-    type: textinput
-    label: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.'
-    validation:
-      match: /[a-zA-Z0-9]/
-      required: false
-  email1:
-    type: email
-    label: 'Where should the email copy be sent to?'
   fieldset0:
     type: fieldset
     column: is-full
     children:
-      fieldset1:
-        type: fieldset
+      radioset1:
+        type: radioset
+        label: 'Toggle different fieldsets'
         column: is-half
-        label: 'Lorem ipsum (fieldset label)'
-        children:
-          dropdown1:
-            type: dropdown
-            label: 'At vero eos et accusam et justo duo dolores et ea rebum.'
-            default: Please select a choice
-            choices:
-              - First choice
-              - Second choice
-              - Third choice
-              - I will open fieldset2
-      fieldset2:
+        alignment: vertical
+        validation:
+          required: false;
+        choices:
+          - 'Static elements'
+          - 'Dynamic elements'
+          - 'Fieldset columns'
+      fieldset_static:
         type: fieldset
+        label: 'Static form elements'
         column: is-half
-        label: 'At vero eos et accusam (fieldset label)'
         toggle:
-          field: fieldset0.fieldset1.dropdown1
-          value: 'I will open fieldset2'
+          field: fieldset0.radioset1
+          value: 'Static elements'
         children:
+          markdown0:
+            type: markdown
+            label: markdown
+            markdown: 'Hello _Markdown_!'
+          image0:
+            type: image
+            label: Image
+            src: logo.png
+          download0:
+            type: download
+            label: 'Download logo.png from data dir'
+            href: logo.png
+          hidden:
+            type: hidden
+            value: 'I am not visable'
+      fieldset_dynamic:
+        type: fieldset
+        label: 'Dynamic elements'
+        column: is-half
+        toggle:
+          field: fieldset0.radioset1
+          value: 'Dynamic elements'
+        children:
+          textinput1:
+            type: textinput
+            label: 'Textinput'
+            validation:
+              match: /[a-zA-Z0-9]/
+              required: false
           numberinput1:
             type: numberinput
-            label: 'Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'
-  fieldset3:
-    type: fieldset
-    column: is-half
-    label: 'Stet clita kasd gubergren (fieldset label)'
-    children:
-      numberinput1:
-        type: radioset
-        label: 'Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'
-        choices:
-          - First choice
-          - Second choice
-          - Third choice
-        validation:
-          required: false
+            label: Numberinput
+          textarea1:
+            type: textarea
+            label: 'Textarea'
+            rows: 8
+          date1:
+            type: date
+            label: 'Date'
+          time1:
+            type: time
+            label: 'Time'
+          datetime1:
+            type: datetime
+            label: 'Datetime'
+          email1:
+            type: email
+            label: 'Email (cc)'
+          radioset1:
+            type: radioset
+            alignment: vertical
+            label: 'Radioset'
+            choices:
+              - 'Choice #1'
+              - 'Choice #2'
+              - 'Choice #3'
+          dropdown1:
+            type: dropdown
+            label: 'Dropdown'
+            default: 'Please choose'
+            choices:
+              - 'Choice #1'
+              - 'Choice #2'
+              - 'Choice #3'
+          checklist1:
+            type: checklist
+            alignment: vertical
+            label: 'Checklist'
+            choices:
+              - 'Choice #1'
+              - 'Choice #2'
+              - 'Choice #3'
+          upload1:
+            type: upload
+            label: 'Upload'
+            validation:
+              filesize: 2MB
+              fileext: jpg, pdf, txt
+          signature:
+            type: signature
+            label: signature
+            height: 400
+            width: 600
   fieldset4:
     type: fieldset
     column: is-full
-    label: 'fieldset with full width (4)'
+    label: 'Fieldset forcing 100% width for its children'
+    toggle:
+      field: fieldset0.radioset1
+      value: 'Fieldset columns'
     children:
       fieldset5:
         type: fieldset
@@ -73,7 +130,7 @@ form:
         children:
           fieldset5a:
             type: fieldset
-            label: 'Fieldset with  2/6 width (5a)'
+            label: 'Fieldset 2/6 width'
             column: is-two-thirds
             children:
               textarea3:
@@ -82,7 +139,7 @@ form:
                   required: false
           fieldset5b:
             type: fieldset
-            label: 'Fieldset with  1/6 width (5b)'
+            label: 'Fieldset 1/6 width'
             column: is-one-third
             children:
               textarea4:
@@ -95,25 +152,19 @@ form:
         children:
           fieldset6a:
             type: fieldset
-            label: 'Fieldset with  1/4 width (6a)'
+            label: 'Fieldset 1/4 width'
             column: is-half
+            children:
+              textarea4:
+                type: textarea
+                validation:
+                  required: false
           fieldset6b:
             type: fieldset
-            label: 'Fieldset with  1/4 width (6b)'
+            label: 'Fieldset 1/4 width'
             column: is-half
-  textarea1:
-    type: textarea
-    column: is-full
-    label: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.'
-    validation:
-      required: false
-  checklist1:
-    type: checklist
-    column: is-one-third
-    label: 'Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat'
-    validation:
-      required: false
-    choices:
-      - First choice
-      - Second choice
-      - Third choice
+            children:
+              textarea4:
+                type: textarea
+                validation:
+                  required: false
