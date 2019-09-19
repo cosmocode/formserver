@@ -2,7 +2,7 @@
 
 <fieldset {{ toggle is not empty ? ('data-toggle-id="'~toggle.id~'" data-toggle-value="'~toggle.value~'"') | raw }}>
     <legend class="hidden">{{ label }}</legend>
-    <div class="column {{ column is not empty ? column : 'is-full' }}">
+    <div class="column {{ column is not empty ? column : 'is-full' }} fieldset-content">
         <div class="label fieldset-label">
             {{ label }}
         </div>
