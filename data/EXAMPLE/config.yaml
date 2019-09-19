@@ -16,7 +16,7 @@ form:
     children:
       radioset1:
         type: radioset
-        label: 'Toggle different fieldsets'
+        label: 'Toggle different fieldsets (hidden fieldsets lose all their values!)'
         column: is-half
         alignment: vertical
         validation:
