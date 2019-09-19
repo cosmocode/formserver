@@ -6,8 +6,9 @@
 vendor
 
 # data
-/data/forms/*
-!/data/forms/236476824663245example
+data/*
+!data/EXAMPLE
+data/EXAMPLE/values.yaml
 
 # logs
 /logs
