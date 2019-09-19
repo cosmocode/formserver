@@ -1,17 +1,19 @@
 {% from '_macros' import renderError %}
-<div class="signature-pad" {{ width is defined ? ('data-width="'~width~'"') | raw }} {{ height is defined ? ('data-height="'~height~'"') | raw }}>
-    <div class="field">
-        <div class="control">
-            <div class="label">{{ label }} {{ is_required ? '*' }}</div>
-            <input type="hidden" id="{{ id }}" name="{{ id }}" value="{{ value }}" class="form-input"/>
-            <canvas />
+<div class="column {{ column is not empty ? column : 'is-full' }}">
+    <div class="signature-pad" {{ width is defined ? ('data-width="'~width~'"') | raw }} {{ height is defined ? ('data-height="'~height~'"') | raw }}>
+        <div class="field">
+            <div class="control">
+                <div class="label">{{ label }} {{ is_required ? '*' }}</div>
+                <input type="hidden" id="{{ id }}" name="{{ id }}" value="{{ value }}" class="form-input"/>
+                <canvas></canvas>
+            </div>
+            {{ renderError(errors) }}
         </div>
-        {{ renderError(errors) }}
-    </div>
 
-    <div class="field">
-        <div class="control">
-            <button type="button" class="button clear" data-action="clear">{{ label_signature_delete }}</button>
+        <div class="field">
+            <div class="control">
+                <button type="button" class="button clear" data-action="clear">{{ label_signature_delete }}</button>
+            </div>
         </div>
     </div>
 </div>

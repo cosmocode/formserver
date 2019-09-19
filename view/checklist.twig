@@ -1,24 +1,26 @@
 {% from '_macros' import renderError %}
-<div class="field">
-    <div class="control">
-        <div class="label">{{ label }} {{ is_required ? '*' }}</div>
-        <div class="grouped-form-elements" id="{{ id }}">
-            {%- for choice in choices -%}
-                <label class="checkbox">
-                    <input
-                            type="checkbox"
-                            id="{{ id~'['~loop.index0~']' }}"
-                            name="{{ id~'['~loop.index0~']' }}"
-                            value="{{ choice }}"
-                            {{ choice in value ? 'checked' }}
-                            class="checkbox-input form-input" />
-                    {{- choice -}}
-                </label>
-                {%- if alignment is defined and alignment == 'vertical' -%}
-                    <br />
-                {% endif %}
-            {%- endfor -%}
+<div class="column {{ column is not empty ? column : 'is-full' }}">
+    <div class="field">
+        <div class="control">
+            <div class="label">{{ label }} {{ is_required ? '*' }}</div>
+            <div class="grouped-form-elements" id="{{ id }}">
+                {%- for choice in choices -%}
+                    <label class="checkbox">
+                        <input
+                                type="checkbox"
+                                id="{{ id~'['~loop.index0~']' }}"
+                                name="{{ id~'['~loop.index0~']' }}"
+                                value="{{ choice }}"
+                                {{ choice in value ? 'checked' }}
+                                class="checkbox-input form-input" />
+                        {{- choice -}}
+                    </label>
+                    {%- if alignment is defined and alignment == 'vertical' -%}
+                        <br />
+                    {% endif %}
+                {%- endfor -%}
+            </div>
         </div>
+        {{ renderError(errors) }}
     </div>
-    {{ renderError(errors) }}
 </div>
