@@ -138,6 +138,7 @@ abstract class AbstractDynamicFormElement extends AbstractFormElement
             $this->getConfig(),
             [
                 'id' => $this->getFormElementId(),
+                'id_string' => $this->getFormElementIdStringified(),
                 'value' => $this->getValue(),
                 'errors' => $this->getErrors(),
                 'is_required' => $this->isRequired()
