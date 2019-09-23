@@ -69,6 +69,17 @@ abstract class AbstractFormElement
     }
 
     /**
+     * Get unique id as a dash separated string instead of an array.
+     * For use in data attributes.
+     *
+     * @return string
+     */
+    public function getFormElementIdStringified()
+    {
+        return str_replace(['[', ']'], ['-', ''], $this->getFormElementId());
+    }
+
+    /**
      * Get the type of the form element
      *
      * @return mixed|null

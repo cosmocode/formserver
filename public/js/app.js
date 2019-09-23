@@ -10,15 +10,41 @@ flatpickr('[data-calendar-type="datetime"]', {'enableTime' : true, 'time_24hr' :
  * Init Signature Pad
  */
 var form = document.getElementById("form");
+var replaceButons = document.querySelectorAll('button.sigreplace');
 var wrappers = document.querySelectorAll(".signature-pad");
 
+// attach event listeners to replace buttons
+Array.from(replaceButons).forEach(function(button) {
+    button.addEventListener('click', function(event) {
+        var id = this.dataset.replacebutton;
+
+        var replacePad = document.querySelector('[data-replacepad=' + id + ']');
+        replacePad.classList.remove('hidden');
+        initSignaturePad(replacePad);
+
+        var replaceContainer = document.querySelector('[data-replacecontainer=' + id + ']');
+        replaceContainer.classList.add('hidden');
+    });
+});
+
+// initialize all (visible) fields
 Array.from(wrappers).forEach(function(wrapper) {
+    initSignaturePad(wrapper);
+});
+
+/**
+ * Initializes a clean signature pad for each visible signature element
+ *
+ * @param wrapper
+ */
+function initSignaturePad(wrapper) {
     var canvas = wrapper.querySelector("canvas");
     var clearButton = wrapper.querySelector("[data-action=clear]");
     var dataField = wrapper.querySelector("input");
 
-    if (wrapper && canvas) {
-        var signatureData = dataField.value;
+    if (wrapper && canvas && !wrapper.classList.contains('hidden')) {
+        // reset field value
+        dataField.value = "";
         var signaturePad = new SignaturePad(canvas, { backgroundColor: "rgb(255,255,255)" });
 
         // Set height and width
@@ -31,23 +57,21 @@ Array.from(wrappers).forEach(function(wrapper) {
             canvas.height = height;
         }
 
-        // Insert stored data
-        if (signatureData !== '') {
-            signaturePad.fromDataURL(signatureData);
-        }
-
-        // Add event listener
+        // Add event listeners
         clearButton.addEventListener("click", function (event) {
             signaturePad.clear();
             dataField.value = "";
         });
 
         form.addEventListener("submit", function (event) {
-            dataField.value = signaturePad.toDataURL("image/svg+xml");
+            if (signaturePad.isEmpty()) {
+                dataField.value = '';
+            } else {
+                dataField.value = signaturePad.toDataURL();
+            }
         });
     }
-});
-
+}
 
 /**
  * Init Toggle
