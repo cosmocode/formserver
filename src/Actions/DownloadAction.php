@@ -24,8 +24,13 @@ class DownloadAction extends AbstractAction
      */
     protected function action(): Response
     {
-        $file = $this->request->getQueryParams()['file'] ?? null;
-        $directory = $this->resolveArg('id');
+        $file = $this->escapePath(
+            $this->request->getQueryParams()['file'] ?? ''
+        );
+
+        $directory = $this->escapePath(
+            $this->resolveArg('id')
+        );
         $filePath = self::DATA_DIRECTORY . $directory . '/' . $file;
 
         if (! file_exists($filePath)) {
@@ -49,5 +54,16 @@ class DownloadAction extends AbstractAction
             ->withHeader('Content-Type', $mimeType)
             ->withHeader('Content-Length', $fileSize)
             ->withBody($fileStream);
+    }
+
+    /**
+     * Escape malicious characters like '/'
+     *
+     * @param string $filename
+     * @return string|string[]|null
+     */
+    protected function escapePath(string $filename)
+    {
+        return preg_replace('/[^A-Za-z0-9_\-\.]/', '_', $filename);
     }
 }
