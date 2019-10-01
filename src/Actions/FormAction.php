@@ -3,9 +3,11 @@ declare(strict_types=1);
 
 namespace CosmoCode\Formserver\Actions;
 
+use CosmoCode\Formserver\Exceptions\MailException;
 use CosmoCode\Formserver\FormGenerator\Form;
 use CosmoCode\Formserver\FormGenerator\FormRenderer;
 use CosmoCode\Formserver\FormGenerator\FormValidator;
+use CosmoCode\Formserver\Service\LangManager;
 use CosmoCode\Formserver\Service\Mailer;
 use Psr\Http\Message\ResponseInterface as Response;
 use Slim\Exception\HttpBadRequestException;
@@ -64,7 +66,9 @@ class FormAction extends AbstractAction
             $formHtml = $formRenderer->render();
             $this->response->getBody()->write($formHtml);
         } catch (HttpBadRequestException $e) {
-            $this->response->getBody()->write('Forbidden: no form ID!');
+            $this->response->getBody()->write(LangManager::getString('error_notfound'));
+        } catch (MailException $e) {
+            $this->response->getBody()->write(LangManager::getString('send_failed'));
         }
 
         return $this->response;

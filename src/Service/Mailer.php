@@ -3,6 +3,7 @@
 namespace CosmoCode\Formserver\Service;
 
 
+use CosmoCode\Formserver\Exceptions\MailException;
 use CosmoCode\Formserver\FormGenerator\Form;
 use CosmoCode\Formserver\FormGenerator\FormElements\AbstractDynamicFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\FieldsetFormElement;
@@ -80,34 +81,38 @@ class Mailer
      */
     public function sendForm(Form $form)
     {
-        $recipients = $form->getMeta('email')['recipients'];
-        $subject = $form->getMeta('email')['subject'] ?? 'Formular ausgefüllt';
-        $subject = $this->injectFormValues($subject, $form);
-        $cc = $this->getCarbonCopyAddresses($form);
+        try {
+            $recipients = $form->getMeta('email')['recipients'];
+            $subject = $form->getMeta('email')['subject'] ?? 'Formular ausgefüllt';
+            $subject = $this->injectFormValues($subject, $form);
+            $cc = $this->getCarbonCopyAddresses($form);
 
-        $this->formToMessage(
-            $form->getFormElements(),
-            $form->getFormDirectory(),
-            $form->getMeta('title')
-        );
+            $this->formToMessage(
+                $form->getFormElements(),
+                $form->getFormDirectory(),
+                $form->getMeta('title')
+            );
 
-        $message = new Swift_Message();
-        $message
-            ->setSubject($subject)
-            ->setFrom($this->sender)
-            ->setTo($recipients)
-            ->setBody($this->htmlBody, 'text/html')
-            ->addPart($this->textBody, 'text/plain');
+            $message = new Swift_Message();
+            $message
+                ->setSubject($subject)
+                ->setFrom($this->sender)
+                ->setTo($recipients)
+                ->setBody($this->htmlBody, 'text/html')
+                ->addPart($this->textBody, 'text/plain');
 
-        if (! empty($cc)) {
-            $message->setCc($cc);
+            if (!empty($cc)) {
+                $message->setCc($cc);
+            }
+
+            foreach ($this->attachments as $attachment) {
+                $message->attach($attachment);
+            }
+
+            $this->swiftmailer->send($message);
+        } catch (\Exception $e) {
+            throw new MailException($e->getMessage());
         }
-
-        foreach ($this->attachments as $attachment) {
-            $message->attach($attachment);
-        }
-
-        $this->swiftmailer->send($message);
     }
 
     /**

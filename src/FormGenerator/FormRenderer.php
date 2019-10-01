@@ -174,7 +174,7 @@ class FormRenderer
                     return LangManager::getString('send_success');
                 }
 
-                return LangManager::getString('send_failed');
+                return LangManager::getString('send_prevented');
             case Form::MODE_SHOW:
                 return null;
         }
