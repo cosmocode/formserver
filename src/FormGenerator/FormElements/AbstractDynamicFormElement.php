@@ -46,7 +46,7 @@ abstract class AbstractDynamicFormElement extends AbstractFormElement
      */
     public function getValueString()
     {
-        return is_string($this->value) ? $this->value : implode(', ', $this->value);
+        return is_array($this->value) ? implode(', ', $this->value) : (string)$this->value;
     }
 
     /**
