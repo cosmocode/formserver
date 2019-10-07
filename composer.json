@@ -42,7 +42,7 @@
   },
   "scripts": {
     "start": "php -S localhost:8181 -t public",
-    "check": "phpcs -p src",
-    "fix": "phpcbf src"
+    "check": "phpcs -p --standard=psr2 src",
+    "fix": "phpcbf --standard=psr2 src"
   }
 }
