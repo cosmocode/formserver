@@ -10,7 +10,7 @@ Each form is accessed via a direct link, which contains the form ID (form direct
 
 All forms are served from subdirectories of `data/`.
 
-Create a `config.yaml` file in a `<data-subdirectory>`. The form will be available at: `https://your.server/forms/<data-subdirectory>`
+Create a `config.yaml` file in a `<data-subdirectory>`. The form will be available at: `https://your.server/<data-subdirectory>`
 
 When the user submits the form, all input values are saved in the form directory as `values.yaml` If the user clicked on `send` and all the inputs are valid, an email is sent to configured addresses.
 
