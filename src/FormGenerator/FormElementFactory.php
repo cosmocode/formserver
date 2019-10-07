@@ -2,7 +2,6 @@
 
 namespace CosmoCode\Formserver\FormGenerator;
 
-
 use CosmoCode\Formserver\Exceptions\FormException;
 use CosmoCode\Formserver\FormGenerator\FormElements\AbstractFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\AbstractDynamicFormElement;
@@ -33,7 +32,7 @@ class FormElementFactory
 {
     /**
      * Static factory function to create a form element
-     * 
+     *
      * @param string $id
      * @param array $config
      * @param AbstractFormElement|null $parent

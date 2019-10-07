@@ -2,7 +2,6 @@
 
 namespace CosmoCode\Formserver\FormGenerator\FormElements;
 
-
 use Michelf\MarkdownExtra;
 
 /**

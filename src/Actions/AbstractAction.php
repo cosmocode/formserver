@@ -68,7 +68,8 @@ abstract class AbstractAction
     {
         if (! isset($this->args[$name])) {
             throw new HttpBadRequestException(
-                $this->request, "Could not resolve argument `{$name}`."
+                $this->request,
+                "Could not resolve argument `{$name}`."
             );
         }
 
