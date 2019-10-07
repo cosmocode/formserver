@@ -15,5 +15,6 @@ deploy:
   skip_cleanup: true
   on:
     repo: cosmocode/formserver
-    branch: deploy
+    branch: master
     php: '7.2'
+    tags: true
