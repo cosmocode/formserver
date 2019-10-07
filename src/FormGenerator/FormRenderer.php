@@ -2,7 +2,6 @@
 
 namespace CosmoCode\Formserver\FormGenerator;
 
-
 use CosmoCode\Formserver\Exceptions\TwigException;
 use CosmoCode\Formserver\FormGenerator\FormElements\FieldsetFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\AbstractFormElement;

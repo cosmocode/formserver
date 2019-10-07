@@ -91,7 +91,7 @@ abstract class AbstractFormElement
 
     /**
      * Get the complete config of this form element
-     * 
+     *
      * @return array
      */
     public function getConfig()

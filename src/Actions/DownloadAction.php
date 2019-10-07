@@ -2,7 +2,6 @@
 
 namespace CosmoCode\Formserver\Actions;
 
-
 use DI\NotFoundException;
 use Mimey\MimeTypes;
 use Psr\Http\Message\ResponseInterface as Response;

@@ -2,7 +2,6 @@
 
 namespace CosmoCode\Formserver\FormGenerator;
 
-
 use CosmoCode\Formserver\Exceptions\FormException;
 use CosmoCode\Formserver\FormGenerator\FormElements\AbstractDynamicFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\AbstractFormElement;
@@ -331,7 +330,6 @@ class Form
     ) {
         if ($formElement instanceof FieldsetFormElement) {
             if ($formElement->hasToggle()) {
-
                 $submittedValue = $this->getFormElementValue(
                     $formElement->getToggleFieldId()
                 );

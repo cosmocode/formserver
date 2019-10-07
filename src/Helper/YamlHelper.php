@@ -2,7 +2,6 @@
 
 namespace CosmoCode\Formserver\Helper;
 
-
 use CosmoCode\Formserver\Exceptions\YamlException;
 
 /**

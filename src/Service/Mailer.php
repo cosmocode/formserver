@@ -2,7 +2,6 @@
 
 namespace CosmoCode\Formserver\Service;
 
-
 use CosmoCode\Formserver\Exceptions\MailException;
 use CosmoCode\Formserver\FormGenerator\Form;
 use CosmoCode\Formserver\FormGenerator\FormElements\AbstractDynamicFormElement;
@@ -101,7 +100,7 @@ class Mailer
                 ->setBody($this->htmlBody, 'text/html')
                 ->addPart($this->textBody, 'text/plain');
 
-            if (!empty($cc)) {
+            if (! empty($cc)) {
                 $message->setCc($cc);
             }
 
@@ -177,7 +176,6 @@ class Mailer
 
             $this->textBody .= sprintf($textLine, $label, $value);
             $this->htmlBody .= sprintf($htmlLine, $label, $value);
-
         }
     }
 

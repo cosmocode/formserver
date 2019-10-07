@@ -2,7 +2,6 @@
 
 namespace CosmoCode\Formserver\FormGenerator;
 
-
 use CosmoCode\Formserver\FormGenerator\FormElements\AbstractDynamicFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\AbstractFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\FieldsetFormElement;
@@ -84,7 +83,8 @@ class FormValidator
                     case 'match':
                         if (! Validator::regex($allowed)->validate($value)) {
                             $formElement->addError(
-                                'error_match', $allowed
+                                'error_match',
+                                $allowed
                             );
                             return;
                         }
@@ -96,7 +96,8 @@ class FormValidator
                         $filePath = $this->form->getFormDirectory() . $value;
                         if (! Validator::size(null, $allowed)->validate($filePath)) {
                             $formElement->addError(
-                                'error_filesize', $allowed
+                                'error_filesize',
+                                $allowed
                             );
                             $this->dropFile($formElement);
                         }
@@ -106,8 +107,7 @@ class FormValidator
                          * @var UploadFormElement $formElement
                          */
                         $validators = [];
-                        foreach (
-                            $formElement->getAllowedExtensionsAsArray() as $ext
+                        foreach ($formElement->getAllowedExtensionsAsArray() as $ext
                         ) {
                             $validators[] = Validator::extension(trim($ext));
                         }

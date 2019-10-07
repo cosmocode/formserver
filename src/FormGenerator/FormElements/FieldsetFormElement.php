@@ -2,7 +2,6 @@
 
 namespace CosmoCode\Formserver\FormGenerator\FormElements;
 
-
 use CosmoCode\Formserver\Exceptions\FormException;
 
 /**
@@ -35,7 +34,8 @@ class FieldsetFormElement extends AbstractFormElement
      * @inheritdoc
      */
     public function __construct(
-        string $id, array $config,
+        string $id,
+        array $config,
         AbstractFormElement $parent = null
     ) {
         unset($config['children']); // Children config not needed
@@ -215,4 +215,3 @@ class FieldsetFormElement extends AbstractFormElement
         return $toggleViewId;
     }
 }
-
