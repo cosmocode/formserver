@@ -2,7 +2,7 @@
   "name": "cosmocode/formserver",
   "description": "Generate forms from YAML, handle submitted data",
   "type": "project",
-  "license": "proprietary",
+  "license": "GPL-3.0-or-later",
   "authors": [
     {
       "name": "Anna Dabrowska",
