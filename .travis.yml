@@ -1,6 +1,12 @@
 language: php
 php:
   - '7.2'
+install:
+  - composer install
+script:
+  - composer check
+before_deploy:
+  - zip -r formserver.zip .
 deploy:
   provider: releases
   api_key:
