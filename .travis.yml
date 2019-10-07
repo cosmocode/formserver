@@ -1,3 +1,6 @@
+language: php
+php:
+  - '7.2'
 deploy:
   provider: releases
   api_key:
@@ -6,3 +9,4 @@ deploy:
   on:
     repo: cosmocode/formserver
     branch: deploy
+    php: '7.2'
