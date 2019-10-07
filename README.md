@@ -28,7 +28,7 @@ The [reference](doc/index.md) details all available options. A demo form is prov
 
 ## Install
 
-End users can simply download the [current release][https://github.com/cosmocode/formserver/releases] `formserver.zip`.
+End users can simply download the [current release](https://github.com/cosmocode/formserver/releases) `formserver.zip`.
 
 Unzip the file and point your PHP enabled webserver to the `public` directory. For Apache a rewrite configuration is provided in a `.htaccess` file. Users of other webservers may need to setup URL rewriting manually.
 
