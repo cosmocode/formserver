@@ -108,7 +108,7 @@ function toggleFieldset(fieldset, formInput) {
         fieldset.setAttribute('disabled', '');
         fieldset.classList.add('hidden');
         Array.from(fieldset.querySelectorAll('.form-input')).forEach(function(fieldsetFormElement) {
-            fieldsetFormElement.value = '';
+            clearFormElementValue(fieldsetFormElement);
             // Trigger event in case another fieldset is affected due to this toggle
             fieldsetFormElement.dispatchEvent(new Event("change"));
         });
@@ -154,4 +154,14 @@ function getFormInputValue(formInput) {
     }
 
     return formInput.value;
+}
+
+// Helper function to unset input value
+// This function is necessary for radios and checkboxes as they are unset via property 'checked'
+function clearFormElementValue(formInput) {
+    if (formInput.type === 'checkbox' || formInput.type === 'radio') {
+        formInput.checked = false;
+    } else {
+        formInput.value = '';
+    }
 }
