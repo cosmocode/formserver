@@ -244,7 +244,7 @@ Representation of a select input.
 
 Options:
 * `choices` _(required)_ - defines available options
-* `default` _(optional)_ - the default text of the select if no value was choosen
+* `default` _(optional)_ - a placeholder text shown if no value was chosen (e.g. "Please select"). **Note:** this is not a real option and has no value that could be saved.
 * `multiselect` _(optional)_ - enables selecting multiple options
 * `size` _(optional)_ - if multiselect is turned on this defines the number of rows shown
 
