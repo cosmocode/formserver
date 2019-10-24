@@ -130,7 +130,7 @@ class Mailer
         $htmlHeadline = '<h2>%s</h2>';
         $textHeadline = "\n\n%s\n\n";
 
-        $htmlLine = '<p><strong>%s:</strong></p><p>%s</p>';
+        $htmlLine = '<p><strong>%s</strong></p><p>%s</p>';
         $textLine = "\n%s\n%s\n";
 
         if ($title) {
@@ -142,7 +142,7 @@ class Mailer
          * @var AbstractDynamicFormElement $element
          */
         foreach ($formElements as $element) {
-            if ($element instanceof FieldsetFormElement) {
+            if ($element instanceof FieldsetFormElement && ! $element->isDisabled()) {
                 $this->textBody
                     .= sprintf($textHeadline, $element->getConfigValue('label'));
                 $this->htmlBody
