@@ -1,0 +1,20 @@
+error_notfound: Die gesuchte Seite konnte nicht gefunden werden.
+error_required: Das ist ein Pflichtfeld
+error_min: Minimaler Wert ist
+error_max: Maximaler Wert ist
+error_match: Eingabe muss übereinstimmen mit
+error_fileext: Erlaubte Dateiformate sind
+error_filesize: Maximale Dateigröße
+form_valid: Das Formular wurde gespeichert
+form_invalid: Formular gespeichert, aber es enthält Fehler
+send_success: Das Formular wurde erfolgreich versendet
+send_prevented: Das Formular konnte nicht gesendet werden, da es fehlerhaft ist.
+send_failed: Es gab einen Fehler beim Versenden der Mail. Bitte kontaktieren Sie den Administrator.
+label_signature_delete: Unterschrift löschen
+label_signature_replace: Unterschrift erneuern
+email_text_attachments: Die Anhänge ansehen
+button_save : Speichern
+button_send : Senden
+button_upload: Datei hochladen
+button_upload_replace: Datei ersetzen
+uploaded_file: Hochgeladene Dateien
