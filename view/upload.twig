@@ -1,9 +1,11 @@
-{% from '_macros' import fileUrl , renderError %}
+{% from '_macros' import fileUrl, renderError, renderTooltip %}
 <div class="column {{ column is not empty ? column : 'is-full' }}">
     <div class="field file {{ errors is not empty ? 'is-danger' }}">
         <div class="control">
             <label class="label">{{ label }} {{ is_required ? '*' }}</label>
+            {{ renderTooltip(tooltip) }}
             {% if is_uploaded %}
+                <br />
                 <a href="{{ fileUrl(value) }}" target="_blank">{{ uploaded_file_label is not empty ? uploaded_file_label : 'Saved file' }}</a><br />
             {% endif %}
             <label class="file-label">

@@ -70,6 +70,7 @@ form:
             validation:
               match: /[a-zA-Z0-9]/
               required: false
+            tooltip: 'Optional input\nAllowed characters: a-Z, 0-9'
           numberinput1:
             type: numberinput
             label: Numberinput
