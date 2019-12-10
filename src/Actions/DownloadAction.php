@@ -2,6 +2,7 @@
 
 namespace CosmoCode\Formserver\Actions;
 
+use CosmoCode\Formserver\Helper\FileHelper;
 use DI\NotFoundException;
 use Mimey\MimeTypes;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -37,12 +38,7 @@ class DownloadAction extends AbstractAction
         }
 
         $mimes = new MimeTypes();
-        $extension = strtolower(
-            pathinfo(
-                $filePath,
-                PATHINFO_EXTENSION
-            )
-        );
+        $extension = FileHelper::getFileExtension($filePath);
         $mimeType = $mimes->getMimeType($extension);
 
         $file = fopen($filePath, 'rb');

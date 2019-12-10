@@ -8,6 +8,7 @@ use CosmoCode\Formserver\FormGenerator\FormElements\AbstractFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\ChecklistFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\FieldsetFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\UploadFormElement;
+use CosmoCode\Formserver\Helper\FileHelper;
 use CosmoCode\Formserver\Helper\YamlHelper;
 use Slim\Psr7\UploadedFile;
 
@@ -281,11 +282,8 @@ class Form
         UploadedFile $uploadedFile,
         UploadFormElement $formElement
     ) {
-        $extension = strtolower(
-            pathinfo(
-                $uploadedFile->getClientFilename(),
-                PATHINFO_EXTENSION
-            )
+        $extension = FileHelper::getFileExtension(
+            $uploadedFile->getClientFilename()
         );
 
         $baseName = $formElement->getId();
