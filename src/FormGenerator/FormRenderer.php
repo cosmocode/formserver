@@ -66,6 +66,7 @@ class FormRenderer
         $uploadButtonLabel = LangManager::getString('button_upload');
         $replaceUploadButtonLabel = LangManager::getString('button_upload_replace');
         $uploadedFileLabel = LangManager::getString('uploaded_file');
+        $uploadInfo = LangManager::getString('upload_info');
 
         // Global variables available in all templates and macros
         $this->twig->addGlobal('form_id', $this->form->getId());
@@ -75,6 +76,7 @@ class FormRenderer
         $this->twig->addGlobal('button_upload_label', $uploadButtonLabel);
         $this->twig->addGlobal('button_upload_replace', $replaceUploadButtonLabel);
         $this->twig->addGlobal('uploaded_file_label', $uploadedFileLabel);
+        $this->twig->addGlobal('upload_info', $uploadInfo);
 
         foreach ($this->form->getFormElements() as $formElement) {
             if ($formElement instanceof FieldsetFormElement) {

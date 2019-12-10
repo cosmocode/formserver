@@ -94,6 +94,15 @@ Array.from(fieldsetsWithToggle).forEach(function(fieldset) {
 
 });
 
+// Init upload feedback text
+Array.from(document.querySelectorAll('.form-input.file-input')).forEach(function(fileUpload) {
+    fileUpload.addEventListener('input', function (e) {
+        infoContainerId = e.target.getAttribute('data-info-container-id');
+        infoContainer = document.getElementById(infoContainerId);
+        infoContainer.classList.remove('hidden');
+    })
+});
+
 // Helper function to enable or disable a fieldset
 function toggleFieldset(fieldset, formInput) {
     var toggleValue = fieldset.getAttribute('data-toggle-value');
