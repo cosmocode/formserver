@@ -4,16 +4,16 @@
         <div class="control">
             <div class="label">{{ label }} {{ is_required ? '*' }}</div>
             <div class="grouped-form-elements" id="{{ id }}">
-                {%- for choice in choices -%}
+                {%- for choice_label, choice_value in choices -%}
                     <label class="checkbox">
                         <input
                                 type="checkbox"
                                 id="{{ id~'['~loop.index0~']' }}"
                                 name="{{ id~'['~loop.index0~']' }}"
-                                value="{{ choice }}"
-                                {{ choice in value ? 'checked' }}
+                                value="{{ choice_value }}"
+                                {{ choice_value in value ? 'checked' }}
                                 class="checkbox-input form-input" />
-                        {{- choice -}}
+                                {{- choice_label | raw -}}
                     </label>
                     {%- if alignment is defined and alignment == 'vertical' -%}
                         <br />
