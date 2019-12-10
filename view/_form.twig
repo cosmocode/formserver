@@ -39,11 +39,13 @@
                     <div class="columns is-multiline">
                         <div class="column is-full">
                             <div class="field is-grouped has-addons has-addons-centered">
-                                <div class="control">
-                                    <button class="button is-link" type="submit" name="formcontrol[save]">
-                                        {{ button_save_label is not empty ? button_save_label : 'Save'}}
-                                    </button>
-                                </div>
+                                {% if save_button_visible %}
+                                    <div class="control">
+                                        <button class="button is-link" type="submit" name="formcontrol[save]">
+                                            {{ button_save_label is not empty ? button_save_label : 'Save'}}
+                                        </button>
+                                    </div>
+                                {% endif %}
                                 <div class="control">
                                     <button class="button is-link" type="submit" name="formcontrol[send]">
                                         {{ button_send_label is not empty ? button_send_label : 'Send'}}

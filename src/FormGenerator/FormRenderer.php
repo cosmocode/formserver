@@ -97,7 +97,8 @@ class FormRenderer
                 'notification' => $this->generateNotification(),
                 'css' => $this->form->getMeta('css'),
                 'form_id' => $this->form->getId(),
-                'logo' => $this->form->getMeta('logo')
+                'logo' => $this->form->getMeta('logo'),
+                'save_button_visible' => $this->form->getMeta('saveButton') ?? true
             ]
         );
     }
