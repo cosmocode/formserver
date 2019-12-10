@@ -9,6 +9,8 @@ meta:
       - recipient2@example.com
     cc:
       - fieldset0.fieldset_dynamic.email1
+  fileExporter:
+    file: i_will_be_moved.txt
 form:
   fieldset0:
     type: fieldset
