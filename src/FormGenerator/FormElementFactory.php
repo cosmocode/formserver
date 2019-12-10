@@ -13,6 +13,7 @@ use CosmoCode\Formserver\FormGenerator\FormElements\DropdownFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\EmailFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\FieldsetFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\HiddenFormElement;
+use CosmoCode\Formserver\FormGenerator\FormElements\HrFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\ImageFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\MarkDownFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\NumberInputFormElement;
@@ -55,6 +56,8 @@ class FormElementFactory
                 return new DownloadFormElement($id, $config, $parent);
             case 'image':
                 return new ImageFormElement($id, $config, $parent);
+            case 'hr':
+                return new HrFormElement($id, $config, $parent);
             case 'upload':
                 return new UploadFormElement($id, $config, $parent);
             case 'textinput':
