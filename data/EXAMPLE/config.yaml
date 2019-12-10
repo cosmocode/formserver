@@ -11,7 +11,7 @@ meta:
       - fieldset0.fieldset_dynamic.email1
   fileExporter:
     file: i_will_be_moved.txt
-  saveButton: false
+  saveButton: true
 form:
   fieldset0:
     type: fieldset
