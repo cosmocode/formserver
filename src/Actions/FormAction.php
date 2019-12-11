@@ -93,7 +93,7 @@ class FormAction extends AbstractAction
      */
     protected function handleFileExport(Form $form)
     {
-        $file = $form->getMeta('fileExporter')['file'] ?? '';
+        $file = $form->getMeta('export') ?? '';
         if ($file !== '') {
             $formId = $form->getId();
             $filePath = $form->getFormDirectory() . $file;
