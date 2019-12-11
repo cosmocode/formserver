@@ -11,6 +11,7 @@ meta:
       - fieldset0.fieldset_dynamic.email1
   export: i_will_be_moved.txt
   saveButton: true
+  language: de
 form:
   fieldset0:
     type: fieldset
