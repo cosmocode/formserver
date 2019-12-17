@@ -19,24 +19,22 @@ class ChecklistFormElement extends AbstractDynamicFormElement
         $choices = $this->getConfigValue('choices');
         $transformedChoices = [];
 
-        foreach ($choices as $choiceValue => $choiceLabel) {
-            $transformedChoiceLabel = MarkdownExtra::defaultTransform($choiceLabel);
+        foreach ($choices as $choice) {
+            $transformedChoice= MarkdownExtra::defaultTransform($choice);
 
             // Markdown lib always wraps the content in a <p>...</p>
             // https://github.com/michelf/php-markdown/issues/230
-            $transformedChoiceLabel = str_replace(
+            $transformedChoices[] = str_replace(
                 ['<p>', '</p>'],
                 '',
-                $transformedChoiceLabel
+                $transformedChoice
             );
-
-            $transformedChoices[$transformedChoiceLabel] = $choiceValue;
         };
 
         return array_merge(
             parent::getViewVariables(),
             [
-                'choices' => $transformedChoices
+                'transformed_choices' => $transformedChoices
             ]
         );
     }
