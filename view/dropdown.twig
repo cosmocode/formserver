@@ -11,7 +11,7 @@
                         {{ size is defined ? 'size='~size }}
                         {{ multiselect is defined and multiselect ? 'multiple' }}>
 
-                    <option value="">{{ default is defined ? default }}</option>
+                    <option value="">{{ empty_label is defined ? empty_label }}</option>
                     {%- for choice in choices -%}
                         <option {{ choice in value ? 'selected' }}>{{ choice }}</option>
                     {%- endfor -%}

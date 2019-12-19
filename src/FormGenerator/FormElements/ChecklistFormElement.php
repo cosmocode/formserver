@@ -10,6 +10,21 @@ use Michelf\MarkdownExtra;
 class ChecklistFormElement extends AbstractDynamicFormElement
 {
     /**
+     * Sets the default value defined in the config.
+     * If none given do nothing
+     *
+     * @return void
+     */
+    public function setDefaultValue()
+    {
+        $defaultValue = $this->getConfigValue('default');
+
+        if ($defaultValue) {
+            $this->setValue($defaultValue);
+        }
+    }
+
+    /**
      * Override parent to transform markdown choice labels
      *
      * @return array

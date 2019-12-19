@@ -100,7 +100,7 @@ form:
           dropdown1:
             type: dropdown
             label: 'Dropdown'
-            default: 'Please choose'
+            empty_label: 'Please choose'
             choices:
               - 'Choice #1'
               - 'Choice #2'
@@ -109,7 +109,6 @@ form:
             type: checklist
             alignment: vertical
             label: 'Checklist'
-            default: 'choice 0'
             choices:
               - 'Choice #1'
               - 'Choice #2 [a nice link](https://www.cosmocode.de)'
