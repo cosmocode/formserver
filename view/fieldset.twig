@@ -1,6 +1,7 @@
 {% from '_macros' import renderError %}
 
-<fieldset {{ toggle is not empty ? ('data-toggle-id="'~toggle.id~'" data-toggle-value="'~toggle.value~'"') | raw }}>
+<fieldset {{ toggle is not empty ? ('data-toggle-id="'~toggle.id~'" data-toggle-value="'~toggle.value~'"') | raw }}
+        {% if tablestyle is not empty %} class="is-left-label"{% endif %}>
     <legend class="hidden">{{ label }}</legend>
     <div class="column {{ column is not empty ? column : 'is-full' }} fieldset-content">
         <div class="label fieldset-label">
@@ -12,8 +13,4 @@
             {% endfor %}
         </div>
     </div>
-
-
 </fieldset>
-
-
