@@ -278,10 +278,11 @@ Options:
 Representation of a select input.  
 
 Options:
-* `choices` _(required)_ - defines available options
-* `default` _(optional)_ - a placeholder text shown if no value was chosen (e.g. "Please select"). **Note:** this is not a real option and has no value that could be saved.
+* `choices` _(required)_ - defines available options. Markdown ist supported.
+* `empty_label` _(optional)_ - a placeholder text shown if no value was chosen (e.g. "Please select"). **Note:** this is not a real option and has no value that could be saved.
 * `multiselect` _(optional)_ - enables selecting multiple options
 * `size` _(optional)_ - if multiselect is turned on this defines the number of rows shown
+* `default` _(optional)_ : Preselects a choice. This is just triggered if the form was never saved before. **Preselect in toggles are not supported yet.** **BREAKING CHANGE until version 1.0.4 this parameter was used for empty_label**
 
 ```yaml
   <id>:
@@ -289,9 +290,10 @@ Options:
     label: dropdown label
     multiselect: true
     size: 3
-    default: choose an option
+    empty_label: choose an option
+    default: 'first choice [a nice link](https://www.cosmocode.de)'
     choices:
-      - first choice
+      - first choice [a nice link](https://www.cosmocode.de)
       - second choice
 ```
 
@@ -302,7 +304,7 @@ Representation of a checkbox group.
 Options:
 * `alignment` _(optional)_ - sets the alignment of the checkboxes, possible values are `vertical` or `horizontal` (default)
 * `choices` _(required)_ - defines available options/checkboxes. Markdown is supported.
-
+* `default` _(optional)_ : Preselects a choice. This is just triggered if the form was never saved before. **Preselect in toggles are not supported yet.**
 ```yaml
   <id>:
     type: checklist
@@ -310,6 +312,7 @@ Options:
     alignment: vertical
     validation:
       required: false
+    default: 'First choice'
     choices:
       - First choice
       - Second choice
