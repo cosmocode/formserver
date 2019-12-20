@@ -34,7 +34,7 @@ class DownloadAction extends AbstractAction
         $filePath = self::DATA_DIRECTORY . $directory . '/' . $file;
 
         if (! file_exists($filePath)) {
-            throw new NotFoundException();
+            return $this->response->withStatus(404);
         }
 
         $mimes = new MimeTypes();
