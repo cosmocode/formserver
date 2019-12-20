@@ -42,13 +42,11 @@ fieldset .subtitle {
 }
 
 
-/** + + + + +  spacer  + + + + + */
-.field.is-spacer {
-    height: 5rem;
-}
-
-.field.is-spacer-doublelabel {
-    height: 6.5rem;
+@media screen and (max-width: 768px), print {
+    .field.is-spacer label,
+    .field.is-spacer-doublelabel label {
+        display: none;
+    }
 }
 
 
@@ -69,8 +67,30 @@ fieldset .subtitle {
         margin-bottom: 0;
     }
 
+
+    /** + + + + +  spacer  + + + + + */
+
+    .field.is-spacer {
+        height: 4.25em;
+    }
+
+    .field.is-spacer-doublelabel {
+        height: 10em;
+    }
+
+    /** + + + + +  spacer in table design  + + + + + */
+
     .is-left-label .field.is-spacer {
-        height: 3rem;
+        height: 2.25em; /* input-height: 2.25 */
+    }
+
+    .is-left-label .field.is-spacer-doublelabel {
+        height: 6em; /* 2 x input-height: 2.25 + 2 x padding: 0.75*/
+    }
+
+    .is-left-label .field.is-spacer label,
+    .is-left-label .field.is-spacer-doublelabel label {
+        display: inline-block;
     }
 
 
