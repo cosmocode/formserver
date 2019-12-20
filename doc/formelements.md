@@ -21,7 +21,7 @@ Fieldsets group other form elements (including nested fieldsets).
 
 Options:
 * `children` _(required)_ - containing child form elements
-* `tablestyle` _(optional)_ set table view true or false. This will color the rows like zebrastripes. Labels of the containing formElements are hidden. The tablehead row will be populated from the labels from the children of the first fieldset. If cells in the first row must be skipped then [Spacers](#spacers) can be used.
+* `tablestyle` _(optional)_ set table view true or false. This will color the rows like zebrastripes. Labels of the containing formElements are hidden. The tablehead row will be populated from the labels from the children of the first fieldset. If cells in the first row must be skipped then [Spacers](#Spacer) can be used.
 * `toggle` _(optional)_ - the fieldset is disabled and hidden until the toggle condition is met
   * `field` - dotted path to the field whose value will be evaluated to match the toggle condition
   * `value` - required value to toggle the fieldset on
