@@ -25,3 +25,9 @@
         </div>
     {%- endif -%}
 {%- endmacro -%}
+
+{%- macro renderTooltip(tooltip) -%}
+    {%- if tooltip is not empty -%}
+        <button type="button" class="button is-small tooltip-button has-tooltip-top" data-tooltip="{{ tooltip | raw }}" style="{{ tooltip_style }}">!</button>
+    {%- endif -%}
+{%- endmacro -%}

@@ -29,3 +29,12 @@ fieldset {
     display: contents;
 
 }
+
+.label {
+    display: inline-block;
+}
+
+.tooltip-button {
+    border: 0;
+
+}

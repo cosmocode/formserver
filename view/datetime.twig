@@ -1,7 +1,8 @@
-{% from '_macros' import renderError %}
+{% from '_macros' import renderError, renderTooltip %}
 <div class="column {{ column is not empty ? column : 'is-full' }}">
     <div class="field">
         <label class="label" for="{{ id }}">{{ label }} {{ is_required ? '*' }}</label>
+        {{ renderTooltip(tooltip) }}
         <div class="control">
             <input
                 type="text"

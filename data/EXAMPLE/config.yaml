@@ -11,6 +11,7 @@ meta:
       - fieldset0.fieldset_dynamic.email1
   export: i_will_be_moved.txt
   saveButton: true
+  tooltip_style: 'border: 1px solid cyan'
   language: de
 form:
   fieldset0:
@@ -70,6 +71,7 @@ form:
             validation:
               match: /[a-zA-Z0-9]/
               required: false
+            tooltip: 'Optional input\nAllowed characters: a-Z, 0-9'
           numberinput1:
             type: numberinput
             label: Numberinput
