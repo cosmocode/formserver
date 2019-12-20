@@ -19,6 +19,7 @@ use CosmoCode\Formserver\FormGenerator\FormElements\MarkDownFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\NumberInputFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\RadiosetFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\SignatureFormElement;
+use CosmoCode\Formserver\FormGenerator\FormElements\SpacerFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\TextAreaFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\TextInputFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\TimeFormElement;
@@ -82,6 +83,8 @@ class FormElementFactory
                 return new DropdownFormElement($id, $config, $parent);
             case 'signature':
                 return new SignatureFormElement($id, $config, $parent);
+            case 'spacer':
+                return new SpacerFormElement($id, $config, $parent);
             default:
                 throw new FormException(
                     "Could not build FormElement id:$id. Undefined type ($formType)"

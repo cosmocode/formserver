@@ -11,10 +11,6 @@ canvas {
     background: #ffffff;
 }
 
-.fieldset-label {
-    font-size: 20pt;
-}
-
 .checkbox {
     padding-left: 4px;
     padding-right: 4px;
@@ -24,17 +20,165 @@ canvas {
     display: none;
 }
 
-/** Required so fieldsets dont destroy bulmas column system */
-fieldset {
-    display: contents;
-
-}
-
+/** Tooltips */
 .label {
     display: inline-block;
 }
 
 .tooltip-button {
     border: 0;
+}
 
+/** Required so fieldsets don't destroy Bulma's column system */
+fieldset {
+    display: contents;
+}
+
+.fieldset-label {
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
+.is-full .fieldset-label {
+    margin-bottom: 1rem;
+}
+
+fieldset h3,
+fieldset .subtitle {
+    font-size: 1.13rem;
+    font-weight: 400;
+    line-height: 1.25;
+}
+
+
+@media screen and (max-width: 768px), print {
+    .field.is-spacer label,
+    .field.is-spacer-doublelabel label {
+        display: none;
+    }
+}
+
+
+@media screen and (min-width: 769px), print {
+    .fieldset-label {
+        min-height: 3.75rem;
+    }
+
+    .is-full .fieldset-label {
+        min-height: 1rem;
+    }
+
+    .columns.is-multiline {
+        margin-bottom: 1rem;
+    }
+
+    .columns.is-multiline .is-multiline {
+        margin-bottom: 0;
+    }
+
+
+    /** + + + + +  spacer  + + + + + */
+
+    .field.is-spacer {
+        height: 4.25em;
+    }
+
+    .field.is-spacer-doublelabel {
+        height: 10em;
+    }
+
+    /** + + + + +  spacer in table design  + + + + + */
+
+    .is-left-label .field.is-spacer {
+        height: 2.25em; /* input-height: 2.25 */
+    }
+
+    .is-left-label .field.is-spacer-doublelabel {
+        height: 6em; /* 2 x input-height: 2.25 + 2 x padding: 0.75*/
+    }
+
+    .is-left-label .field.is-spacer label,
+    .is-left-label .field.is-spacer-doublelabel label {
+        display: inline-block;
+    }
+
+
+    /** + + + + +  label once  + + + + + */
+
+    /* + + +  width of cols  + + + */
+
+    .is-left-label .column.is-half {
+        width: 33.3333%;
+    }
+
+    .is-left-label fieldset:first-of-type .column.is-half {
+        width: 66.6666%;
+    }
+
+    .is-left-label .column.is-one-third {
+        width: 25%;
+    }
+
+    .is-left-label fieldset:first-of-type .column.is-one-third {
+        width: 50%;
+    }
+
+    .is-left-label .column.is-one-quarter {
+        width: 20%;
+    }
+
+    .is-left-label fieldset:first-of-type .column.is-one-quarter {
+        width: 40%;
+    }
+
+    /* + + +  background of cols  + + + */
+
+    .is-left-label fieldset:nth-of-type(even) .column .is-multiline {
+        background-color: #F3F3F3;
+    }
+
+    .is-left-label fieldset:first-of-type .fieldset-content .columns {
+        position: relative;
+    }
+
+    .is-left-label fieldset:first-of-type .fieldset-content .columns::before {
+        content: '';
+        position: absolute;
+        width: 50%;
+        height: 100%;
+        background-color: #F3F3F3;
+        border-right: 10px solid #FFFFFF;
+    }
+
+    /* + + +  position of col header (1. col)  + + + */
+
+    .is-left-label fieldset:first-of-type .fieldset-label {
+        width: 50%;
+        margin-right: 0;
+        margin-left: auto;
+    }
+
+    /* + + +  position of labels + width of input (1. col)  + + + */
+
+    .is-left-label .column .field {
+        position: relative;
+    }
+
+    .is-left-label label {
+        position: absolute;
+        left: -1000rem;
+        top: -1000rem;
+    }
+
+    .is-left-label fieldset:first-of-type label {
+        left: 0;
+        top: 0;
+        width: 50%;
+    }
+
+    .is-left-label fieldset:first-of-type .control {
+        width: 50%;
+        margin-right: 0;
+        margin-left: auto;
+    }
 }
