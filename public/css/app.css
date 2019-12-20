@@ -153,6 +153,7 @@ fieldset .subtitle {
     /* + + +  position of col header (1. col)  + + + */
 
     .is-left-label fieldset:first-of-type .fieldset-label {
+        display: block;
         width: 50%;
         margin-right: 0;
         margin-left: auto;
