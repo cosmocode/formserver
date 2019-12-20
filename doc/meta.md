@@ -25,6 +25,21 @@ Your CSS file will be included after our basic styles, which are mostly plain [B
 
 An email with user input and attached uploads will be sent to configured addresses. A copy can be sent to an address from an email field if you provide the fieldId(s) in the `cc` section.   
 
+## Translations
+
+```yaml
+  language: de
+```
+
+The set language will be loaded from ./conf/language-{{language}}.yaml.
+
+At first ./conf/language.default.yaml gets loaded.
+
+If ./conf/language.local.yaml exists it will override all set strings from the default file.
+
+Finally ./conf/language-{{language}}.yaml. overrides all set strings from the previous files
+
+
 ## File export options
 
 ```yaml
