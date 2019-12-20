@@ -301,7 +301,7 @@ Representation of a checkbox group.
 
 Options:
 * `alignment` _(optional)_ - sets the alignment of the checkboxes, possible values are `vertical` or `horizontal` (default)
-* `choices` _(required)_ - defines available options/checkboxes
+* `choices` _(required)_ - defines available options/checkboxes. Markdown is supported.
 
 ```yaml
   <id>:
