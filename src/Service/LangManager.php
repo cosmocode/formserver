@@ -12,7 +12,7 @@ class LangManager
 {
     const LANG_FILE_PATH_GLOBAL = __DIR__ . '/../../conf/language.default.yaml';
     const LANG_FILE_PATH_LOCAL = __DIR__ . '/../../conf/language.local.yaml';
-    const LANG_FILE_PATH_DYNAMIC = __DIR__ . '/../../conf/language-{{language}}.yaml';
+    const LANG_FILE_PATH_DYNAMIC = __DIR__ . '/../../conf/language.{{language}}.yaml';
 
     /**
      * Language strings.
