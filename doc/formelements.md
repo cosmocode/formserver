@@ -123,6 +123,23 @@ Options:
     label: "label"
     double: true
 ```
+
+### Horizontal line
+Representation of a hr.
+
+Options:
+* `column` _(optional)_
+* `color` _(optional)_ - The color of the hr
+* `height` _(optional)_ - The height of the hr
+
+```yaml
+  <id>:
+    type: hr
+    column: is-full
+    color: '#f5f5f5'
+    height: 2
+```
+
 ## Dynamic fields (user input)
 
 All dynamic fields have a value the user can enter.
