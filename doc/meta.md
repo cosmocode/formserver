@@ -64,3 +64,13 @@ When the form email gets send the given file (in this case file_to_be_moved.txt)
  
 The visibilty of the save button can be toggled.
 If this option is not set the button will be shown by default.
+
+## Tooltips
+
+ ```yaml
+   tooltip_style: 'border: 1px solid cyan'
+ ```
+
+This setting controls the tooltip button style attribute.
+
+Every tooltip for this form is affected.

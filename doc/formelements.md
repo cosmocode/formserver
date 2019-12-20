@@ -147,10 +147,12 @@ They are required by default.
 
 Options:
 * `validation` _(optional)_ - used to apply [validation](validation.md)
+* `tooltip` _(optional)_ - Shows a hint for the form element. Also see [Tooltip styling](meta.md#Tooltips)
 
 ```yaml
   <id>:
     type: <type>
+    tooltip: 'A useful hint for this field.'
     validation:
       required: false
       match: /^regex_expression$/
