@@ -21,6 +21,7 @@ Fieldsets group other form elements (including nested fieldsets).
 
 Options:
 * `children` _(required)_ - containing child form elements
+* `tablestyle` _(optional)_ set table view true or false. This will color the rows like zebrastripes. Labels of the containing formElements are hidden. The tablehead row will be populated from the labels from the children of the first fieldset. If cells in the first row must be skipped then [Spacers](#spacers) can be used.
 * `toggle` _(optional)_ - the fieldset is disabled and hidden until the toggle condition is met
   * `field` - dotted path to the field whose value will be evaluated to match the toggle condition
   * `value` - required value to toggle the fieldset on
@@ -106,6 +107,21 @@ Options:
   <id>:
     type: hidden
     value: "hidden value"
+```
+
+
+### Spacer
+
+Representation of a empty table cell. Should be used in table fieldset (tableStyle: true).
+Options:
+* `label` _(required)_ - The label. If the spacer is inside the first fieldset of a table fieldset (tableStyle: true) then the label will be used
+* `double` _(optional)_ - If set to true also skips cell below
+
+```yaml
+  <id>:
+    type: spacer
+    label: "label"
+    double: true
 ```
 ## Dynamic fields (user input)
 
