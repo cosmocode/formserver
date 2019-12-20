@@ -24,3 +24,19 @@ Your CSS file will be included after our basic styles, which are mostly plain [B
 ```
 
 An email with user input and attached uploads will be sent to configured addresses. A copy can be sent to an address from an email field if you provide the fieldId(s) in the `cc` section.   
+
+## File export options
+
+```yaml
+  export: file_to_be_moved.txt
+```
+
+When the form email gets send the given file (in this case file_to_be_moved.txt) will be moved to the export directory. The export directory is set by default to ./export. It can be changed by overriding the default settings (./conf/settings.default.yaml):
+ Create / Edit the file ./conf/settings.local.yaml.
+ Add:
+  ```yaml
+   fileExporter:
+     dir : <anotherFolder>
+ ```
+ 
+ The directory is always relative from the projects root dir.
