@@ -1,19 +1,27 @@
-{% from '_macros' import fileUrl , renderError %}
+{% from '_macros' import fileUrl, renderError, renderTooltip %}
 <div class="column {{ column is not empty ? column : 'is-full' }}">
     <div class="field file {{ errors is not empty ? 'is-danger' }}">
         <div class="control">
             <label class="label">{{ label }} {{ is_required ? '*' }}</label>
+            {{ renderTooltip(tooltip) }} <br />
             {% if is_uploaded %}
                 <a href="{{ fileUrl(value) }}" target="_blank">{{ uploaded_file_label is not empty ? uploaded_file_label : 'Saved file' }}</a><br />
             {% endif %}
             <label class="file-label">
-                <input type="file" class="file-input form-input" id="{{ id }}" name="{{ id }}" {{ allowed_extensions is defined ? ('accept=".'~allowed_extensions|join(',.')~'"')|raw }} />
+                <input type="file"
+                       class="file-input form-input" id="{{ id }}"
+                       name="{{ id }}"
+                       {{ allowed_extensions is defined ? ('accept=".'~allowed_extensions|join(',.')~'"')|raw }}
+                       data-info-container-id="{{ id }}-upload-info" />
                 <span class="file-cta">
-                        <span class="file-label">
-                            {{ is_uploaded ? button_upload_replace : button_upload_label }}
-                        </span>
+                    <span class="file-label">
+                        {{ is_uploaded ? button_upload_replace : button_upload_label }}
                     </span>
+                </span>
             </label>
+
+            <p class="hidden" id="{{ id }}-upload-info">{{ upload_info }}</p>
+
             {{ renderError(errors) }}
         </div>
     </div>

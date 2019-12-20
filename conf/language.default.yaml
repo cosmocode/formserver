@@ -18,3 +18,4 @@ button_send : Send
 button_upload: Upload file
 button_upload_replace: Replace uploaded file
 uploaded_file: Saved file
+upload_info: The selected file will be uploaded and checked after saving or sending the form

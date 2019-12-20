@@ -141,8 +141,23 @@ abstract class AbstractDynamicFormElement extends AbstractFormElement
                 'id_string' => $this->getFormElementIdStringified(),
                 'value' => $this->getValue(),
                 'errors' => $this->getErrors(),
-                'is_required' => $this->isRequired()
+                'is_required' => $this->isRequired(),
+                'tooltip' => $this->parseTooltip()
             ]
         );
+    }
+
+    /**
+     * Parses tooltip.
+     * Transform newlines (\n) to NCR representation.
+     * If no tooltip given return empty string.
+     *
+     * @return string
+     */
+    protected function parseTooltip()
+    {
+        $tooltip = $this->getConfigValue('tooltip') ?? '';
+
+        return str_replace("\n", '&#10;&#013;', $tooltip);
     }
 }

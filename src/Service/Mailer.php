@@ -125,7 +125,7 @@ class Mailer
     protected function formToMessage(
         array $formElements,
         string $formDirectory,
-        string $title = ''
+        string $title = null
     ) {
         $htmlHeadline = '<h2>%s</h2>';
         $textHeadline = "\n\n%s\n\n";
@@ -142,7 +142,9 @@ class Mailer
          * @var AbstractDynamicFormElement $element
          */
         foreach ($formElements as $element) {
-            if ($element instanceof FieldsetFormElement && ! $element->isDisabled()) {
+            if ($element instanceof FieldsetFormElement
+                && ! $element->isDisabled()
+            ) {
                 $this->textBody
                     .= sprintf($textHeadline, $element->getConfigValue('label'));
                 $this->htmlBody

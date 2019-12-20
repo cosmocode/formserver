@@ -24,3 +24,53 @@ Your CSS file will be included after our basic styles, which are mostly plain [B
 ```
 
 An email with user input and attached uploads will be sent to configured addresses. A copy can be sent to an address from an email field if you provide the fieldId(s) in the `cc` section.   
+
+## Translations
+
+```yaml
+  language: de
+```
+
+The set language will be loaded from ./conf/language-{{language}}.yaml.
+
+At first ./conf/language.default.yaml gets loaded.
+
+If ./conf/language.local.yaml exists it will override all set strings from the default file.
+
+Finally ./conf/language-{{language}}.yaml. overrides all set strings from the previous files
+
+
+## File export options
+
+```yaml
+  export: file_to_be_moved.txt
+```
+
+When the form email gets send the given file (in this case file_to_be_moved.txt) will be moved to the export directory. The export directory is set by default to ./export. It can be changed by overriding the default settings (./conf/settings.default.yaml):
+ Create / Edit the file ./conf/settings.local.yaml.
+ Add:
+  ```yaml
+   fileExporter:
+     dir : <anotherFolder>
+ ```
+ 
+ The directory is always relative from the projects root dir.
+ 
+ ## Visibility Savebutton
+ 
+ ```yaml
+   saveButton: true
+ ```
+ 
+The visibilty of the save button can be toggled.
+If this option is not set the button will be shown by default.
+
+## Tooltips
+
+ ```yaml
+   tooltip_style: 'border: 1px solid cyan'
+ ```
+
+This setting controls the tooltip button style attribute.
+
+Every tooltip for this form is affected.

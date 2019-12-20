@@ -2,6 +2,7 @@
 
 namespace CosmoCode\Formserver\Actions;
 
+use CosmoCode\Formserver\Helper\FileHelper;
 use DI\NotFoundException;
 use Mimey\MimeTypes;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -32,27 +33,22 @@ class DownloadAction extends AbstractAction
         );
         $filePath = self::DATA_DIRECTORY . $directory . '/' . $file;
 
-        if (! file_exists($filePath)) {
-            throw new NotFoundException();
+        if (file_exists($filePath)) {
+            $mimes = new MimeTypes();
+            $extension = FileHelper::getFileExtension($filePath);
+            $mimeType = $mimes->getMimeType($extension);
+
+            $file = fopen($filePath, 'rb');
+            $fileStream = new Stream($file);
+            $fileSize = filesize($filePath);
+
+            return $this->response
+                ->withHeader('Content-Type', $mimeType)
+                ->withHeader('Content-Length', $fileSize)
+                ->withBody($fileStream);
         }
 
-        $mimes = new MimeTypes();
-        $extension = strtolower(
-            pathinfo(
-                $filePath,
-                PATHINFO_EXTENSION
-            )
-        );
-        $mimeType = $mimes->getMimeType($extension);
-
-        $file = fopen($filePath, 'rb');
-        $fileStream = new Stream($file);
-        $fileSize = filesize($filePath);
-
-        return $this->response
-            ->withHeader('Content-Type', $mimeType)
-            ->withHeader('Content-Length', $fileSize)
-            ->withBody($fileStream);
+        return $this->response->withStatus(404);
     }
 
     /**

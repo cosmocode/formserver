@@ -9,9 +9,13 @@ vendor
 data/*
 !data/EXAMPLE/config.yaml
 !data/EXAMPLE/logo.png
+!data/EXAMPLE/i_will_be_moved.txt
 
 # logs
 /logs
 
 # local conf
 /conf/*.local.yaml
+
+# export directory
+/export

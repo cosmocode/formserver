@@ -61,11 +61,13 @@ class FormRenderer
     {
         $renderedFormElements = [];
         $title = $this->form->getMeta('title');
+        $tooltipStyle = $this->form->getMeta('tooltip_style') ?? '';
         $saveButtonLabel = LangManager::getString('button_save');
         $sendButtonlabel = LangManager::getString('button_send');
         $uploadButtonLabel = LangManager::getString('button_upload');
         $replaceUploadButtonLabel = LangManager::getString('button_upload_replace');
         $uploadedFileLabel = LangManager::getString('uploaded_file');
+        $uploadInfo = LangManager::getString('upload_info');
 
         // Global variables available in all templates and macros
         $this->twig->addGlobal('form_id', $this->form->getId());
@@ -75,6 +77,8 @@ class FormRenderer
         $this->twig->addGlobal('button_upload_label', $uploadButtonLabel);
         $this->twig->addGlobal('button_upload_replace', $replaceUploadButtonLabel);
         $this->twig->addGlobal('uploaded_file_label', $uploadedFileLabel);
+        $this->twig->addGlobal('upload_info', $uploadInfo);
+        $this->twig->addGlobal('tooltip_style', $tooltipStyle);
 
         foreach ($this->form->getFormElements() as $formElement) {
             if ($formElement instanceof FieldsetFormElement) {
@@ -97,7 +101,8 @@ class FormRenderer
                 'notification' => $this->generateNotification(),
                 'css' => $this->form->getMeta('css'),
                 'form_id' => $this->form->getId(),
-                'logo' => $this->form->getMeta('logo')
+                'logo' => $this->form->getMeta('logo'),
+                'save_button_visible' => $this->form->getMeta('saveButton') ?? true
             ]
         );
     }

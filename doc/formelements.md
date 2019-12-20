@@ -21,6 +21,7 @@ Fieldsets group other form elements (including nested fieldsets).
 
 Options:
 * `children` _(required)_ - containing child form elements
+* `tablestyle` _(optional)_ set table view true or false. This will color the rows like zebrastripes. Labels of the containing formElements are hidden. The tablehead row will be populated from the labels from the children of the first fieldset. If cells in the first row must be skipped then [Spacers](#spacers) can be used.
 * `toggle` _(optional)_ - the fieldset is disabled and hidden until the toggle condition is met
   * `field` - dotted path to the field whose value will be evaluated to match the toggle condition
   * `value` - required value to toggle the fieldset on
@@ -107,6 +108,38 @@ Options:
     type: hidden
     value: "hidden value"
 ```
+
+
+### Spacer
+
+Representation of a empty table cell. Should be used in table fieldset (tableStyle: true).
+Options:
+* `label` _(required)_ - The label. If the spacer is inside the first fieldset of a table fieldset (tableStyle: true) then the label will be used
+* `double` _(optional)_ - If set to true also skips cell below
+
+```yaml
+  <id>:
+    type: spacer
+    label: "label"
+    double: true
+```
+
+### Horizontal line
+Representation of a hr.
+
+Options:
+* `column` _(optional)_
+* `color` _(optional)_ - The color of the hr
+* `height` _(optional)_ - The height of the hr
+
+```yaml
+  <id>:
+    type: hr
+    column: is-full
+    color: '#f5f5f5'
+    height: 2
+```
+
 ## Dynamic fields (user input)
 
 All dynamic fields have a value the user can enter.
@@ -114,10 +147,12 @@ They are required by default.
 
 Options:
 * `validation` _(optional)_ - used to apply [validation](validation.md)
+* `tooltip` _(optional)_ - Shows a hint for the form element. Also see [Tooltip styling](meta.md#Tooltips)
 
 ```yaml
   <id>:
     type: <type>
+    tooltip: 'A useful hint for this field.'
     validation:
       required: false
       match: /^regex_expression$/
@@ -243,10 +278,11 @@ Options:
 Representation of a select input.  
 
 Options:
-* `choices` _(required)_ - defines available options
-* `default` _(optional)_ - a placeholder text shown if no value was chosen (e.g. "Please select"). **Note:** this is not a real option and has no value that could be saved.
+* `choices` _(required)_ - defines available options. Markdown ist supported.
+* `empty_label` _(optional)_ - a placeholder text shown if no value was chosen (e.g. "Please select"). **Note:** this is not a real option and has no value that could be saved.
 * `multiselect` _(optional)_ - enables selecting multiple options
 * `size` _(optional)_ - if multiselect is turned on this defines the number of rows shown
+* `default` _(optional)_ : Preselects a choice. This is just triggered if the form was never saved before. **Preselect in toggles are not supported yet.** **BREAKING CHANGE until version 1.0.4 this parameter was used for empty_label**
 
 ```yaml
   <id>:
@@ -254,9 +290,10 @@ Options:
     label: dropdown label
     multiselect: true
     size: 3
-    default: choose an option
+    empty_label: choose an option
+    default: 'first choice [a nice link](https://www.cosmocode.de)'
     choices:
-      - first choice
+      - first choice [a nice link](https://www.cosmocode.de)
       - second choice
 ```
 
@@ -266,8 +303,8 @@ Representation of a checkbox group.
 
 Options:
 * `alignment` _(optional)_ - sets the alignment of the checkboxes, possible values are `vertical` or `horizontal` (default)
-* `choices` _(required)_ - defines available options/checkboxes
-
+* `choices` _(required)_ - defines available options/checkboxes. Markdown is supported.
+* `default` _(optional)_ : Preselects a choice. This is just triggered if the form was never saved before. **Preselect in toggles are not supported yet.**
 ```yaml
   <id>:
     type: checklist
@@ -275,6 +312,7 @@ Options:
     alignment: vertical
     validation:
       required: false
+    default: 'First choice'
     choices:
       - First choice
       - Second choice

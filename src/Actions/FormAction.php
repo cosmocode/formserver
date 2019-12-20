@@ -3,10 +3,13 @@ declare(strict_types=1);
 
 namespace CosmoCode\Formserver\Actions;
 
+use CosmoCode\Formserver\Exceptions\FormException;
+use CosmoCode\Formserver\Exceptions\LanguageException;
 use CosmoCode\Formserver\Exceptions\MailException;
 use CosmoCode\Formserver\FormGenerator\Form;
 use CosmoCode\Formserver\FormGenerator\FormRenderer;
 use CosmoCode\Formserver\FormGenerator\FormValidator;
+use CosmoCode\Formserver\Service\FileExporter;
 use CosmoCode\Formserver\Service\LangManager;
 use CosmoCode\Formserver\Service\Mailer;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -25,13 +28,20 @@ class FormAction extends AbstractAction
     protected $mailer;
 
     /**
+     * @var FileExporter
+     */
+    protected $fileExporter;
+
+    /**
      * Constructor to inject dependencies
      *
      * @param Mailer $mailer
+     * @param FileExporter $fileExporter
      */
-    public function __construct(Mailer $mailer)
+    public function __construct(Mailer $mailer, FileExporter $fileExporter)
     {
         $this->mailer = $mailer;
+        $this->fileExporter = $fileExporter;
     }
 
     /**
@@ -44,6 +54,8 @@ class FormAction extends AbstractAction
         try {
             $id = $this->resolveArg('id');
             $form = new Form($id);
+
+            LangManager::init($form->getMeta('language'));
             $formRenderer = new FormRenderer($form);
             $formValidator = new FormValidator($form);
 
@@ -58,6 +70,7 @@ class FormAction extends AbstractAction
 
                 if ($form->isValid() && $form->getMode() === Form::MODE_SEND) {
                     $this->mailer->sendForm($form);
+                    $this->handleFileExport($form);
                 }
             } elseif ($this->request->getMethod() === 'GET') {
                 $form->restore();
@@ -72,5 +85,23 @@ class FormAction extends AbstractAction
         }
 
         return $this->response;
+    }
+
+    /**
+     * Helper function to copy file to another location when form gets sent
+     *
+     * @param Form $form
+     * @return void
+     * @throws FormException
+     */
+    protected function handleFileExport(Form $form)
+    {
+        $file = $form->getMeta('export') ?? '';
+        if ($file !== '') {
+            $formId = $form->getId();
+            $filePath = $form->getFormDirectory() . $file;
+
+            $this->fileExporter->moveFile($filePath, $formId);
+        }
     }
 }

@@ -7,3 +7,5 @@ settings:
     encryption: ~
     username: ~
     password: ~
+  fileExporter:
+    dir: export

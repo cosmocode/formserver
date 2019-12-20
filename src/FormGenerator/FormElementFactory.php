@@ -13,11 +13,13 @@ use CosmoCode\Formserver\FormGenerator\FormElements\DropdownFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\EmailFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\FieldsetFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\HiddenFormElement;
+use CosmoCode\Formserver\FormGenerator\FormElements\HrFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\ImageFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\MarkDownFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\NumberInputFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\RadiosetFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\SignatureFormElement;
+use CosmoCode\Formserver\FormGenerator\FormElements\SpacerFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\TextAreaFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\TextInputFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\TimeFormElement;
@@ -55,6 +57,8 @@ class FormElementFactory
                 return new DownloadFormElement($id, $config, $parent);
             case 'image':
                 return new ImageFormElement($id, $config, $parent);
+            case 'hr':
+                return new HrFormElement($id, $config, $parent);
             case 'upload':
                 return new UploadFormElement($id, $config, $parent);
             case 'textinput':
@@ -79,6 +83,8 @@ class FormElementFactory
                 return new DropdownFormElement($id, $config, $parent);
             case 'signature':
                 return new SignatureFormElement($id, $config, $parent);
+            case 'spacer':
+                return new SpacerFormElement($id, $config, $parent);
             default:
                 throw new FormException(
                     "Could not build FormElement id:$id. Undefined type ($formType)"
