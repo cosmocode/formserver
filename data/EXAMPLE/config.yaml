@@ -12,6 +12,7 @@ meta:
   fileExporter:
     file: i_will_be_moved.txt
   saveButton: true
+  tooltip_style: 'border: 1px solid cyan'
 form:
   fieldset0:
     type: fieldset

@@ -61,6 +61,7 @@ class FormRenderer
     {
         $renderedFormElements = [];
         $title = $this->form->getMeta('title');
+        $tooltipStyle = $this->form->getMeta('tooltip_style') ?? '';
         $saveButtonLabel = LangManager::getString('button_save');
         $sendButtonlabel = LangManager::getString('button_send');
         $uploadButtonLabel = LangManager::getString('button_upload');
@@ -77,6 +78,7 @@ class FormRenderer
         $this->twig->addGlobal('button_upload_replace', $replaceUploadButtonLabel);
         $this->twig->addGlobal('uploaded_file_label', $uploadedFileLabel);
         $this->twig->addGlobal('upload_info', $uploadInfo);
+        $this->twig->addGlobal('tooltip_style', $tooltipStyle);
 
         foreach ($this->form->getFormElements() as $formElement) {
             if ($formElement instanceof FieldsetFormElement) {
