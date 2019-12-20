@@ -62,6 +62,9 @@ class FileExporter
 
         $fileExtension = FileHelper::getFileExtension($filePath);
 
-        copy($filePath, $this->exportDir . $newFilename . '.' . $fileExtension);
+        $newFilePath = $this->exportDir . $newFilename . '.' . $fileExtension;
+        if (! is_file($newFilePath)) {
+            copy($filePath, $newFilePath);
+        }
     }
 }

@@ -6,6 +6,7 @@ use CosmoCode\Formserver\Exceptions\FormException;
 use CosmoCode\Formserver\FormGenerator\FormElements\AbstractDynamicFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\AbstractFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\ChecklistFormElement;
+use CosmoCode\Formserver\FormGenerator\FormElements\DropdownFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\FieldsetFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\UploadFormElement;
 use CosmoCode\Formserver\Helper\FileHelper;
@@ -202,15 +203,20 @@ class Form
      */
     public function restore()
     {
-        // values do not exist on first view
-        if (! is_file($this->getFormDirectory() . 'values.yaml')) {
-            return;
-        }
+        // Form was saved before. Restore data
+        if (is_file($this->getFormDirectory() . 'values.yaml')) {
+            $values = YamlHelper::parseYaml(
+                $this->getFormDirectory() . 'values.yaml'
+            );
 
-        $values = YamlHelper::parseYaml($this->getFormDirectory() . 'values.yaml');
-
-        foreach ($this->formElements as $formElement) {
-            $this->restoreValue($values, $formElement);
+            foreach ($this->formElements as $formElement) {
+                $this->restoreValue($values, $formElement);
+            }
+        } else {
+            // Form was never saved before. Set default values
+            foreach ($this->formElements as $formElement) {
+                $this->setDefaultValues($formElement);
+            }
         }
     }
 
@@ -385,6 +391,23 @@ class Form
         } elseif ($formElement instanceof AbstractDynamicFormElement) {
             $value = $values[$formElement->getId()] ?? null;
             $formElement->setValue($value);
+        }
+    }
+
+    /**
+     * Helper function to restore a specific value to a form element
+     *
+     * @param AbstractFormElement $formElement
+     * @return void
+     */
+    protected function setDefaultValues(AbstractFormElement $formElement)
+    {
+        if ($formElement instanceof FieldsetFormElement) {
+            foreach ($formElement->getChildren() as $fieldsetChild) {
+                $this->setDefaultValues($fieldsetChild);
+            }
+        } elseif ($formElement instanceof ChecklistFormElement || $formElement instanceof  DropdownFormElement) {
+            $formElement->setDefaultValue();
         }
     }
 

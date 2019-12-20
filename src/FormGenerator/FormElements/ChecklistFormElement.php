@@ -10,6 +10,21 @@ use Michelf\MarkdownExtra;
 class ChecklistFormElement extends AbstractDynamicFormElement
 {
     /**
+     * Sets the default value defined in the config.
+     * If none given do nothing
+     *
+     * @return void
+     */
+    public function setDefaultValue()
+    {
+        $defaultValue = $this->getConfigValue('default');
+
+        if ($defaultValue) {
+            $this->setValue($defaultValue);
+        }
+    }
+
+    /**
      * Override parent to transform markdown choice labels
      *
      * @return array
@@ -19,24 +34,22 @@ class ChecklistFormElement extends AbstractDynamicFormElement
         $choices = $this->getConfigValue('choices');
         $transformedChoices = [];
 
-        foreach ($choices as $choiceValue => $choiceLabel) {
-            $transformedChoiceLabel = MarkdownExtra::defaultTransform($choiceLabel);
+        foreach ($choices as $choice) {
+            $transformedChoice= MarkdownExtra::defaultTransform($choice);
 
             // Markdown lib always wraps the content in a <p>...</p>
             // https://github.com/michelf/php-markdown/issues/230
-            $transformedChoiceLabel = str_replace(
+            $transformedChoices[] = str_replace(
                 ['<p>', '</p>'],
                 '',
-                $transformedChoiceLabel
+                $transformedChoice
             );
-
-            $transformedChoices[$transformedChoiceLabel] = $choiceValue;
         };
 
         return array_merge(
             parent::getViewVariables(),
             [
-                'choices' => $transformedChoices
+                'transformed_choices' => $transformedChoices
             ]
         );
     }

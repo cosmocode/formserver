@@ -9,10 +9,10 @@ meta:
       - recipient2@example.com
     cc:
       - fieldset0.fieldset_dynamic.email1
-  fileExporter:
-    file: i_will_be_moved.txt
+  export: i_will_be_moved.txt
   saveButton: true
   tooltip_style: 'border: 1px solid cyan'
+  language: de
 form:
   fieldset0:
     type: fieldset
@@ -102,7 +102,7 @@ form:
           dropdown1:
             type: dropdown
             label: 'Dropdown'
-            default: 'Please choose'
+            empty_label: 'Please choose'
             choices:
               - 'Choice #1'
               - 'Choice #2'
@@ -112,9 +112,9 @@ form:
             alignment: vertical
             label: 'Checklist'
             choices:
-              choice 0: 'Choice #1'
-              choice 1: 'Choice #2 [a nice link](https://www.cosmocode.de)'
-              choice 2: 'Choice #3'
+              - 'Choice #1'
+              - 'Choice #2 [a nice link](https://www.cosmocode.de)'
+              - 'Choice #3'
           upload1:
             type: upload
             label: 'Upload'

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace CosmoCode\Formserver\Actions;
 
 use CosmoCode\Formserver\Exceptions\FormException;
+use CosmoCode\Formserver\Exceptions\LanguageException;
 use CosmoCode\Formserver\Exceptions\MailException;
 use CosmoCode\Formserver\FormGenerator\Form;
 use CosmoCode\Formserver\FormGenerator\FormRenderer;
@@ -53,6 +54,8 @@ class FormAction extends AbstractAction
         try {
             $id = $this->resolveArg('id');
             $form = new Form($id);
+
+            LangManager::init($form->getMeta('language'));
             $formRenderer = new FormRenderer($form);
             $formValidator = new FormValidator($form);
 
@@ -93,7 +96,7 @@ class FormAction extends AbstractAction
      */
     protected function handleFileExport(Form $form)
     {
-        $file = $form->getMeta('fileExporter')['file'] ?? '';
+        $file = $form->getMeta('export') ?? '';
         if ($file !== '') {
             $formId = $form->getId();
             $filePath = $form->getFormDirectory() . $file;
