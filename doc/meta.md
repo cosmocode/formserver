@@ -55,3 +55,12 @@ When the form email gets send the given file (in this case file_to_be_moved.txt)
  ```
  
  The directory is always relative from the projects root dir.
+ 
+ ## Visibility Savebutton
+ 
+ ```yaml
+   saveButton: true
+ ```
+ 
+The visibilty of the save button can be toggled.
+If this option is not set the button will be shown by default.
