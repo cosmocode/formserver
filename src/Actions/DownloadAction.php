@@ -33,22 +33,22 @@ class DownloadAction extends AbstractAction
         );
         $filePath = self::DATA_DIRECTORY . $directory . '/' . $file;
 
-        if (! file_exists($filePath)) {
-            return $this->response->withStatus(404);
+        if (file_exists($filePath)) {
+            $mimes = new MimeTypes();
+            $extension = FileHelper::getFileExtension($filePath);
+            $mimeType = $mimes->getMimeType($extension);
+
+            $file = fopen($filePath, 'rb');
+            $fileStream = new Stream($file);
+            $fileSize = filesize($filePath);
+
+            return $this->response
+                ->withHeader('Content-Type', $mimeType)
+                ->withHeader('Content-Length', $fileSize)
+                ->withBody($fileStream);
         }
 
-        $mimes = new MimeTypes();
-        $extension = FileHelper::getFileExtension($filePath);
-        $mimeType = $mimes->getMimeType($extension);
-
-        $file = fopen($filePath, 'rb');
-        $fileStream = new Stream($file);
-        $fileSize = filesize($filePath);
-
-        return $this->response
-            ->withHeader('Content-Type', $mimeType)
-            ->withHeader('Content-Length', $fileSize)
-            ->withBody($fileStream);
+        return $this->response->withStatus(404);
     }
 
     /**
