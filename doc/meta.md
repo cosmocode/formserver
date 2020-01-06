@@ -31,13 +31,13 @@ An email with user input and attached uploads will be sent to configured address
   language: de
 ```
 
-The set language will be loaded from ./conf/language-{{language}}.yaml.
+The set language will be loaded from ```/conf/language.<language>.yaml```.
 
-At first ./conf/language.default.yaml gets loaded.
+At first ```/conf/language.default.yaml``` gets loaded.
 
-If ./conf/language.local.yaml exists it will override all set strings from the default file.
+If ```/conf/language.local.yaml``` exists it will override all set strings from the default file.
 
-Finally ./conf/language-{{language}}.yaml. overrides all set strings from the previous files
+Finally ```/conf/language.<language>.yaml``` overrides all set strings from the previous files.
 
 
 ## File export options
@@ -54,12 +54,12 @@ When the form email gets send the given file (in this case file_to_be_moved.txt)
      dir : <anotherFolder>
  ```
  
- The directory is always relative from the projects root dir.
+ The directory is always relative to the project's root directory.
  
- ## Visibility Savebutton
+ ## Visibility of the "Save" button
  
  ```yaml
-   saveButton: true
+   saveButton: false
  ```
  
 The visibilty of the save button can be toggled.
