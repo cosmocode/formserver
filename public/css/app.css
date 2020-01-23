@@ -144,10 +144,9 @@ fieldset .subtitle {
     .is-left-label fieldset:first-of-type .fieldset-content .columns::before {
         content: '';
         position: absolute;
-        width: 50%;
+        width: 47%;
         height: 100%;
         background-color: #F3F3F3;
-        border-right: 10px solid #FFFFFF;
     }
 
     /* + + +  position of col header (1. col)  + + + */
