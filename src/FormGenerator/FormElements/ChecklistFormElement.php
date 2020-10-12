@@ -17,6 +17,11 @@ class ChecklistFormElement extends AbstractDynamicFormElement
      */
     public function setDefaultValue()
     {
+
+        if ($this->getValue()) {
+            return;
+        }
+
         $defaultValue = $this->getConfigValue('default');
 
         if ($defaultValue) {

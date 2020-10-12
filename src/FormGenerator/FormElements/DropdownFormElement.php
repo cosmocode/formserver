@@ -15,6 +15,10 @@ class DropdownFormElement extends AbstractDynamicFormElement
      */
     public function setdefaultvalue()
     {
+        if ($this->getValue()) {
+            return;
+        }
+
         $defaultValue = $this->getConfigValue('default');
 
         if ($defaultValue) {
