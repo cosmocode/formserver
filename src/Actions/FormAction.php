@@ -71,6 +71,11 @@ class FormAction extends AbstractAction
                 if ($form->isValid() && $form->getMode() === Form::MODE_SEND) {
                     $this->mailer->sendForm($form);
                     $this->handleFileExport($form);
+                    // finally clean up if it is a non-persistent form
+                    if ($form->getMeta('saveButton') === false) {
+                        $formElements = $form->getFormElements();
+                        $form->reset($formElements);
+                    }
                 }
             } elseif ($this->request->getMethod() === 'GET') {
                 $form->restore();

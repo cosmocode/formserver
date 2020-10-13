@@ -7,6 +7,33 @@ namespace CosmoCode\Formserver\FormGenerator\FormElements;
  */
 class UploadFormElement extends AbstractDynamicFormElement
 {
+    /**
+     * @var string
+     */
+    protected $previousValue = '';
+
+    public function getPreviousValue()
+    {
+        return $this->previousValue;
+    }
+
+    public function setPreviousValue($value)
+    {
+        $this->previousValue = $value;
+    }
+
+    /**
+     * Remove old file before resetting the value, useful when clearing the form after submit
+     *
+     * @param $formPath
+     */
+    public function setDefaultValue($formPath)
+    {
+        if ($this->value && is_file($formPath . $this->value)) {
+            unlink($formPath . $this->value);
+            unset($this->value);
+        }
+    }
 
     /**
      * Get allowed extension for this upload
@@ -49,6 +76,7 @@ class UploadFormElement extends AbstractDynamicFormElement
                 'errors' => $this->getErrors(),
                 'allowed_extensions' => $this->getAllowedExtensionsAsArray(),
                 'value' => $this->getValue(),
+                'previous_value' => $this->getPreviousValue(),
                 'is_required' => $this->isRequired()
             ]
         );

@@ -65,6 +65,11 @@ abstract class AbstractDynamicFormElement extends AbstractFormElement
         }
     }
 
+    public function clearValue()
+    {
+        $this->value = null;
+    }
+
     /**
      * Returns the field's configured validation rules
      *

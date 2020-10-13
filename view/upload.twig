@@ -13,6 +13,9 @@
                        name="{{ id }}"
                        {{ allowed_extensions is defined ? ('accept=".'~allowed_extensions|join(',.')~'"')|raw }}
                        data-info-container-id="{{ id }}-upload-info" />
+                <input type="hidden"
+                       name="{{ id }}[previous_value]"
+                       value="{{ previous_value }}">
                 <span class="file-cta">
                     <span class="file-label">
                         {{ is_uploaded ? button_upload_replace : button_upload_label }}

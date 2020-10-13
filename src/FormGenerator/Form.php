@@ -158,8 +158,9 @@ class Form
     public function submit(array $data, array $files)
     {
         // Important! Restore persisted data first to determine if UploadFormElements
-        // have already an uploaded file (They have a value which containts the file
+        // have already an uploaded file (They have a value which contains the file
         // name)
+        // FIXME is this still necessary?
         $this->restore();
 
         // submit data
@@ -197,7 +198,7 @@ class Form
     }
 
     /**
-     * Restore all persisted data
+     * Restore all persisted data or load defaults
      *
      * @return void
      */
@@ -237,6 +238,27 @@ class Form
     }
 
     /**
+     * Reset all form elements to either empty or default values
+     *
+     * @param $formElements
+     */
+    public function reset($formElements)
+    {
+        foreach ($formElements as $formElement) {
+            if ($formElement instanceof FieldsetFormElement) {
+                $childElements = $formElement->getChildren();
+                $this->reset($childElements);
+            } else {
+                $formElement->clearValue();
+            }
+        }
+
+        foreach ($formElements as $formElement) {
+            $this->setDefaultValues($formElement);
+        }
+    }
+
+    /**
      * Helper function to submit data to a form element
      *
      * @param AbstractFormElement $formElement
@@ -261,13 +283,20 @@ class Form
              */
             $file = $files[$formElement->getId()] ?? null;
 
-            if ($file !== null && $file->getError() === UPLOAD_ERR_OK) {
-                if (! empty($formElement->getValue())) {
-                    // Reupload delete old file first
+            // try to restore previous upload data
+            $previousUpload = $data[$formElement->getId()]['previous_value'];
+            $formElement->setPreviousValue($previousUpload);
+
+            if ($file->getError() === UPLOAD_ERR_OK) {
+                // Re-upload: delete old file first
+                if ($previousUpload) {
                     $this->deleteFileFromFormElement($formElement);
                 }
                 $fileName = $this->moveUploadedFile($file, $formElement);
                 $formElement->setValue($fileName);
+            } elseif ($previousUpload) {
+                // reuse previously uploaded file on new submit
+                $formElement->setValue($previousUpload);
             }
         } elseif ($formElement instanceof AbstractDynamicFormElement) {
             $value = $data[$formElement->getId()] ?? null;
@@ -299,6 +328,9 @@ class Form
             $parent = $parent->getParent();
         }
 
+        if ($this->getMeta('saveButton') === false) {
+            $baseName = time() . '_' . $baseName;
+        }
         $fileName = sprintf('%s.%0.8s', $baseName, $extension);
 
         $filePath = $this->getFormDirectory() . $fileName;
@@ -315,7 +347,7 @@ class Form
      */
     protected function deleteFileFromFormElement(UploadFormElement $formElement)
     {
-        $filePath = $this->getFormDirectory() . $formElement->getValue();
+        $filePath = $this->getFormDirectory() . $formElement->getPreviousValue();
         if (is_file($filePath)) {
             unlink($filePath);
         } else {
@@ -406,7 +438,8 @@ class Form
             foreach ($formElement->getChildren() as $fieldsetChild) {
                 $this->setDefaultValues($fieldsetChild);
             }
-        } elseif ($formElement instanceof ChecklistFormElement || $formElement instanceof  DropdownFormElement) {
+        } elseif ($formElement instanceof ChecklistFormElement
+            || $formElement instanceof  DropdownFormElement) {
             $formElement->setDefaultValue();
         }
     }
