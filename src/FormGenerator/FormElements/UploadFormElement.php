@@ -12,6 +12,17 @@ class UploadFormElement extends AbstractDynamicFormElement
      */
     protected $previousValue = '';
 
+    /**
+     * Update previous value on every upload
+     *
+     * @param mixed $value
+     */
+    public function setValue($value)
+    {
+        parent::setValue($value);
+        $this->setPreviousValue($value);
+    }
+
     public function getPreviousValue()
     {
         return $this->previousValue;
