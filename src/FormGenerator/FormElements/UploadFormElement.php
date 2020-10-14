@@ -38,12 +38,12 @@ class UploadFormElement extends AbstractDynamicFormElement
      *
      * @param $formPath
      */
-    public function setDefaultValue($formPath)
+    public function clearValue($formPath)
     {
         if ($this->value && is_file($formPath . $this->value)) {
             unlink($formPath . $this->value);
-            unset($this->value);
         }
+        $this->setValue(null);
     }
 
     /**

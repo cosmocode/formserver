@@ -65,7 +65,10 @@ abstract class AbstractDynamicFormElement extends AbstractFormElement
         }
     }
 
-    public function clearValue()
+    /**
+     * @param string $formPath
+     */
+    public function clearValue(string $formPath)
     {
         $this->value = null;
     }

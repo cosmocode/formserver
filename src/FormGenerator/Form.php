@@ -249,7 +249,7 @@ class Form
                 $childElements = $formElement->getChildren();
                 $this->reset($childElements);
             } else {
-                $formElement->clearValue();
+                $formElement->clearValue($this->getFormDirectory());
             }
         }
 
