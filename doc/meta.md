@@ -56,14 +56,15 @@ When the form email gets send the given file (in this case file_to_be_moved.txt)
  
  The directory is always relative to the project's root directory.
  
- ## Visibility of the "Save" button
+ ## "Save" button
  
  ```yaml
    saveButton: false
  ```
  
-The visibilty of the save button can be toggled.
-If this option is not set the button will be shown by default.
+This option disables not only the save button, but also persisting user inputs. **As soon as the form is successfully submitted, all data is lost, so send it per email!**
+
+This way you can re-use the same form for multiple submissions of different data or for multiple users.
 
 ## Tooltips
 

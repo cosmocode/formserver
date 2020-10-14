@@ -1,10 +1,20 @@
 # Form server
 
-This is a PHP app that generates HTML forms from YAML descriptions. It will save and optionally email the submitted data.
+This is a PHP app that generates HTML forms from YAML descriptions.
 
-The goal is to gather user-specific data. The initial submissions may be incomplete and can be updated at a later time without the need for additional authentication mechanisms or databases.
+It can save and/or email the submitted data.
+
+## Use cases
+
+### Save data
+
+This is the default behavior of the app. The goal is to gather user-specific data. The initial submissions may be incomplete and can be updated at a later time without the need for additional authentication mechanisms or databases.
 
 Each form is accessed via a direct link, which contains the form ID (form directory).
+
+### Do not persist, only send
+
+If the save button is disabled in [form configuration](doc/meta.md), no data is persisted. Each submission  is completely independent of each other. Multiple users can safely access the same form.
 
 ## Usage
 
@@ -24,7 +34,6 @@ The [reference](doc/index.md) details all available options. A demo form is prov
 ## Current limitations
 
  * The YAML files are not validated. You will see no warnings if your configuration cannot be translated into an HTML form.
- * There is no user management or reusing the same form for multiple users.
 
 ## Install
 
