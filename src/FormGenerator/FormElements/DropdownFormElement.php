@@ -13,7 +13,7 @@ class DropdownFormElement extends AbstractDynamicFormElement
      *
      * @return void
      */
-    public function setdefaultvalue()
+    public function setDefaultValue()
     {
         if ($this->getValue()) {
             return;

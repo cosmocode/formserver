@@ -66,7 +66,10 @@ class FormAction extends AbstractAction
                     $this->request->getUploadedFiles()
                 );
                 $formValidator->validate();
-                $form->getMeta('saveButton') !== false && $form->persist();
+
+                if ($form->getMeta('saveButton') !== false) {
+                    $form->persist();
+                }
 
                 if ($form->isValid() && $form->getMode() === Form::MODE_SEND) {
                     $this->mailer->sendForm($form);

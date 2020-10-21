@@ -157,12 +157,6 @@ class Form
      */
     public function submit(array $data, array $files)
     {
-        // Important! Restore persisted data first to determine if UploadFormElements
-        // have already an uploaded file (They have a value which contains the file
-        // name)
-        // FIXME is this still necessary?
-        $this->restore();
-
         // submit data
         foreach ($this->formElements as $formElement) {
             $this->submitFormElement($formElement, $data, $files);
@@ -439,8 +433,11 @@ class Form
                 $this->setDefaultValues($fieldsetChild);
             }
         } elseif ($formElement instanceof ChecklistFormElement
-            || $formElement instanceof  DropdownFormElement) {
-            $formElement->setDefaultValue();
+            || $formElement instanceof  DropdownFormElement
+        ) {
+            if (! $formElement->hasValue()) {
+                $formElement->setDefaultValue();
+            }
         }
     }
 
