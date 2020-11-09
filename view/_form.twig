@@ -47,11 +47,13 @@
                                         </button>
                                     </div>
                                 {% endif %}
-                                <div class="control">
-                                    <button class="button is-link" type="submit" name="formcontrol[send]">
-                                        {{ button_send_label is not empty ? button_send_label : 'Send'}}
-                                    </button>
-                                </div>
+                                {% if send_button_visible %}
+                                    <div class="control">
+                                        <button class="button is-link" type="submit" name="formcontrol[send]">
+                                            {{ button_send_label is not empty ? button_send_label : 'Send'}}
+                                        </button>
+                                    </div>
+                                {% endif %}
                             </div>
                         </div>
                         <div class="column is-full">
