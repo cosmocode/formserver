@@ -2,7 +2,7 @@ language: php
 php:
   - '7.2'
 install:
-  - composer install
+  - composer install --no-dev
 script:
   - composer check
 before_deploy:
