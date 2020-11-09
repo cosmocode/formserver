@@ -242,7 +242,7 @@ class Form
             if ($formElement instanceof FieldsetFormElement) {
                 $childElements = $formElement->getChildren();
                 $this->reset($childElements);
-            } else {
+            } elseif ($formElement instanceof AbstractDynamicFormElement) {
                 $formElement->clearValue($this->getFormDirectory());
             }
         }
