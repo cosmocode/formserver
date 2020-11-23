@@ -1,6 +1,5 @@
 {% from '_macros' import renderError %}
 
-{% if scrollable is not empty %}<div class="is-scrollable">{% endif %}
 <fieldset {{ toggle is not empty ? ('data-toggle-id="'~toggle.id~'" data-toggle-value="'~toggle.value~'"') | raw }}
         {% if tablestyle is not empty %} class="is-left-label"{% endif %}>
     <legend class="hidden">{{ label }}</legend>
@@ -8,7 +7,7 @@
         <div class="label fieldset-label">
             {{ label }}
         </div>
-        <div class="columns{% if scrollable is empty %} is-multiline{% endif %}">
+        <div class="columns{% if scrollable is empty %} is-multiline{% else %} is-scrollable{% endif %}">
             {% if tablestyle is not empty %}<div class="next-is-double"></div>{% endif %}
             {% for rendered_child_view in rendered_child_views %}
                 {{ rendered_child_view | raw }}
@@ -16,4 +15,3 @@
         </div>
     </div>
 </fieldset>
-    {% if scrollable is not empty %}</div>{% endif %}
