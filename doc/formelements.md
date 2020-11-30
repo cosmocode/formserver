@@ -168,6 +168,7 @@ Simple text input.
     type: textinput
     label: text label
     column: is-half
+    placeholder: placeholder value for input
     validation:
       required: false
 ```
@@ -181,6 +182,7 @@ Simple number (integer) input.
     type: numberinput
     label: numberinput label
     column: is-half
+    placeholder: placeholder value for input
     validation:
       required: false
 ```
@@ -198,6 +200,7 @@ Options:
     type: textarea
     label: textarea label
     column: is-half
+    placeholder: placeholder value for input
     validation:
       required: false
     rows: 7
@@ -213,6 +216,7 @@ Text input that expects a date and provides a calendar picker.
     type: date
     label: date label
     column: is-two-thirds
+    placeholder: placeholder value for input
     validation:
       required: false
 ```
@@ -225,6 +229,7 @@ Text input that expects a time and provides a time picker.
     type: time
     label: time label
     column: is-two-thirds
+    placeholder: placeholder value for input
     validation:
       required: false
 ```
@@ -237,6 +242,7 @@ Text input that expects a date and a time and provides a combined picker.
     type: datetime
     label: datetime label
     column: is-two-thirds
+    placeholder: placeholder value for input
     validation:
       required: false
 ```
@@ -249,6 +255,7 @@ Text input that expects a valid email (the HTML5 validation is handled by the br
     type: email
     label: email label
     column: is-half
+    placeholder: placeholder value for input
     validation:
       required: false
 ```

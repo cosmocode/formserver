@@ -9,7 +9,8 @@
                     name="{{ id }}"
                     {{ cols is defined ? 'cols='~cols }}
                     {{ rows is defined ? 'rows='~rows }}
-                    class="textarea form-input {{ errors is not empty ? 'is-danger' }}" >
+                    class="textarea form-input {{ errors is not empty ? 'is-danger' }}"
+                    {{ placeholder is not empty ? ('placeholder="' ~ placeholder ~ '"') | raw }} />
 
                     {{- value -}}
                 </textarea>

@@ -10,7 +10,8 @@
                 name="{{ id }}"
                 value="{{ value }}"
                 class="input form-input {{ errors is not empty ? 'is-danger' }}"
-                data-calendar-type="datetime" />
+                data-calendar-type="datetime"
+                {{ placeholder is not empty ? ('placeholder="'~ placeholder ~ '"') | raw }} />
         </div>
         {{ renderError(errors) }}
     </div>

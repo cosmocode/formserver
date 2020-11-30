@@ -9,7 +9,8 @@
                     id="{{ id }}"
                     name="{{ id }}"
                     value="{{ value }}"
-                    class="input form-input {{ errors is not empty ? 'is-danger' }}" />
+                    class="input form-input {{ errors is not empty ? 'is-danger' }}"
+                    {{ placeholder is not empty ? ('placeholder="' ~ placeholder ~ '"') | raw }} />
         </div>
         {{ renderError(errors) }}
     </div>

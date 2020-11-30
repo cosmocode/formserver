@@ -137,6 +137,16 @@ abstract class AbstractDynamicFormElement extends AbstractFormElement
     }
 
     /**
+     * Get input placeholder attribute value
+     *
+     * @return string|null
+     */
+    public function getPlaceholderValue()
+    {
+        return $this->getConfigValue('placeholder');
+    }
+
+    /**
      * @inheritDoc
      * @return array
      */
@@ -150,7 +160,8 @@ abstract class AbstractDynamicFormElement extends AbstractFormElement
                 'value' => $this->getValue(),
                 'errors' => $this->getErrors(),
                 'is_required' => $this->isRequired(),
-                'tooltip' => $this->parseTooltip()
+                'tooltip' => $this->parseTooltip(),
+                'placeholder' => $this->getPlaceholderValue()
             ]
         );
     }
