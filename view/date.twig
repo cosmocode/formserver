@@ -1,7 +1,11 @@
 {% from '_macros' import renderError, renderTooltip %}
 <div class="column {{ column is not empty ? column : 'is-full' }}">
     <div class="field">
-        <label class="label" for="{{ id }}">{{ label }} {{ is_required ? '*' }}</label>
+        <label class="label" for="{{ id }}">
+            {%- if label is not empty -%}
+                {{ label }} {{ is_required ? '*' }}
+            {%- endif  -%}
+        </label>
         {{ renderTooltip(tooltip) }}
         <div class="control">
             <input
@@ -11,7 +15,9 @@
                     value="{{ value }}"
                     class="input form-input {{ errors is not empty ? 'is-danger' }}"
                     data-calendar-type="date"
-                    {{ placeholder is not empty ? ('placeholder="'~ placeholder ~ '"') | raw }} />
+                    {% if placeholder is not empty -%}
+                        placeholder="{{ placeholder ~ (is_required and label is empty ? ' *') }}"
+                    {%- endif %} />
         </div>
         {{ renderError(errors) }}
     </div>

@@ -1,7 +1,11 @@
 {% from '_macros' import renderError, renderTooltip %}
 <div class="column {{ column is not empty ? column : 'is-full' }}">
     <div class="field">
-        <label class="label" for="{{ id }}">{{ label }} {{ is_required ? '*' }}</label>
+        <label class="label" for="{{ id }}">
+            {%- if label is not empty -%}
+                {{ label }} {{ is_required ? '*' }}
+            {%- endif  -%}
+        </label>
         {{ renderTooltip(tooltip) }}
         <div class="control">
                 <textarea
@@ -10,7 +14,9 @@
                     {{ cols is defined ? 'cols='~cols }}
                     {{ rows is defined ? 'rows='~rows }}
                     class="textarea form-input {{ errors is not empty ? 'is-danger' }}"
-                    {{ placeholder is not empty ? ('placeholder="' ~ placeholder ~ '"') | raw }} />
+                    {% if placeholder is not empty -%}
+                        placeholder="{{ placeholder ~ (is_required and label is empty ? ' *') }}"
+                    {%- endif %} />
 
                     {{- value -}}
                 </textarea>
