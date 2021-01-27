@@ -144,7 +144,7 @@ fieldset .subtitle {
     .is-left-label fieldset:first-of-type .fieldset-content .columns::before {
         content: '';
         position: absolute;
-        width: 47%;
+        width: 50%;
         height: 100%;
         background-color: #F3F3F3;
     }
@@ -177,7 +177,7 @@ fieldset .subtitle {
     }
 
     .is-left-label fieldset:first-of-type .control {
-        width: 50%;
+        width: 47%;
         margin-right: 0;
         margin-left: auto;
     }
