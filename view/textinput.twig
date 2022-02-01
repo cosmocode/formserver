@@ -14,6 +14,7 @@
                     name="{{ id }}"
                     value="{{ value }}"
                     class="input form-input {{ errors is not empty ? 'is-danger' }}"
+                    {% if is_readonly%}readonly{% endif %}
                     {% if placeholder is not empty -%}
                         placeholder="{{ placeholder ~ (is_required and label is empty ? ' *') }}"
                     {%- endif %} />

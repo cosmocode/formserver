@@ -101,6 +101,16 @@ abstract class AbstractDynamicFormElement extends AbstractFormElement
     }
 
     /**
+     * Returns true if config option "readnly" is set to true for this element
+     *
+     * @return bool
+     */
+    public function isReadonly()
+    {
+        return (bool)$this->getConfigValue('readonly');
+    }
+
+    /**
      * Attaches an error to the form element
      *
      * @param string $error
@@ -160,6 +170,7 @@ abstract class AbstractDynamicFormElement extends AbstractFormElement
                 'value' => $this->getValue(),
                 'errors' => $this->getErrors(),
                 'is_required' => $this->isRequired(),
+                'is_readonly' => $this->isReadonly(),
                 'tooltip' => $this->parseTooltip(),
                 'placeholder' => $this->getPlaceholderValue()
             ]
