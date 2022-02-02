@@ -111,12 +111,14 @@ class FormValidator
                         ) {
                             $validators[] = Validator::extension(trim($ext));
                         }
-                        if (! Validator::oneOf($validators)->validate($value)) {
-                            $formElement->addError(
-                                'error_fileext',
-                                $formElement->getAllowedExtensionsAsString()
-                            );
-                            $this->dropFile($formElement);
+                        foreach ($value as $file) {
+                            if (! Validator::oneOf($validators)->validate($file)) {
+                                $formElement->addError(
+                                    'error_fileext',
+                                    $formElement->getAllowedExtensionsAsString()
+                                );
+                                $this->dropFile($formElement);
+                            }
                         }
                         break;
                 }

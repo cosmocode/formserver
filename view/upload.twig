@@ -5,12 +5,17 @@
             <label class="label">{{ label }} {{ is_required ? '*' }}</label>
             {{ renderTooltip(tooltip) }} <br />
             {% if is_uploaded %}
-                <a href="{{ fileUrl(value) }}" target="_blank">{{ uploaded_file_label is not empty ? uploaded_file_label : 'Saved file' }}</a><br />
+                <ul>
+                    {% for uploaded in value %}
+                        <li><a href="{{ fileUrl(uploaded) }}" target="_blank">{{ uploaded_file_label is not empty ? uploaded_file_label : 'Saved file' }}</a></li>
+                    {% endfor %}
+                </ul>
             {% endif %}
             <label class="file-label">
                 <input type="file"
                        class="file-input form-input" id="{{ id }}"
-                       name="{{ id }}"
+                       name="{{ id }}[]"
+                       multiple="multiple"
                        {{ allowed_extensions is defined ? ('accept=".'~allowed_extensions|join(',.')~'"')|raw }}
                        data-info-container-id="{{ id }}-upload-info" />
                 <input type="hidden"

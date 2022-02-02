@@ -12,6 +12,11 @@ class UploadFormElement extends AbstractDynamicFormElement
      */
     protected $previousValue = '';
 
+    public function getValue()
+    {
+        return $this->value;
+    }
+
     /**
      * Update previous value on every upload
      *
@@ -19,18 +24,24 @@ class UploadFormElement extends AbstractDynamicFormElement
      */
     public function setValue($value)
     {
-        parent::setValue($value);
-        $this->setPreviousValue($value);
+        if (! empty($value)) {
+            if (is_array($value)) {
+                $this->value = $value;
+            } else {
+                $this->value[] = $value;
+            }
+        }
+        $this->setPreviousValue($this->value);
     }
 
     public function getPreviousValue()
     {
-        return $this->previousValue;
+        return json_decode($this->previousValue);
     }
 
     public function setPreviousValue($value)
     {
-        $this->previousValue = $value;
+        $this->previousValue = json_encode($value);
     }
 
     /**
@@ -87,7 +98,7 @@ class UploadFormElement extends AbstractDynamicFormElement
                 'errors' => $this->getErrors(),
                 'allowed_extensions' => $this->getAllowedExtensionsAsArray(),
                 'value' => $this->getValue(),
-                'previous_value' => $this->getPreviousValue(),
+                'previous_value' => json_encode($this->getPreviousValue()),
                 'is_required' => $this->isRequired()
             ]
         );

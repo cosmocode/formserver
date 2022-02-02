@@ -2,7 +2,7 @@
 
 namespace CosmoCode\Formserver\Helper;
 
-use CosmoCode\Formserver\Exceptions\YamlException;
+use Slim\Psr7\UploadedFile;
 
 /**
  * Helper class for file operations
@@ -51,5 +51,30 @@ class FileHelper
         $length = strlen($end);
 
         return substr($string, -$length) === $end;
+    }
+
+    /**
+     * Returns true if both new and old upload data are found and are error free
+     *
+     * @param UploadedFile[] $newUpload
+     * @param array $previousUpload
+     * @return bool
+     */
+    public static function isReupload(array $newUpload, array $previousUpload)
+    {
+        if (empty($previousUpload)) {
+            return false;
+        }
+
+        // true if there are actual uploads, all error free
+        return array_reduce(
+            $newUpload,
+            function ($carry, $file) {
+                /** @var UploadedFile $file */
+                $ok = $file->getError() === UPLOAD_ERR_OK;
+                return $carry && $ok;
+            },
+            true
+        );
     }
 }

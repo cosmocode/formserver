@@ -272,24 +272,25 @@ class Form
                 $this->submitFormElement($fieldsetChild, $subData, $subFiles);
             }
         } elseif ($formElement instanceof UploadFormElement) {
-            /**
-             * @var UploadedFile $file
-             */
-            $file = $files[$formElement->getId()] ?? null;
+            $newUpload = $files[$formElement->getId()] ?? null;
 
             // try to restore previous upload data
-            $previousUpload = $data[$formElement->getId()]['previous_value'];
+            $previousUpload = json_decode($data[$formElement->getId()]['previous_value']);
             $formElement->setPreviousValue($previousUpload);
 
-            if ($file->getError() === UPLOAD_ERR_OK) {
-                // Re-upload: delete old file first
-                if ($previousUpload) {
-                    $this->deleteFileFromFormElement($formElement);
+            // Re-upload: delete old files first
+            if (FileHelper::isReupload($newUpload, $previousUpload)) {
+                $this->deleteFileFromFormElement($formElement);
+
+                /**
+                 * @var UploadedFile $file
+                 */
+                foreach ($newUpload as $key => $file) {
+                    $fileName = $this->moveUploadedFile($file, $formElement, $key);
+                    $formElement->setValue($fileName);
                 }
-                $fileName = $this->moveUploadedFile($file, $formElement);
-                $formElement->setValue($fileName);
-            } elseif ($previousUpload) {
-                // reuse previously uploaded file on new submit
+            } else {
+                // reuse previously uploaded files on new submit
                 $formElement->setValue($previousUpload);
             }
         } elseif ($formElement instanceof AbstractDynamicFormElement) {
@@ -305,11 +306,13 @@ class Form
      *
      * @param UploadedFile $uploadedFile
      * @param UploadFormElement $formElement
+     * @param int $key
      * @return string
      */
     protected function moveUploadedFile(
         UploadedFile $uploadedFile,
-        UploadFormElement $formElement
+        UploadFormElement $formElement,
+        int $key
     ) {
         $extension = FileHelper::getFileExtension(
             $uploadedFile->getClientFilename()
@@ -325,7 +328,7 @@ class Form
         if ($this->getMeta('saveButton') === false) {
             $baseName = time() . '_' . $baseName;
         }
-        $fileName = sprintf('%s.%0.8s', $baseName, $extension);
+        $fileName = sprintf('%s_%s.%0.8s', $baseName, $key, $extension);
 
         $filePath = $this->getFormDirectory() . $fileName;
         $uploadedFile->moveTo($filePath);
@@ -341,11 +344,14 @@ class Form
      */
     protected function deleteFileFromFormElement(UploadFormElement $formElement)
     {
-        $filePath = $this->getFormDirectory() . $formElement->getPreviousValue();
-        if (is_file($filePath)) {
-            unlink($filePath);
-        } else {
-            throw new FormException("Could not delete file: '$filePath'");
+        $previousUploads = $formElement->getPreviousValue();
+        foreach ($previousUploads as $upload) {
+            $filePath = $this->getFormDirectory() . $upload;
+            if (is_file($filePath)) {
+                unlink($filePath);
+            } else {
+                throw new FormException("Could not delete file: '$filePath'");
+            }
         }
     }
 
