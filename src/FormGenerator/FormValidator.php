@@ -63,7 +63,7 @@ class FormValidator
             foreach ($formElement->getValidationRules() as $validation => $allowed) {
                 switch ($validation) {
                     case 'required':
-                        if (! Validator::notEmpty()->validate($value)) {
+                        if (is_null($value)) {
                             $formElement->addError('error_required');
                             return;
                         }
