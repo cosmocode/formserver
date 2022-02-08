@@ -16,6 +16,10 @@ canvas {
     padding-right: 4px;
 }
 
+input.checkbox {
+    margin-right: 4px;
+}
+
 .hidden {
     display: none;
 }
