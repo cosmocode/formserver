@@ -67,7 +67,6 @@ class FileHelper
         }
 
         return self::isValidUpload($newUpload);
-
     }
 
     /**
