@@ -149,11 +149,13 @@ They are required by default.
 Options:
 * `validation` _(optional)_ - used to apply [validation](validation.md)
 * `tooltip` _(optional)_ - Shows a hint for the form element. Also see [Tooltip styling](meta.md#Tooltips)
+* `readonly` _(optional)_ - Disables user input. Available only for fields where users type in values. Useful when values are pre-filled from `values.yaml`
 
 ```yaml
   <id>:
     type: <type>
     tooltip: 'A useful hint for this field.'
+    readonly: true
     validation:
       required: false
       match: /^regex_expression$/

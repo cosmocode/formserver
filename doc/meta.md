@@ -43,10 +43,12 @@ Finally ```/conf/language.<language>.yaml``` overrides all set strings from the 
 ## File export options
 
 ```yaml
-  export: file_to_be_moved.txt
+  export: file_to_be_exported.txt
 ```
 
-When the form email gets send the given file (in this case file_to_be_moved.txt) will be moved to the export directory. The export directory is set by default to ./export. It can be changed by overriding the default settings (./conf/settings.default.yaml):
+When the form is successfully submitted the given file (in this case file_to_be_exported.txt) will be copied to the export directory. The exported file will be named the same as the config directory, aka form id. 
+
+The export directory is set by default to ./export. It can be changed by overriding the default settings (./conf/settings.default.yaml):
  Create / Edit the file ./conf/settings.local.yaml.
  Add:
   ```yaml
