@@ -75,6 +75,7 @@ class FormAction extends AbstractAction
                     $this->mailer->sendForm($form);
                     $this->handleFileExport($form);
                     // finally clean up if it is a non-persistent form
+                    // FIXME what about export-only form?
                     if ($form->getMeta('saveButton') === false) {
                         $formElements = $form->getFormElements();
                         $form->reset($formElements);

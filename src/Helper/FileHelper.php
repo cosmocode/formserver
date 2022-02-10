@@ -66,9 +66,20 @@ class FileHelper
             return false;
         }
 
-        // true if there are actual uploads, all error free
+        return self::isValidUpload($newUpload);
+
+    }
+
+    /**
+     * Returns true if there are actual uploads, all error free
+     *
+     * @param array $uploads
+     * @return bool
+     */
+    public static function isValidUpload(array $uploads)
+    {
         return array_reduce(
-            $newUpload,
+            $uploads,
             function ($carry, $file) {
                 /** @var UploadedFile $file */
                 $ok = $file->getError() === UPLOAD_ERR_OK;

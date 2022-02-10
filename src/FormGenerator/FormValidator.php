@@ -93,13 +93,15 @@ class FormValidator
                         /**
                          * @var UploadFormElement $formElement
                          */
-                        $filePath = $this->form->getFormDirectory() . $value;
-                        if (! Validator::size(null, $allowed)->validate($filePath)) {
-                            $formElement->addError(
-                                'error_filesize',
-                                $allowed
-                            );
-                            $this->dropFile($formElement);
+                        foreach ($value as $key => $file) {
+                            $filePath = $this->form->getFormDirectory() . $file;
+                            if (! Validator::size(null, $allowed)->validate($filePath)) {
+                                $formElement->addError(
+                                    'error_filesize',
+                                    $allowed
+                                );
+                                $this->dropFile($formElement, $key);
+                            }
                         }
                         break;
                     case 'fileext':
@@ -111,13 +113,13 @@ class FormValidator
                         ) {
                             $validators[] = Validator::extension(trim($ext));
                         }
-                        foreach ($value as $file) {
+                        foreach ($value as $key => $file) {
                             if (! Validator::oneOf($validators)->validate($file)) {
                                 $formElement->addError(
                                     'error_fileext',
                                     $formElement->getAllowedExtensionsAsString()
                                 );
-                                $this->dropFile($formElement);
+                                $this->dropFile($formElement, $key);
                             }
                         }
                         break;
@@ -130,11 +132,14 @@ class FormValidator
      * Removes a file form an UploadFormElement
      *
      * @param UploadFormElement $formElement
+     * @param int $key
      * @return void
      */
-    protected function dropFile(UploadFormElement $formElement)
+    protected function dropFile(UploadFormElement $formElement, int $key)
     {
-        $filePath = $this->form->getFormDirectory() . $formElement->getValue();
+        $files = $formElement->getValue();
+
+        $filePath = $this->form->getFormDirectory() . $files[$key];
         is_file($filePath) && unlink($filePath);
         $formElement->setValue(null);
     }

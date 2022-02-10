@@ -281,7 +281,9 @@ class Form
             // Re-upload: delete old files first
             if (FileHelper::isReupload($newUpload, $previousUpload)) {
                 $this->deleteFileFromFormElement($formElement);
+            }
 
+            if (FileHelper::isValidUpload($newUpload)) {
                 /**
                  * @var UploadedFile $file
                  */

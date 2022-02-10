@@ -8,9 +8,9 @@ namespace CosmoCode\Formserver\FormGenerator\FormElements;
 class UploadFormElement extends AbstractDynamicFormElement
 {
     /**
-     * @var string
+     * @var array
      */
-    protected $previousValue = '';
+    protected $previousValue;
 
     public function getValue()
     {
@@ -18,27 +18,38 @@ class UploadFormElement extends AbstractDynamicFormElement
     }
 
     /**
-     * Update previous value on every upload
+     * Update previous value on every upload.
+     * Also used when restoring persisted values.
      *
      * @param mixed $value
      */
     public function setValue($value)
     {
         if (! empty($value)) {
+            // before introducing multiupload values were simple strings
             if (is_array($value)) {
                 $this->value = $value;
             } else {
                 $this->value[] = $value;
             }
+        } elseif (is_null($value)) {
+            $this->value = null;
         }
         $this->setPreviousValue($this->value);
     }
 
+    /**
+     * @return array
+     */
     public function getPreviousValue()
     {
-        return json_decode($this->previousValue);
+        return json_decode($this->previousValue) ?? [];
     }
 
+    /**
+     * @param array|null $value
+     * @return void
+     */
     public function setPreviousValue($value)
     {
         $this->previousValue = json_encode($value);
@@ -51,9 +62,14 @@ class UploadFormElement extends AbstractDynamicFormElement
      */
     public function clearValue($formPath)
     {
-        if ($this->value && is_file($formPath . $this->value)) {
-            unlink($formPath . $this->value);
+        if (is_array($this->value)) {
+            foreach ($this->value as $value) {
+                if (is_file($formPath . $value)) {
+                    unlink($formPath . $value);
+                }
+            }
         }
+
         $this->setValue(null);
     }
 

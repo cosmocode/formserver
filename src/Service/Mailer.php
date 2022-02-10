@@ -161,9 +161,14 @@ class Mailer
             $value = $element->getValueString();
 
             if ($element instanceof UploadFormElement && $value) {
-                $this->attachments[]
-                    = \Swift_Attachment::fromPath($formDirectory . $value);
+                // multiple files?
+                $files = explode(', ', $value);
+                foreach ($files as $file) {
+                    $this->attachments[]
+                        = \Swift_Attachment::fromPath($formDirectory . $file);
+                }
             }
+
             if ($element instanceof SignatureFormElement && $value) {
                 $encoded_image = explode(",", $value)[1];
                 $decoded_image = base64_decode($encoded_image);
