@@ -103,7 +103,7 @@ class FormRenderer
                 'form_id' => $this->form->getId(),
                 'logo' => $this->form->getMeta('logo'),
                 'save_button_visible' => $this->form->getMeta('saveButton') ?? true,
-                'send_button_visible' => $this->form->getMeta('email') ?? false,
+                'send_button_visible' => ($this->form->getMeta('email') || $this->form->getMeta('export')) ?? false,
             ]
         );
     }

@@ -80,6 +80,10 @@ class Mailer
      */
     public function sendForm(Form $form)
     {
+        if (empty($form->getMeta('email'))) {
+            return;
+        }
+
         try {
             $recipients = $form->getMeta('email')['recipients'];
             $subject = $form->getMeta('email')['subject'] ?? 'Formular ausgefüllt';
