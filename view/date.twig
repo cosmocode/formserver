@@ -13,7 +13,7 @@
                     id="{{ id }}"
                     name="{{ id }}"
                     value="{{ value }}"
-                    class="input form-input {{ errors is not empty ? 'is-danger' }}"
+                    class="input form-input{% if is_readonly%} is-static has-text-grey{% endif %} {{ errors is not empty ? 'is-danger' }}"
                     data-calendar-type="date"
                     {% if is_readonly%}readonly{% endif %}
                     {% if placeholder is not empty -%}

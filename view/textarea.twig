@@ -13,7 +13,7 @@
                     name="{{ id }}"
                     {{ cols is defined ? 'cols='~cols }}
                     {{ rows is defined ? 'rows='~rows }}
-                    class="textarea form-input {{ errors is not empty ? 'is-danger' }}"
+                    class="textarea form-input{% if is_readonly%} is-static has-text-grey{% endif %} {{ errors is not empty ? 'is-danger' }}"
                     {% if is_readonly%}readonly{% endif %}
                     {% if placeholder is not empty -%}
                         placeholder="{{ placeholder ~ (is_required and label is empty ? ' *') }}"
