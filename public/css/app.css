@@ -16,7 +16,7 @@ canvas {
     padding-right: 4px;
 }
 
-input.checkbox {
+input.checkbox-input {
     margin-right: 4px;
 }
 
@@ -160,7 +160,7 @@ fieldset .subtitle {
         width: 50%;
         margin-right: 0;
         margin-left: auto;
-        padding-left: 1.2rem;
+        padding-left: 3%;
     }
 
     /* + + +  position of labels + width of input (1. col)  + + + */
