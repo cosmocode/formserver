@@ -107,7 +107,7 @@ abstract class AbstractDynamicFormElement extends AbstractFormElement
      */
     public function isReadonly()
     {
-        return (bool)$this->getConfigValue('readonly');
+        return (bool)$this->getConfigValue('readonly') && $this->hasValue();
     }
 
     /**
