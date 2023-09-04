@@ -205,7 +205,3 @@ fieldset .subtitle {
     border: 3px solid #fff;
     background-color: rgba(0, 0, 0, .3);
 }
-
-canvas {
-    width: 100%;
-}
