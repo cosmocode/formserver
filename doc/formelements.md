@@ -6,7 +6,7 @@ Form elements can be grouped visually and/or logically in [fieldsets](#fieldsets
 The element definition must contain at least the type of the form element.  
 Options:  
 * `label` _(optional)_ - the label of the form element (excluded: [hidden](#hidden), [markdown](#markdown))
-* `column` _(optional)_ - [bulma column sizes](https://bulma.io/documentation/columns/sizes/) defining the width of the form element (excluded: [hidden](#hidden))
+* `column` _(optional)_ - [bulma column sizes](https://bulma.io/documentation/columns/sizes/) defining the width of the form element (excluded: [hidden](#hidden)). You can use [offset](https://bulma.io/documentation/columns/sizes/#offset) to position the columns, for example `is-half is-offset-one-quarter` to center a half-width column.
 ```yaml
 <id>:
     type: <type>
