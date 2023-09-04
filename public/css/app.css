@@ -177,12 +177,14 @@ fieldset .subtitle {
         width: 50%;
     }
 
+    /* labels will be invisible in tablestyle "columns" */
     .is-left-label label {
         position: absolute;
         left: -1000rem;
         top: -1000rem;
     }
 
+    /* but visibly move first label to "left header column" */
     .is-left-label fieldset:first-of-type label {
         position: relative;
         left: 0;
@@ -193,6 +195,13 @@ fieldset .subtitle {
         width: 47%;
         margin-right: 0;
         margin-left: auto;
+    }
+
+    /* radio inputs are wrapped in labels so skip table magic */
+    .is-left-label fieldset .control .grouped-form-elements label {
+        position: relative;
+        left: 0;
+        top: 0;
     }
 }
 
