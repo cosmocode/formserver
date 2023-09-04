@@ -12,7 +12,7 @@
             </div>
             <div class="grouped-form-elements" id="{{ id }}">
                 {%- for choice in choices -%}
-                    <label class="checkbox">
+                    <label class="checkbox {{ labelsmall is not empty ? 'label-smaller' }}">
                         <input
                                 type="checkbox"
                                 id="{{ id~'['~loop.index0~']' }}"

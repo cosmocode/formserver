@@ -24,6 +24,10 @@ input.checkbox-input {
     display: none;
 }
 
+label.label-smaller {
+    font-weight: normal;
+}
+
 /** Tooltips */
 .label {
     display: inline-block;

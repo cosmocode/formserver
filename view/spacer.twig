@@ -1,5 +1,5 @@
 <div class="column {{ column is not empty ? column : 'is-full' }}">
     <div class="field is-spacer{{ double is not empty ? '-doublelabel' : '' }}">
-        <label class="label">{{ label }}</label>
+        <label class="label {{ labelsmall is not empty ? 'label-smaller' }}">{{ label }}</label>
     </div>
 </div>

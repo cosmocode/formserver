@@ -17,7 +17,7 @@
     <div class="signature-pad {{ value is not empty ? 'hidden'}}" data-replacepad="{{ id_string }}" {{ width is defined ? ('data-width="'~width~'"') | raw }} {{ height is defined ? ('data-height="'~height~'"') | raw }}>
         <div class="field">
             <div class="control">
-                <div class="label">{{ label }} {{ is_required ? '*' }}</div>
+                <div class="label {{ labelsmall is not empty ? 'label-smaller' }}">{{ label }} {{ is_required ? '*' }}</div>
                 <input type="hidden" id="{{ id }}" name="{{ id }}" value="{{ value }}" class="form-input"/>
                 <canvas></canvas>
             </div>

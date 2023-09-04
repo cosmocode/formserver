@@ -1,7 +1,7 @@
 {% from '_macros' import fileUrl , renderError %}
 <div class="column {{ column is not empty ? column : 'is-full' }}">
     <div class="field">
-        <div class="label">{{ label }}</div>
+        <div class="label {{ labelsmall is not empty ? 'label-smaller' }}">{{ label }}</div>
         <div class="control">
             <img src="{{ fileUrl(src) }}" style="{{ width is defined ? 'width:'~width~'px;' }} {{ height is defined ? 'height:'~height~'px;' }}" alt="{{ alt is defined ? alt : label }}">
         </div>

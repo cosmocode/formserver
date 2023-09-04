@@ -2,7 +2,7 @@
 <div class="column {{ column is not empty ? column : 'is-full' }}">
     <div class="field">
         <div class="label-with-tooltip">
-            <label class="label" for="{{ id }}">
+            <label class="label {{ labelsmall is not empty ? 'label-smaller' }}" for="{{ id }}">
                 {%- if label is not empty -%}
                     {{ label }} {{ is_required ? '*' }}
                 {%- endif  -%}
