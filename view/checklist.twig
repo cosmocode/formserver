@@ -2,9 +2,11 @@
 <div class="column {{ column is not empty ? column : 'is-full' }}">
     <div class="field">
         <div class="control">
-            {%- if label is not empty -%}
-                <div class="label">{{ label }} {{ is_required ? '*' }}</div>
-            {%- endif -%}
+            <div class="label">
+                {%- if label is not empty -%}
+                    {{ label }} {{ is_required ? '*' }}
+                {%- endif -%}
+            </div>
             {{ renderTooltip(tooltip) }}
             <div class="grouped-form-elements" id="{{ id }}">
                 {%- for choice in choices -%}

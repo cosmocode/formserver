@@ -31,6 +31,7 @@ input.checkbox-input {
 
 .tooltip-button {
     border: 0;
+    margin-left: 0.2rem;
 }
 
 /** Required so fieldsets don't destroy Bulma's column system */
