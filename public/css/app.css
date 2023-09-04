@@ -65,10 +65,6 @@ fieldset .subtitle {
 
 
 @media screen and (min-width: 769px), print {
-    .fieldset-label {
-        min-height: 3.75rem;
-    }
-
     .is-full .fieldset-label {
         min-height: 1rem;
     }
