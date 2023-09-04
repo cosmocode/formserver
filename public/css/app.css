@@ -92,6 +92,10 @@ fieldset .subtitle {
         height: 10em;
     }
 
+    /**
+     * .is-left-label marks fieldsets with "tablestyle" attribute
+     */
+
     /** + + + + +  spacer in table design  + + + + + */
 
     .is-left-label .field.is-spacer {
@@ -107,10 +111,7 @@ fieldset .subtitle {
         display: inline-block;
     }
 
-
-    /** + + + + +  label once  + + + + + */
-
-    /* + + +  width of cols  + + + */
+    /* + + +  width of cols in table design + + + */
 
     .is-left-label .column.is-half {
         width: 33.3333%;
@@ -136,7 +137,7 @@ fieldset .subtitle {
         width: 40%;
     }
 
-    /* + + +  background of cols  + + + */
+    /* + + +  background of cols in table design + + + */
 
     .is-left-label fieldset:nth-of-type(even) .column .is-multiline {
         background-color: #F3F3F3;
@@ -170,6 +171,12 @@ fieldset .subtitle {
         position: relative;
     }
 
+    .is-left-label fieldset:first-of-type.label-with-tooltip {
+        display: flex;
+        flex-direction: row;
+        width: 50%;
+    }
+
     .is-left-label label {
         position: absolute;
         left: -1000rem;
@@ -177,9 +184,9 @@ fieldset .subtitle {
     }
 
     .is-left-label fieldset:first-of-type label {
+        position: relative;
         left: 0;
         top: 0;
-        width: 50%;
     }
 
     .is-left-label fieldset:first-of-type .control {
