@@ -11,7 +11,7 @@
             <div class="select {{ multiselect is defined and multiselect ? 'is-multiple' }} {{ errors is not empty ? 'is-danger' }}">
                 <select
                         id="{{ id }}"
-                        name="{{ id }}"
+                        name="{{ id }}[]"
                         class="form-input"
                         {{ size is defined ? 'size='~size }}
                         {{ multiselect is defined and multiselect ? 'multiple' }}>
