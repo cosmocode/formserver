@@ -9,3 +9,4 @@ settings:
     password: ~
   fileExporter:
     dir: export
+  errorMessage: 'Form not found!'
