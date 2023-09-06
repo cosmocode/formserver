@@ -175,6 +175,8 @@ Simple text input.
       required: false
 ```
 
+* `clone` _(optional)_ - Adds a clone button to the field. That way you can repeat the same input to create a list of variable length.
+
 ### Numberinput
 
 Simple number (integer) input.

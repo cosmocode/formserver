@@ -33,6 +33,11 @@ input.checkbox-input {
     border: 0;
 }
 
+button.clone-field {
+    float: right;
+    margin-top: 0.5rem;
+}
+
 /** Required so fieldsets don't destroy Bulma's column system */
 fieldset {
     display: contents;
