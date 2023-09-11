@@ -64,6 +64,7 @@ class FormRenderer
         $tooltipStyle = $this->form->getMeta('tooltip_style') ?? '';
         $saveButtonLabel = LangManager::getString('button_save');
         $sendButtonlabel = LangManager::getString('button_send');
+        $cloneButtonlabel = LangManager::getString('button_clone');
         $uploadButtonLabel = LangManager::getString('button_upload');
         $replaceUploadButtonLabel = LangManager::getString('button_upload_replace');
         $uploadedFileLabel = LangManager::getString('uploaded_file');
@@ -74,6 +75,7 @@ class FormRenderer
         $this->twig->addGlobal('form_is_valid', $this->form->isValid());
         $this->twig->addGlobal('button_save_label', $saveButtonLabel);
         $this->twig->addGlobal('button_send_label', $sendButtonlabel);
+        $this->twig->addGlobal('button_clone_label', $cloneButtonlabel);
         $this->twig->addGlobal('button_upload_label', $uploadButtonLabel);
         $this->twig->addGlobal('button_upload_replace', $replaceUploadButtonLabel);
         $this->twig->addGlobal('uploaded_file_label', $uploadedFileLabel);

@@ -38,6 +38,11 @@ label.label-smaller {
     margin-left: 0.2rem;
 }
 
+button.clone-field {
+    float: right;
+    margin-top: 0.5rem;
+}
+
 /** Required so fieldsets don't destroy Bulma's column system */
 fieldset {
     display: contents;

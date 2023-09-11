@@ -196,3 +196,34 @@ Array.from(document.querySelectorAll('.is-left-label .next-is-double')).forEach(
         colFifth.classList.add('is-two-fifths');
     }
 });
+
+
+/*
+ * Clone field
+ */
+function cloneHandler(e) {
+    if (e.target.matches('button.clone-field')) {
+
+        const elem = e.target;
+        const cloned = elem.parentNode.parentNode.cloneNode(true);
+        const input = cloned.querySelector('input');
+
+        cloned.id = cloned.id.replace(/(\d+$)/, function (match, number) {
+            return (parseInt(number, 10) + 1);
+        });
+
+        const newId = input.id.replace(/(\d+$)/, function(match, number) {
+            return (parseInt(number, 10) + 1);
+        });
+        input.value = '';
+        input.setAttribute('value', '');
+        input.id = newId;
+        const label = cloned.querySelector('label');
+        label.setAttribute('for', newId);
+
+        elem.parentNode.parentNode.after(cloned);
+        elem.parentNode.removeChild(elem);
+    }
+}
+
+form.addEventListener('click', cloneHandler);
