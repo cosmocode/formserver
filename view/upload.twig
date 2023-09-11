@@ -17,7 +17,9 @@
                        name="{{ id }}[]"
                        multiple="multiple"
                        {{ allowed_extensions is defined ? ('accept=".'~allowed_extensions|join(',.')~'"')|raw }}
-                       data-info-container-id="{{ id }}-upload-info" />
+                       data-info-container-id="{{ id }}-upload-info"
+                       data-error-container-id="{{ id }}-upload-error"
+                        data-max="{{ max_size }}"/>
                 <input type="hidden"
                        name="{{ id }}[previous_value]"
                        value="{{ previous_value }}">
@@ -29,6 +31,7 @@
             </label>
 
             <p class="hidden" id="{{ id }}-upload-info">{{ upload_info }}</p>
+            <p class="hidden has-text-danger" id="{{ id }}-upload-error">{{ upload_error }} (max {{ max_size_human }})</p>
 
             {{ renderError(errors) }}
         </div>

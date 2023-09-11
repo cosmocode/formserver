@@ -56,13 +56,15 @@ $customErrorHandler = function (
 ) use ($app) {
     $response = $app->getResponseFactory()->createResponse();
 
+    $settings = $app->getContainer()->get('settings');
+
     if ($exception instanceof \Slim\Exception\HttpNotFoundException) {
-        $settings = $app->getContainer()->get('settings');
-        $errorMessage = '<h1>' . $settings['errorMessage'] . '</h1>';
+        $errorMessage = '<h1>' . $settings['errorMessageNotFound'] . '</h1>';
         $response->getBody()->write($errorMessage);
         $response = $response->withStatus(404);
     } else {
-        $response->getBody()->write($exception->getMessage());
+        $errorMessage = '<h1>' . $settings['errorMessageGeneral'] . '</h1>';
+        $response->getBody()->write($errorMessage);
         $response = $response->withStatus(500);
     }
 

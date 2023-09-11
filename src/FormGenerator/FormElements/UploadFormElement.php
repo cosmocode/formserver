@@ -2,6 +2,8 @@
 
 namespace CosmoCode\Formserver\FormGenerator\FormElements;
 
+use CosmoCode\Formserver\Helper\FileHelper;
+
 /**
  * Representation of a file upload
  */
@@ -100,6 +102,42 @@ class UploadFormElement extends AbstractDynamicFormElement
         return $allowedExtensions;
     }
 
+
+    /**
+     * Get allowed size for this upload
+     *
+     * @return string
+     */
+    public function getAllowedSizeAsString()
+    {
+        return strtolower(
+            $this->getConfig()['validation']['filesize'] ?? ''
+        );
+    }
+
+    /**
+     * Maximum allowed download size in bytes.
+     * Evaluates field config 'filesize' amd PHP values of upload_max_filesize
+     * and post_max_size.
+     *
+     * As this creates a per-field safeguard, form upload can still fail if
+     * sum total of multiple fields exceeds limits.
+     *
+     * @return int
+     */
+    public function getMaxSize()
+    {
+        $fieldMax = $this->getAllowedSizeAsString();
+
+        if ($fieldMax) {
+            return FileHelper::humanToBytes($fieldMax);
+        }
+        $phpUploadMax = FileHelper::humanToBytes(ini_get('upload_max_filesize'));
+        $phpPostMax = FileHelper::humanToBytes(ini_get('post_max_size'));
+
+        return min($phpUploadMax, $phpPostMax);
+    }
+
     /**
      * @inheritDoc
      * @return array
@@ -115,7 +153,9 @@ class UploadFormElement extends AbstractDynamicFormElement
                 'allowed_extensions' => $this->getAllowedExtensionsAsArray(),
                 'value' => $this->getValue(),
                 'previous_value' => json_encode($this->getPreviousValue()),
-                'is_required' => $this->isRequired()
+                'is_required' => $this->isRequired(),
+                'max_size' => $this->getMaxSize(),
+                'max_size_human' => FileHelper::getMaxSizeHuman($this->getMaxSize()),
             ]
         );
     }
