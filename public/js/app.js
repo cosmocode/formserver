@@ -97,9 +97,32 @@ Array.from(fieldsetsWithToggle).forEach(function(fieldset) {
 // Init upload feedback text
 Array.from(document.querySelectorAll('.form-input.file-input')).forEach(function(fileUpload) {
     fileUpload.addEventListener('input', function (e) {
-        infoContainerId = e.target.getAttribute('data-info-container-id');
-        infoContainer = document.getElementById(infoContainerId);
-        infoContainer.classList.remove('hidden');
+        const infoContainerId = e.target.getAttribute('data-info-container-id');
+        const infoContainer = document.getElementById(infoContainerId);
+        const errorContainerId = e.target.getAttribute('data-error-container-id');
+        const errorContainer = document.getElementById(errorContainerId);
+
+        const max = e.target.getAttribute('data-max');
+        const curFiles = this.files;
+
+        let uploadSize = 0;
+
+        for (const file of curFiles) {
+            uploadSize += file.size;
+        }
+
+        const ok = uploadSize < max;
+
+        if (!ok) {
+            this.value = ''
+            errorContainer.classList.remove('hidden');
+            infoContainer.classList.add('hidden');
+        } else {
+            errorContainer.classList.add('hidden');
+            infoContainer.classList.remove('hidden');
+
+        }
+
     })
 });
 
@@ -196,3 +219,34 @@ Array.from(document.querySelectorAll('.is-left-label .next-is-double')).forEach(
         colFifth.classList.add('is-two-fifths');
     }
 });
+
+
+/*
+ * Clone field
+ */
+function cloneHandler(e) {
+    if (e.target.matches('button.clone-field')) {
+
+        const elem = e.target;
+        const cloned = elem.parentNode.parentNode.cloneNode(true);
+        const input = cloned.querySelector('input');
+
+        cloned.id = cloned.id.replace(/(\d+$)/, function (match, number) {
+            return (parseInt(number, 10) + 1);
+        });
+
+        const newId = input.id.replace(/(\d+$)/, function(match, number) {
+            return (parseInt(number, 10) + 1);
+        });
+        input.value = '';
+        input.setAttribute('value', '');
+        input.id = newId;
+        const label = cloned.querySelector('label');
+        label.setAttribute('for', newId);
+
+        elem.parentNode.parentNode.after(cloned);
+        elem.parentNode.removeChild(elem);
+    }
+}
+
+form.addEventListener('click', cloneHandler);

@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace CosmoCode\Formserver\Actions;
 
+use CosmoCode\Formserver\Exceptions\FormException;
+use CosmoCode\Formserver\Exceptions\YamlException;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpBadRequestException;
@@ -45,8 +47,10 @@ abstract class AbstractAction
 
         try {
             return $this->action();
-        } catch (\Exception $e) {
+        } catch (YamlException $e) {
             throw new HttpNotFoundException($this->request, $e->getMessage());
+        } catch (\Exception $e) {
+            throw new FormException($this->request, $e->getMessage());
         }
     }
 

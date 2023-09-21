@@ -15,7 +15,9 @@ label_signature_replace: Unterschrift erneuern
 email_text_attachments: Die Anhänge ansehen
 button_save : Speichern
 button_send : Senden
+button_clone: Feld hinzufügen
 button_upload: Datei hochladen
 button_upload_replace: Datei ersetzen
 uploaded_file: Hochgeladene Dateien
 upload_info: Die ausgewählte Datei wird beim Speichern oder Senden hochgeladen und geprüft
+upload_error: Dia Dateien sind zu groß!

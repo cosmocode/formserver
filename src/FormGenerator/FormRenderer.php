@@ -64,20 +64,24 @@ class FormRenderer
         $tooltipStyle = $this->form->getMeta('tooltip_style') ?? '';
         $saveButtonLabel = LangManager::getString('button_save');
         $sendButtonlabel = LangManager::getString('button_send');
+        $cloneButtonlabel = LangManager::getString('button_clone');
         $uploadButtonLabel = LangManager::getString('button_upload');
         $replaceUploadButtonLabel = LangManager::getString('button_upload_replace');
         $uploadedFileLabel = LangManager::getString('uploaded_file');
         $uploadInfo = LangManager::getString('upload_info');
+        $uploadError = LangManager::getString('upload_error');
 
         // Global variables available in all templates and macros
         $this->twig->addGlobal('form_id', $this->form->getId());
         $this->twig->addGlobal('form_is_valid', $this->form->isValid());
         $this->twig->addGlobal('button_save_label', $saveButtonLabel);
         $this->twig->addGlobal('button_send_label', $sendButtonlabel);
+        $this->twig->addGlobal('button_clone_label', $cloneButtonlabel);
         $this->twig->addGlobal('button_upload_label', $uploadButtonLabel);
         $this->twig->addGlobal('button_upload_replace', $replaceUploadButtonLabel);
         $this->twig->addGlobal('uploaded_file_label', $uploadedFileLabel);
         $this->twig->addGlobal('upload_info', $uploadInfo);
+        $this->twig->addGlobal('upload_error', $uploadError);
         $this->twig->addGlobal('tooltip_style', $tooltipStyle);
 
         foreach ($this->form->getFormElements() as $formElement) {

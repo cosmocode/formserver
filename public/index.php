@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 use CosmoCode\Formserver\ResponseEmitter\ResponseEmitter;
 use DI\ContainerBuilder;
+use Psr\Http\Message\ServerRequestInterface;
 use Slim\Factory\AppFactory;
 use Slim\Factory\ServerRequestCreatorFactory;
 
@@ -44,6 +45,47 @@ $request = $serverRequestCreator->createServerRequestFromGlobals();
 
 // Add Routing Middleware
 $app->addRoutingMiddleware();
+
+// define minimal custom error handler
+$customErrorHandler = function (
+    ServerRequestInterface $request,
+    Throwable $exception,
+    bool $displayErrorDetails,
+    bool $logErrors,
+    bool $logErrorDetails
+) use ($app) {
+    $response = $app->getResponseFactory()->createResponse();
+
+    $settings = $app->getContainer()->get('settings');
+
+    if ($exception instanceof \Slim\Exception\HttpNotFoundException) {
+        // custom error page
+        $errorPage = __DIR__ . '/../' . $settings['errorPageNotFound'];
+        if (is_file($errorPage)) {
+            $errorMessage = file_get_contents($errorPage);
+        } else {
+            $errorMessage = '<h1>' . $settings['errorMessageNotFound'] . '</h1>';
+        }
+        $response->getBody()->write($errorMessage);
+        $response = $response->withStatus(404);
+    } else {
+        // custom error page
+        $errorPage = __DIR__ . '/../' . $settings['errorPageGeneral'];
+        if (is_file($errorPage)) {
+            $errorMessage = file_get_contents($errorPage);
+        } else {
+            $errorMessage = '<h1>' . $settings['errorMessageGeneral'] . '</h1>';
+        }
+        $response->getBody()->write($errorMessage);
+        $response = $response->withStatus(500);
+    }
+
+    return $response;
+};
+
+ // This middleware should be added last.
+$errorMiddleware = $app->addErrorMiddleware(false, false, false);
+$errorMiddleware->setDefaultErrorHandler($customErrorHandler);
 
 // Run App & Emit Response
 $response = $app->handle($request);

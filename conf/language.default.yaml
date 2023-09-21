@@ -15,7 +15,9 @@ label_signature_replace: Replace signature
 email_text_attachments: Look into the attachments
 button_save : Save
 button_send : Send
+button_clone: Copy field
 button_upload: Upload file
 button_upload_replace: Replace uploaded file
 uploaded_file: Saved file
 upload_info: The selected file will be uploaded and checked after saving or sending the form
+upload_error: Upload is too large!

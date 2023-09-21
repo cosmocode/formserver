@@ -87,4 +87,55 @@ class FileHelper
             true
         );
     }
+
+    /**
+     * Calculate byte size from human readable format
+     *
+     * @param string $size
+     * @return int
+     */
+    public static function humanToBytes($size)
+    {
+        $post = preg_match('/(\D*?)$/', $size, $matches);
+        if ($post) {
+            $size = str_replace($matches[0], '', $size);
+        }
+
+        switch (strtolower($matches[0])) {
+            case 'k':
+            case 'kb':
+                $size *= 1024;
+                break;
+            case 'm':
+            case 'mb':
+                $size *= 1024 * 1024;
+                break;
+            case 'g':
+            case 'gb':
+                $size *= 1024 * 1024 * 1024;
+                break;
+        }
+
+        return (int)$size;
+    }
+
+    /**
+     * Return byte size in human readable format
+     *
+     * @param int $size
+     * @return string
+     */
+    public static function getMaxSizeHuman(int $size)
+    {
+        if ($size >= 1024**3) {
+            $fileSize = round($size / 1024 / 1024 / 1024, 1) . 'GB';
+        } elseif ($size >= 1024**2) {
+            $fileSize = round($size / 1024 / 1024, 1) . 'MB';
+        } elseif ($size >= 1024) {
+            $fileSize = round($size / 1024, 1) . 'KB';
+        } else {
+            $fileSize = $size . ' bytes';
+        }
+        return $fileSize;
+    }
 }

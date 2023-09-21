@@ -2,7 +2,7 @@
 
 ## App configuration
 
-[App settings](app.md) offer a few options to adjust the defaults, including mail server settings and the messages displayed to the user.
+[App settings](app.md) offer a few options to adjust the defaults, including mail server settings and the messages displayed to the user, including a general error message.
 
 ## Form configuration
 

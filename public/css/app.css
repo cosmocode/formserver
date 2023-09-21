@@ -24,6 +24,10 @@ input.checkbox-input {
     display: none;
 }
 
+label.label-smaller {
+    font-weight: normal;
+}
+
 /** Tooltips */
 .label {
     display: inline-block;
@@ -31,6 +35,12 @@ input.checkbox-input {
 
 .tooltip-button {
     border: 0;
+    margin-left: 0.2rem;
+}
+
+button.clone-field {
+    float: right;
+    margin-top: 0.5rem;
 }
 
 /** Required so fieldsets don't destroy Bulma's column system */
@@ -64,10 +74,6 @@ fieldset .subtitle {
 
 
 @media screen and (min-width: 769px), print {
-    .fieldset-label {
-        min-height: 3.75rem;
-    }
-
     .is-full .fieldset-label {
         min-height: 1rem;
     }
@@ -91,6 +97,10 @@ fieldset .subtitle {
         height: 10em;
     }
 
+    /**
+     * .is-left-label marks fieldsets with "tablestyle" attribute
+     */
+
     /** + + + + +  spacer in table design  + + + + + */
 
     .is-left-label .field.is-spacer {
@@ -106,10 +116,7 @@ fieldset .subtitle {
         display: inline-block;
     }
 
-
-    /** + + + + +  label once  + + + + + */
-
-    /* + + +  width of cols  + + + */
+    /* + + +  width of cols in table design + + + */
 
     .is-left-label .column.is-half {
         width: 33.3333%;
@@ -135,7 +142,7 @@ fieldset .subtitle {
         width: 40%;
     }
 
-    /* + + +  background of cols  + + + */
+    /* + + +  background of cols in table design + + + */
 
     .is-left-label fieldset:nth-of-type(even) .column .is-multiline {
         background-color: #F3F3F3;
@@ -169,22 +176,37 @@ fieldset .subtitle {
         position: relative;
     }
 
+    .is-left-label fieldset:first-of-type.label-with-tooltip {
+        display: flex;
+        flex-direction: row;
+        width: 50%;
+    }
+
+    /* labels will be invisible in tablestyle "columns" */
     .is-left-label label {
         position: absolute;
         left: -1000rem;
         top: -1000rem;
     }
 
+    /* but visibly move first label to "left header column" */
     .is-left-label fieldset:first-of-type label {
+        position: relative;
         left: 0;
         top: 0;
-        width: 50%;
     }
 
     .is-left-label fieldset:first-of-type .control {
         width: 47%;
         margin-right: 0;
         margin-left: auto;
+    }
+
+    /* radio inputs are wrapped in labels so skip table magic */
+    .is-left-label fieldset .control .grouped-form-elements label {
+        position: relative;
+        left: 0;
+        top: 0;
     }
 }
 
@@ -204,8 +226,4 @@ fieldset .subtitle {
     border-radius: 8px;
     border: 3px solid #fff;
     background-color: rgba(0, 0, 0, .3);
-}
-
-canvas {
-    width: 100%;
 }

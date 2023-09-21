@@ -2,13 +2,17 @@
 <div class="column {{ column is not empty ? column : 'is-full' }}">
     <div class="field">
         <div class="control">
-            {%- if label is not empty -%}
-                <div class="label">{{ label }} {{ is_required ? '*' }}</div>
-            {%- endif -%}
-            {{ renderTooltip(tooltip) }}
+            <div class="label-with-tooltip">
+                <div class="label">
+                    {%- if label is not empty -%}
+                        {{ label }} {{ is_required ? '*' }}
+                    {%- endif -%}
+                </div>
+                {{ renderTooltip(tooltip) }}
+            </div>
             <div class="grouped-form-elements" id="{{ id }}">
                 {%- for choice in choices -%}
-                    <label class="checkbox">
+                    <label class="checkbox {{ labelsmall is not empty ? 'label-smaller' }}">
                         <input
                                 type="checkbox"
                                 id="{{ id~'['~loop.index0~']' }}"
