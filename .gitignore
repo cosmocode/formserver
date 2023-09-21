@@ -10,6 +10,8 @@ data/*
 !data/EXAMPLE/config.yaml
 !data/EXAMPLE/logo.png
 !data/EXAMPLE/i_will_be_moved.txt
+!data/404.html
+!data/500.html
 
 # logs
 /logs

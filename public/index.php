@@ -59,11 +59,23 @@ $customErrorHandler = function (
     $settings = $app->getContainer()->get('settings');
 
     if ($exception instanceof \Slim\Exception\HttpNotFoundException) {
-        $errorMessage = '<h1>' . $settings['errorMessageNotFound'] . '</h1>';
+        // custom error page
+        $errorPage = __DIR__ . '/../' . $settings['errorPageNotFound'];
+        if (is_file($errorPage)) {
+            $errorMessage = file_get_contents($errorPage);
+        } else {
+            $errorMessage = '<h1>' . $settings['errorMessageNotFound'] . '</h1>';
+        }
         $response->getBody()->write($errorMessage);
         $response = $response->withStatus(404);
     } else {
-        $errorMessage = '<h1>' . $settings['errorMessageGeneral'] . '</h1>';
+        // custom error page
+        $errorPage = __DIR__ . '/../' . $settings['errorPageGeneral'];
+        if (is_file($errorPage)) {
+            $errorMessage = file_get_contents($errorPage);
+        } else {
+            $errorMessage = '<h1>' . $settings['errorMessageGeneral'] . '</h1>';
+        }
         $response->getBody()->write($errorMessage);
         $response = $response->withStatus(500);
     }

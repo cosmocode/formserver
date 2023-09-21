@@ -10,4 +10,6 @@ settings:
   fileExporter:
     dir: export
   errorMessageNotFound: 'Form not found!'
-  errorMessageGeneral: 'Unknown error!!'
+  errorMessageGeneral: 'Unknown error!'
+  errorPageNotFound: 'data/404.html'
+  errorPageGeneral: 'data/500.html'

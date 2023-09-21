@@ -88,6 +88,12 @@ class FileHelper
         );
     }
 
+    /**
+     * Calculate byte size from human readable format
+     *
+     * @param string $size
+     * @return int
+     */
     public static function humanToBytes($size)
     {
         $post = preg_match('/(\D*?)$/', $size, $matches);
@@ -97,6 +103,7 @@ class FileHelper
 
         switch (strtolower($matches[0])) {
             case 'k':
+            case 'kb':
                 $size *= 1024;
                 break;
             case 'm':
@@ -112,14 +119,20 @@ class FileHelper
         return (int)$size;
     }
 
+    /**
+     * Return byte size in human readable format
+     *
+     * @param int $size
+     * @return string
+     */
     public static function getMaxSizeHuman(int $size)
     {
         if ($size >= 1024**3) {
-            $fileSize = round($size / 1024 / 1024 / 1024,1) . 'GB';
+            $fileSize = round($size / 1024 / 1024 / 1024, 1) . 'GB';
         } elseif ($size >= 1024**2) {
-            $fileSize = round($size / 1024 / 1024,1) . 'MB';
-        } elseif($size >= 1024) {
-            $fileSize = round($size / 1024,1) . 'KB';
+            $fileSize = round($size / 1024 / 1024, 1) . 'MB';
+        } elseif ($size >= 1024) {
+            $fileSize = round($size / 1024, 1) . 'KB';
         } else {
             $fileSize = $size . ' bytes';
         }
