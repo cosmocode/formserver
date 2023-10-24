@@ -1,27 +1,61 @@
 {% from '_macros' import renderError, renderTooltip %}
 <div class="column {{ column is not empty ? column : 'is-full' }}">
-    <div class="field">
-        <div class="label-with-tooltip">
-            <label class="label {{ labelsmall is not empty ? 'label-smaller' }}" for="{{ id }}">
-                {%- if label is not empty -%}
-                    {{ label }} {{ is_required ? '*' }}
-                {%- endif  -%}
-            </label>
-            {{ renderTooltip(tooltip) }}
+    {% if clone is not empty %}
+        {% for val in value %}
+            <div class="field" id="field-{{ id }}-{{ loop.index }}">
+                <div class="label-with-tooltip">
+                    <label class="label {{ labelsmall is not empty ? 'label-smaller' }}" for="{{ id }}-{{ loop.index }}">
+                        {%- if label is not empty -%}
+                            {{ label }} {{ is_required ? '*' }}
+                        {%- endif  -%}
+                    </label>
+                    {{ renderTooltip(tooltip) }}
+                </div>
+                <div class="control is-cloneable">
+                    <input
+                            type="text"
+                            id="{{ id }}-{{ loop.index }}"
+                            name="{{ id }}[]"
+                            value="{{ val }}"
+                            class="input form-input{% if is_readonly%} has-background-grey-lighter{% endif %} {{ errors is not empty ? 'is-danger' }}"
+                            data-calendar-type="datetime"
+                            {% if is_readonly%}readonly{% endif %}
+                            {% if placeholder is not empty -%}
+                                placeholder="{{ placeholder ~ (is_required and label is empty ? ' *') }}"
+                            {%- endif %} />
+                    {% if loop.last %}
+                        <button type="button" class="button is-light clone-field">
+                            + {{ button_clone_label }}
+                        </button>
+                    {% endif %}
+                </div>
+                {{ renderError(errors) }}
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="field">
+            <div class="label-with-tooltip">
+                <label class="label {{ labelsmall is not empty ? 'label-smaller' }}" for="{{ id }}">
+                    {%- if label is not empty -%}
+                        {{ label }} {{ is_required ? '*' }}
+                    {%- endif  -%}
+                </label>
+                {{ renderTooltip(tooltip) }}
+            </div>
+            <div class="control">
+                <input
+                    type="text"
+                    id="{{ id }}"
+                    name="{{ id }}"
+                    value="{{ value }}"
+                    class="input form-input{% if is_readonly%} has-background-grey-lighter{% endif %} {{ errors is not empty ? 'is-danger' }}"
+                    data-calendar-type="datetime"
+                    {% if is_readonly%}readonly{% endif %}
+                    {% if placeholder is not empty -%}
+                        placeholder="{{ placeholder ~ (is_required and label is empty ? ' *') }}"
+                    {%- endif %} />
+            </div>
+            {{ renderError(errors) }}
         </div>
-        <div class="control">
-            <input
-                type="text"
-                id="{{ id }}"
-                name="{{ id }}"
-                value="{{ value }}"
-                class="input form-input{% if is_readonly%} has-background-grey-lighter{% endif %} {{ errors is not empty ? 'is-danger' }}"
-                data-calendar-type="datetime"
-                {% if is_readonly%}readonly{% endif %}
-                {% if placeholder is not empty -%}
-                    placeholder="{{ placeholder ~ (is_required and label is empty ? ' *') }}"
-                {%- endif %} />
-        </div>
-        {{ renderError(errors) }}
-    </div>
+    {% endif %}
 </div>

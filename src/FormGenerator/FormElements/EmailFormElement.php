@@ -7,5 +7,18 @@ namespace CosmoCode\Formserver\FormGenerator\FormElements;
  */
 class EmailFormElement extends AbstractDynamicFormElement
 {
+    /**
+     * Handle values in a clonable field
+     *
+     * @return array
+     */
+    public function getViewVariables()
+    {
+        $conf = parent::getViewVariables();
+        if (!empty($conf['clone']) && !is_array($conf['value'])) {
+            $conf['value'] = [$conf['value']];
+        }
 
+        return $conf;
+    }
 }

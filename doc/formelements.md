@@ -176,7 +176,7 @@ Simple text input.
       required: false
 ```
 
-* `clone` _(optional)_ - Adds a clone button to the field. That way you can repeat the same input to create a list of variable length.
+* `clone` _(optional)_ - When set to `true`, adds a clone button to the field. That way you can repeat the same input to create a list of variable length.
 
 ### Numberinput
 
@@ -191,6 +191,8 @@ Simple number (integer) input.
     validation:
       required: false
 ```
+
+* `clone` _(optional)_ - When set to `true`, adds a clone button to the field. That way you can repeat the same input to create a list of variable length.
 
 ### Textarea
 
@@ -225,6 +227,10 @@ Text input that expects a date and provides a calendar picker.
     validation:
       required: false
 ```
+
+Options:
+* `clone` _(optional)_ - When set to `true`, adds a clone button to the field. That way you can repeat the same input to create a list of variable length.
+
 ### Time
 
 Text input that expects a time and provides a time picker.
@@ -238,6 +244,9 @@ Text input that expects a time and provides a time picker.
     validation:
       required: false
 ```
+Options:
+* `clone` _(optional)_ - When set to `true`, adds a clone button to the field. That way you can repeat the same input to create a list of variable length.
+
 ### Datetime
 
 Text input that expects a date and a time and provides a combined picker.
@@ -251,6 +260,9 @@ Text input that expects a date and a time and provides a combined picker.
     validation:
       required: false
 ```
+Options:
+* `clone` _(optional)_ - When set to `true`, adds a clone button to the field. That way you can repeat the same input to create a list of variable length.
+
 ### Email
 
 Text input that expects a valid email (the HTML5 validation is handled by the browser).
@@ -264,6 +276,9 @@ Text input that expects a valid email (the HTML5 validation is handled by the br
     validation:
       required: false
 ```
+
+Options:
+    * `clone` _(optional)_ - When set to `true`, adds a clone button to the field. That way you can repeat the same input to create a list of variable length.
 
 ### Radioset
 
