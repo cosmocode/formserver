@@ -155,7 +155,7 @@ fieldset .subtitle {
     .is-left-label fieldset:first-of-type .fieldset-content .columns::before {
         content: '';
         position: absolute;
-        width: 50%;
+        width: 47%;
         height: 100%;
         background-color: #F3F3F3;
     }
@@ -176,30 +176,23 @@ fieldset .subtitle {
         position: relative;
     }
 
-    .is-left-label fieldset:first-of-type.label-with-tooltip {
-        display: flex;
-        flex-direction: row;
-        width: 50%;
-    }
-
     /* labels will be invisible in tablestyle "columns" */
-    .is-left-label label {
+    .is-left-label div.label-with-tooltip {
         position: absolute;
         left: -1000rem;
         top: -1000rem;
     }
 
     /* but visibly move first label to "left header column" */
-    .is-left-label fieldset:first-of-type label {
+    .is-left-label fieldset:first-of-type div.label-with-tooltip {
         position: relative;
         left: 0;
         top: 0;
+        width: 50%;
     }
 
-    .is-left-label fieldset:first-of-type .control {
-        width: 47%;
-        margin-right: 0;
-        margin-left: auto;
+    .is-left-label fieldset:first-of-type .field {
+        display: flex;
     }
 
     /* radio inputs are wrapped in labels so skip table magic */
