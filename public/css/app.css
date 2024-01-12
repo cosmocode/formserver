@@ -155,7 +155,7 @@ fieldset .subtitle {
     .is-left-label fieldset:first-of-type .fieldset-content .columns::before {
         content: '';
         position: absolute;
-        width: 47%;
+        width: 50%;
         height: 100%;
         background-color: #F3F3F3;
     }
@@ -163,10 +163,9 @@ fieldset .subtitle {
     /* + + +  position of col header (1. col)  + + + */
 
     .is-left-label fieldset:first-of-type .fieldset-label {
-        display: block;
         width: 50%;
         margin-right: 0;
-        margin-left: auto;
+        margin-left: 50%;
         padding-left: 3%;
     }
 
@@ -193,6 +192,11 @@ fieldset .subtitle {
 
     .is-left-label fieldset:first-of-type .field {
         display: flex;
+    }
+
+    .is-left-label fieldset:first-of-type .field .control {
+        flex-grow: 1;
+        padding-left: 0.75rem;
     }
 
     /* radio inputs are wrapped in labels so skip table magic */
