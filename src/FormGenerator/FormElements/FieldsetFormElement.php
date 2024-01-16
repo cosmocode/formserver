@@ -3,6 +3,7 @@
 namespace CosmoCode\Formserver\FormGenerator\FormElements;
 
 use CosmoCode\Formserver\Exceptions\FormException;
+use CosmoCode\Formserver\FormGenerator\FormValidator;
 
 /**
  * Representation of a fieldset.
@@ -191,7 +192,8 @@ class FieldsetFormElement extends AbstractFormElement
                 'id' => $this->getFormElementId(),
                 'rendered_child_views' => $this->renderedChildViews,
             ],
-            $this->getToggleVariables()
+            $this->getToggleVariables(),
+            $this->processBackgroundVariables()
         );
     }
 
@@ -213,5 +215,26 @@ class FieldsetFormElement extends AbstractFormElement
         }
 
         return $toggleViewId;
+    }
+
+    /**
+     * Check if the background value from config can be used as a Bulma color
+     * or a valid CSS color definition and return the appropriate view variable.
+     *
+     * @return array
+     */
+    protected function processBackgroundVariables()
+    {
+        $background = $this->getConfigValue('background');
+        if (!$background) {
+            return [];
+        }
+
+        if (in_array($background, FormValidator::COLORS_BULMA)) {
+            return ['backgroundName' => $background];
+        }
+        if (preg_match(FormValidator::COLORS_REGEX, $background)) {
+            return ['backgroundNumber' => $background];
+        }
     }
 }
