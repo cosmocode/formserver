@@ -199,12 +199,6 @@ fieldset .subtitle {
         padding-left: 0.75rem;
     }
 
-    /* radio inputs are wrapped in labels so skip table magic */
-    .is-left-label fieldset .control .grouped-form-elements label {
-        position: relative;
-        left: 0;
-        top: 0;
-    }
 }
 
 .is-scrollable {

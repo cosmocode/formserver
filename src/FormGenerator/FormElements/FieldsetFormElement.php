@@ -236,5 +236,6 @@ class FieldsetFormElement extends AbstractFormElement
         if (preg_match(FormValidator::COLORS_REGEX, $background)) {
             return ['backgroundNumber' => $background];
         }
+        return [];
     }
 }
