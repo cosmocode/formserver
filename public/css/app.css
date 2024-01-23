@@ -24,7 +24,8 @@ input.checkbox-input {
     display: none;
 }
 
-label.label-smaller {
+label.label-smaller,
+div.label-smaller {
     font-weight: normal;
 }
 
