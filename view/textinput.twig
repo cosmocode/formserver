@@ -8,8 +8,8 @@
                     {%- if label is not empty -%}
                         {{ label }} {{ is_required ? '*' }}
                     {%- endif  -%}
+                    {{ renderTooltip(tooltip) }}
                 </label>
-                {{ renderTooltip(tooltip) }}
                 <div class="control is-cloneable">
                     <input
                             type="text"

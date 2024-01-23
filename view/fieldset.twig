@@ -1,4 +1,4 @@
-{% from '_macros' import renderError %}
+{% from '_macros' import renderError, renderTooltip %}
 
 {% if backgroundName is not empty %}
     <div class="has-background-{{ backgroundName }}">
@@ -12,6 +12,7 @@
     <div class="column {{ column is not empty ? column : 'is-full' }} fieldset-content">
         <div class="label fieldset-label">
             {{ label }}
+            {{ renderTooltip(tooltip) }}
         </div>
         <div class="columns{% if scrollable is empty %} is-multiline{% else %} is-scrollable{% endif %}">
             {% if tablestyle is not empty %}<div class="next-is-double"></div>{% endif %}

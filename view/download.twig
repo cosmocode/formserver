@@ -1,8 +1,9 @@
-{% from '_macros' import fileUrl %}
+{% from '_macros' import fileUrl, renderTooltip %}
 <div class="column {{ column is not empty ? column : 'is-full' }}">
     <div class="field">
         <div class="control">
             <a href="{{ fileUrl(href)  }}" target="_blank">{{ label }}</a>
+            {{ renderTooltip(tooltip) }}
         </div>
     </div>
 </div>

@@ -34,10 +34,31 @@ div.label-smaller {
     display: inline-block;
 }
 
-.tooltip-button {
+button.is-small.tooltip-button {
     border: 0;
-    margin-left: 0.2rem;
+    font-size: 0.65rem;
 }
+
+h1, h2, h3, h4, h5, h6 {
+    &.is-1,
+    &.is-2,
+    &.is-3 {
+        & > button.is-small.tooltip-button {
+            margin-top: 0.5rem;
+        }
+    }
+
+    &.is-4 {
+        & > button.is-small.tooltip-button {
+            margin-top: 0.2rem;
+        }
+    }
+
+    & > button.is-small.tooltip-button {
+        margin-top: 0.3rem;
+    }
+}
+
 
 button.clone-field {
     float: right;
