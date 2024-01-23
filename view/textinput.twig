@@ -33,13 +33,13 @@
         {% else %}
             <div class="field">
                 <div class="label-with-tooltip">
-            <label class="label {{ labelsmall is not empty ? 'label-smaller' }}" for="{{ id }}">
-                {%- if label is not empty -%}
-                    {{ label }} {{ is_required ? '*' }}
-                {%- endif  -%}
-            </label>
-            {{ renderTooltip(tooltip) }}
-        </div>
+                    <label class="label {{ labelsmall is not empty ? 'label-smaller' }}" for="{{ id }}">
+                        {%- if label is not empty -%}
+                            {{ label }} {{ is_required ? '*' }}
+                        {%- endif  -%}
+                    </label>
+                    {{ renderTooltip(tooltip) }}
+                </div>
                 <div class="control">
                     <input
                             type="text"
