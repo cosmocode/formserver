@@ -6,8 +6,8 @@
                 {%- if label is not empty -%}
                     {{ label }} {{ is_required ? '*' }}
                 {%- endif -%}
+                {{ renderTooltip(tooltip) }}
             </div>
-            {{ renderTooltip(tooltip) }}
         </div>
         <div class="control">
             <div class="grouped-form-elements" id="{{ id }}">
