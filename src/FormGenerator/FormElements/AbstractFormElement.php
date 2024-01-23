@@ -132,6 +132,20 @@ abstract class AbstractFormElement
     }
 
     /**
+     * Parses tooltip.
+     * Transform newlines (\n) to NCR representation.
+     * If no tooltip given return empty string.
+     *
+     * @return string
+     */
+    protected function parseTooltip()
+    {
+        $tooltip = $this->getConfigValue('tooltip') ?? '';
+
+        return str_replace("\n", '&#10;&#013;', $tooltip);
+    }
+
+    /**
      * Prepare variables array for twig view
      *
      * @return array

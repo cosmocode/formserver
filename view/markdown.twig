@@ -1,7 +1,9 @@
+{% from '_macros' import renderTooltip %}
 <div class="column {{ column is not empty ? column : 'is-full' }}">
-    <div class="field">
+    <div class="field with-tooltip">
         <div class="control">
             {{ markdown | raw }}
+            {{ renderTooltip(tooltip) }}
         </div>
     </div>
 </div>

@@ -32,7 +32,8 @@ class MarkDownFormElement extends AbstractFormElement
             $this->getConfig(),
             [
                 'id' => $this->getFormElementId(),
-                'markdown' => $markdown
+                'markdown' => $markdown,
+                'tooltip' => $this->parseTooltip(),
             ]
         );
     }
