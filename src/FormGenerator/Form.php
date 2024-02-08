@@ -60,7 +60,9 @@ class Form
         foreach ($config['form'] as $formElementId => $formElementConfig) {
             $this->formElements[] = FormElementFactory::createFormElement(
                 $formElementId,
-                $formElementConfig
+                $formElementConfig,
+                null,
+                $this->id
             );
         }
     }

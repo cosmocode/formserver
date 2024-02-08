@@ -2,6 +2,8 @@
 
 namespace CosmoCode\Formserver\FormGenerator\FormElements;
 
+use Michelf\MarkdownExtra;
+
 /**
  * Base class for every FormElement.
  * It has
@@ -28,20 +30,28 @@ abstract class AbstractFormElement
     protected $parent;
 
     /**
+     * @var string
+     */
+    protected $formId;
+
+    /**
      * Inheriting child elements must call this constructor
      *
      * @param string $id
      * @param array $config
      * @param FieldsetFormElement|null $parent
+     * @param string $formId
      */
     public function __construct(
         string $id,
         array $config,
-        FieldsetFormElement $parent = null
+        FieldsetFormElement $parent = null,
+        string $formId = ''
     ) {
         $this->id = $id;
         $this->config = $config;
         $this->parent = $parent;
+        $this->formId = $formId;
     }
 
     /**
@@ -143,6 +153,16 @@ abstract class AbstractFormElement
         $tooltip = $this->getConfigValue('tooltip') ?? '';
 
         return str_replace("\n", '&#10;&#013;', $tooltip);
+    }
+
+    protected function parseModal()
+    {
+        $modal = $this->getConfigValue('modal') ?? '';
+        if ($modal) {
+            $modal = MarkdownExtra::defaultTransform($modal);
+            $modal = str_replace('<img src="', '<img src="/download/' . $this->formId . '?file=', $modal);
+        }
+        return $modal;
     }
 
     /**

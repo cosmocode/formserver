@@ -99,6 +99,16 @@ form:
               - 'Choice #1'
               - 'Choice #2'
               - 'Choice #3'
+            modal: |
+              ###This is a modal.
+              
+              With paragraphs.
+              
+              ![](logo.png)
+              
+              And images.
+              
+              Any markdown goes.
           dropdown1:
             type: dropdown
             label: 'Dropdown'

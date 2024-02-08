@@ -31,3 +31,19 @@
         <button type="button" class="button is-small tooltip-button has-tooltip-multiline has-tooltip-right" data-tooltip="{{ tooltip | raw }}" style="{{ tooltip_style }}">!</button>
     {%- endif -%}
 {%- endmacro -%}
+
+{%- macro renderModal(modal, id) -%}
+    {%- if modal is not empty -%}
+        <button type="button" class="button is-small js-modal-trigger" data-target="modal-{{ id }}" style="{{ tooltip_style }}">?</button>
+        <div id="modal-{{ id }}" class="modal">
+            <div class="modal-background"></div>
+            <div class="modal-content">
+                <div class="box">
+                    {{ modal | raw }}
+                </div>
+            </div>
+
+            <button class="modal-close is-large" aria-label="close"></button>
+        </div>
+    {%- endif -%}
+{%- endmacro -%}

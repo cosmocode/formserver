@@ -172,6 +172,7 @@ abstract class AbstractDynamicFormElement extends AbstractFormElement
                 'is_required' => $this->isRequired(),
                 'is_readonly' => $this->isReadonly(),
                 'tooltip' => $this->parseTooltip(),
+                'modal' => $this->parseModal(),
                 'placeholder' => $this->getPlaceholderValue()
             ]
         );

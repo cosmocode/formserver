@@ -43,46 +43,47 @@ class FormElementFactory
     public static function createFormElement(
         string $id,
         array $config,
-        FieldsetFormElement $parent = null
+        FieldsetFormElement $parent = null,
+        string $formId = ''
     ) {
         $formType = $config['type'];
         switch ($formType) {
             case 'fieldset':
-                return self::createFieldsetFormElement($id, $config, $parent);
+                return self::createFieldsetFormElement($id, $config, $parent, $formId);
             case 'markdown':
-                return new MarkDownFormElement($id, $config, $parent);
+                return new MarkDownFormElement($id, $config, $parent, $formId);
             case 'hidden':
                 return new HiddenFormElement($id, $config, $parent);
             case 'download':
-                return new DownloadFormElement($id, $config, $parent);
+                return new DownloadFormElement($id, $config, $parent, $formId);
             case 'image':
-                return new ImageFormElement($id, $config, $parent);
+                return new ImageFormElement($id, $config, $parent, $formId);
             case 'hr':
                 return new HrFormElement($id, $config, $parent);
             case 'upload':
-                return new UploadFormElement($id, $config, $parent);
+                return new UploadFormElement($id, $config, $parent, $formId);
             case 'textinput':
-                return new TextInputFormElement($id, $config, $parent);
+                return new TextInputFormElement($id, $config, $parent, $formId);
             case 'numberinput':
-                return new NumberInputFormElement($id, $config, $parent);
+                return new NumberInputFormElement($id, $config, $parent, $formId);
             case 'date':
-                return new DateFormElement($id, $config, $parent);
+                return new DateFormElement($id, $config, $parent, $formId);
             case 'time':
-                return new TimeFormElement($id, $config, $parent);
+                return new TimeFormElement($id, $config, $parent, $formId);
             case 'datetime':
-                return new DateTimeFormElement($id, $config, $parent);
+                return new DateTimeFormElement($id, $config, $parent, $formId);
             case 'email':
-                return new EmailFormElement($id, $config, $parent);
+                return new EmailFormElement($id, $config, $parent, $formId);
             case 'textarea':
-                return new TextAreaFormElement($id, $config, $parent);
+                return new TextAreaFormElement($id, $config, $parent, $formId);
             case 'radioset':
-                return new RadiosetFormElement($id, $config, $parent);
+                return new RadiosetFormElement($id, $config, $parent, $formId);
             case 'checklist':
-                return new ChecklistFormElement($id, $config, $parent);
+                return new ChecklistFormElement($id, $config, $parent, $formId);
             case 'dropdown':
-                return new DropdownFormElement($id, $config, $parent);
+                return new DropdownFormElement($id, $config, $parent, $formId);
             case 'signature':
-                return new SignatureFormElement($id, $config, $parent);
+                return new SignatureFormElement($id, $config, $parent, $formId);
             case 'spacer':
                 return new SpacerFormElement($id, $config, $parent);
             default:
@@ -98,12 +99,14 @@ class FormElementFactory
      * @param string $id
      * @param array $config
      * @param FieldsetFormElement|null $parent
+     * @param string $formId
      * @return FieldsetFormElement
      */
     protected static function createFieldsetFormElement(
         string $id,
         array $config,
-        FieldsetFormElement $parent = null
+        FieldsetFormElement $parent = null,
+        string $formId = ''
     ) {
         $fieldsetFormElement = new FieldsetFormElement($id, $config, $parent);
 
@@ -111,7 +114,8 @@ class FormElementFactory
             $childFormElement = self::createFormElement(
                 $childId,
                 $childConfig,
-                $fieldsetFormElement
+                $fieldsetFormElement,
+                $formId
             );
 
             $fieldsetFormElement->addChild($childFormElement);
