@@ -43,12 +43,14 @@ h1, h2, h3, h4, h5, h6 {
     &.is-1,
     &.is-2,
     &.is-3 {
+        width: 100%;
         & > button.is-small.tooltip-button {
             margin-top: 0.5rem;
         }
     }
 
     &.is-4 {
+        width: 100%;
         & > button.is-small.tooltip-button {
             margin-top: 0.2rem;
         }
@@ -243,7 +245,7 @@ fieldset .subtitle {
 
 div .field.with-tooltip .control {
     display: inline-flex;
-    justify-content: space-between;
+    width: 100%;
     align-items: normal;
     align-content: baseline;
 
