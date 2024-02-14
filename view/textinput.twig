@@ -1,4 +1,4 @@
-{% from '_macros' import renderError, renderTooltip %}
+{% from '_macros' import renderError, renderTooltip, renderModal %}
 <div class="column {{ column is not empty ? column : 'is-full' }}">
 
     {% if clone is not empty %}
@@ -9,6 +9,7 @@
                         {{ label }} {{ is_required ? '*' }}
                     {%- endif  -%}
                     {{ renderTooltip(tooltip) }}
+                    {{ renderModal(modal, id ~ loop.index) }}
                 </label>
                 <div class="control is-cloneable">
                     <input
@@ -39,6 +40,7 @@
                         {%- endif  -%}
                     </label>
                     {{ renderTooltip(tooltip) }}
+                    {{ renderModal(modal, id) }}
                 </div>
                 <div class="control">
                     <input

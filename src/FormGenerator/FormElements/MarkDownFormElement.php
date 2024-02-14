@@ -29,11 +29,9 @@ class MarkDownFormElement extends AbstractFormElement
         $markdown = MarkdownExtra::defaultTransform($this->getMarkdown());
 
         return array_merge(
-            $this->getConfig(),
+            parent::getViewVariables(),
             [
-                'id' => $this->getFormElementId(),
                 'markdown' => $markdown,
-                'tooltip' => $this->parseTooltip(),
             ]
         );
     }

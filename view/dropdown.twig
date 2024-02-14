@@ -1,4 +1,4 @@
-{% from '_macros' import renderError, renderTooltip %}
+{% from '_macros' import renderError, renderTooltip, renderModal %}
 <div class="column {{ column is not empty ? column : 'is-full' }}">
     <div class="field">
         <div class="label-with-tooltip">
@@ -8,6 +8,7 @@
                 {%- endif  -%}
             </label>
             {{ renderTooltip(tooltip) }}
+            {{ renderModal(modal, id) }}
         </div>
         <div class="control">
             <div class="select {{ multiselect is defined and multiselect ? 'is-multiple' }} {{ errors is not empty ? 'is-danger' }}">

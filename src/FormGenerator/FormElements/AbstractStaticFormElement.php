@@ -7,17 +7,4 @@ namespace CosmoCode\Formserver\FormGenerator\FormElements;
  */
 abstract class AbstractStaticFormElement extends AbstractFormElement
 {
-    /**
-     * @inheritdoc
-     * @return array
-     */
-    public function getViewVariables()
-    {
-        return array_merge(
-            $this->getConfig(),
-            [
-                'id' => $this->getFormElementId()
-            ]
-        );
-    }
 }

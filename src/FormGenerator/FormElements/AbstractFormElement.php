@@ -170,5 +170,15 @@ abstract class AbstractFormElement
      *
      * @return array
      */
-    abstract public function getViewVariables();
+    public function getViewVariables()
+    {
+        return array_merge(
+            $this->config,
+            [
+                'id' => $this->getFormElementId(),
+                'tooltip' => $this->parseTooltip(),
+                'modal' => $this->parseModal(),
+                ]
+        );
+    }
 }

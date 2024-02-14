@@ -253,3 +253,11 @@ div .field.with-tooltip .control {
         margin-left: 0.5rem;
     }
 }
+
+/**
+ * Modal
+ */
+
+div.modal-content div.box * {
+    font-weight: initial;
+}

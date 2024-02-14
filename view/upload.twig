@@ -1,9 +1,10 @@
-{% from '_macros' import fileUrl, renderError, renderTooltip %}
+{% from '_macros' import fileUrl, renderError, renderTooltip, renderModal %}
 <div class="column {{ column is not empty ? column : 'is-full' }}">
     <div class="field file {{ errors is not empty ? 'is-danger' }}">
         <div class="control">
             <label class="label {{ labelsmall is not empty ? 'label-smaller' }}">{{ label }} {{ is_required ? '*' }}</label>
-            {{ renderTooltip(tooltip) }} <br />
+            {{ renderTooltip(tooltip) }}
+            {{ renderModal(modal, id) }}<br />
             {% if is_uploaded %}
                 <ul>
                     {% for uploaded in value %}

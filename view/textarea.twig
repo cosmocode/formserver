@@ -1,4 +1,4 @@
-{% from '_macros' import renderError, renderTooltip %}
+{% from '_macros' import renderError, renderTooltip, renderModal %}
 <div class="column {{ column is not empty ? column : 'is-full' }}">
     <div class="field">
         <label class="label {{ labelsmall is not empty ? 'label-smaller' }}" for="{{ id }}">
@@ -7,6 +7,7 @@
             {%- endif  -%}
         </label>
         {{ renderTooltip(tooltip) }}
+        {{ renderModal(modal, id) }}
         <div class="control">
                 <textarea
                     id="{{ id }}"

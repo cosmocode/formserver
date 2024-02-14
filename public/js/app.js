@@ -292,7 +292,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    console.log('HERE');
     // Add a click event on buttons to open a specific modal
     (document.querySelectorAll('.js-modal-trigger') || []).forEach(($trigger) => {
         const modal = $trigger.dataset.target;
@@ -307,7 +306,8 @@ document.addEventListener('DOMContentLoaded', () => {
     (document.querySelectorAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button') || []).forEach(($close) => {
         const $target = $close.closest('.modal');
 
-        $close.addEventListener('click', () => {
+        $close.addEventListener('click', (evt) => {
+            evt.preventDefault();
             closeModal($target);
         });
     });

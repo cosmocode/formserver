@@ -163,16 +163,13 @@ abstract class AbstractDynamicFormElement extends AbstractFormElement
     public function getViewVariables()
     {
         return array_merge(
-            $this->getConfig(),
+            parent::getViewVariables(),
             [
-                'id' => $this->getFormElementId(),
                 'id_string' => $this->getFormElementIdStringified(),
                 'value' => $this->getValue(),
                 'errors' => $this->getErrors(),
                 'is_required' => $this->isRequired(),
                 'is_readonly' => $this->isReadonly(),
-                'tooltip' => $this->parseTooltip(),
-                'modal' => $this->parseModal(),
                 'placeholder' => $this->getPlaceholderValue()
             ]
         );

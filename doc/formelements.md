@@ -8,6 +8,7 @@ Options:
 * `label` _(optional)_ - the label of the form element (excluded: [hidden](#hidden), [markdown](#markdown))
 * `labelsmall` _(optional)_ - if set to true, the label will be rendered in regular font instead of default bold
 * `tooltip` _(optional)_ - Shows a hint for the element. Ignored in structure elements like spacers and HR. Also see [Tooltip styling](meta.md#Tooltips)
+* `modal` _(optional)_ - Content of a simple Bulma modal in markdown syntax. Refer to the bundled EXAMPLE configuration. Images are interpreted as files located directly in your form directory. The option is ignored in structure elements like spacers and HR.  
 * `column` _(optional)_ - [bulma column sizes](https://bulma.io/documentation/columns/sizes/) defining the width of the form element (excluded: [hidden](#hidden)). You can use [offset](https://bulma.io/documentation/columns/sizes/#offset) to position the columns, for example `is-half is-offset-one-quarter` to center a half-width column.
 ```yaml
 <id>:

@@ -14,11 +14,6 @@ class UploadFormElement extends AbstractDynamicFormElement
      */
     protected $previousValue;
 
-    public function getValue()
-    {
-        return $this->value;
-    }
-
     /**
      * Update previous value on every upload.
      * Also used when restoring persisted values.
@@ -145,15 +140,11 @@ class UploadFormElement extends AbstractDynamicFormElement
     public function getViewVariables()
     {
         return array_merge(
-            $this->getConfig(),
+            parent::getViewVariables(),
             [
-                'id' => $this->getFormElementId(),
                 'is_uploaded' => $this->hasValue(),
-                'errors' => $this->getErrors(),
                 'allowed_extensions' => $this->getAllowedExtensionsAsArray(),
-                'value' => $this->getValue(),
                 'previous_value' => json_encode($this->getPreviousValue()),
-                'is_required' => $this->isRequired(),
                 'max_size' => $this->getMaxSize(),
                 'max_size_human' => FileHelper::getMaxSizeHuman($this->getMaxSize()),
             ]

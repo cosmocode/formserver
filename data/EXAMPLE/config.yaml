@@ -100,7 +100,7 @@ form:
               - 'Choice #2'
               - 'Choice #3'
             modal: |
-              ###This is a modal.
+              ###This is a modal. {.title .is-1}
               
               With paragraphs.
               
@@ -109,6 +109,7 @@ form:
               And images.
               
               Any markdown goes.
+            tooltip: 'Optional input\nAllowed characters: a-Z, 0-9'
           dropdown1:
             type: dropdown
             label: 'Dropdown'

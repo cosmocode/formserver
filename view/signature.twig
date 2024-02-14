@@ -1,4 +1,4 @@
-{% from '_macros' import renderError, renderTooltip %}
+{% from '_macros' import renderError, renderTooltip, renderModal %}
 <div class="column {{ column is not empty ? column : 'is-full' }}">
 
     {% if value %}
@@ -19,6 +19,7 @@
             <div class="control">
                 <div class="label {{ labelsmall is not empty ? 'label-smaller' }}">{{ label }} {{ is_required ? '*' }}
                     {{ renderTooltip(tooltip) }}
+                    {{ renderModal(modal, id) }}
                 </div>
                 <input type="hidden" id="{{ id }}" name="{{ id }}" value="{{ value }}" class="form-input"/>
                 <canvas></canvas>
