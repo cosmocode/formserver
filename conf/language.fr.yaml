@@ -1,0 +1,23 @@
+error_notfound: La page recherchée n'a pas été trouvée.
+error_required: Ce champ est obligatoire
+error_min: La valeur doit être d'au moins
+error_max: La valeur ne doit pas dépasser
+error_match: La valeur doit correspondre à
+error_fileext: Les types de fichiers autorisés sont
+error_filesize: La taille maximale du fichier est de
+form_valid: Le formulaire a été enregistré avec succès
+form_invalid: Le formulaire a été enregistré avec succès, mais il contient encore des erreurs.
+send_success: Le formulaire a été envoyé avec succès.
+send_prevented: Le formulaire n'a pas pu être envoyé car il contient des erreurs.
+send_failed: Une erreur s'est produite lors de l'envoi du courrier électronique. Veuillez contacter l'administrateur.
+label_signature_delete: Entrée libre
+label_signature_replace: Remplacer l'entrée
+email_text_attachments: Examinez les pièces jointes
+button_save : Économiser
+button_send : Envoyer
+button_clone: Copier le champ
+button_upload: Télécharger le fichier
+button_upload_replace: Remplacer le fichier téléchargé
+uploaded_file: Fichier enregistré
+upload_info: Le fichier sélectionné sera téléchargé et vérifié après l'enregistrement ou l'envoi du formulaire.
+upload_error: Le téléchargement est trop important!
