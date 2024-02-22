@@ -34,6 +34,10 @@ div.label-smaller {
     display: inline-block;
 }
 
+.signature-pad .label {
+    display: block;
+}
+
 button.is-small.tooltip-button {
     border: 0;
     font-size: 0.65rem;
