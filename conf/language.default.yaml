@@ -10,8 +10,8 @@ form_invalid: Form was saved successfully, but it still contains errors.
 send_success: The form was sent successfully.
 send_prevented: The form could not be sent because it contains errors.
 send_failed: There was en error sending email. Please contact the administrator.
-label_signature_delete: Delete signature
-label_signature_replace: Replace signature
+label_signature_delete: Clear input
+label_signature_replace: Replace input
 email_text_attachments: Look into the attachments
 button_save : Save
 button_send : Send
