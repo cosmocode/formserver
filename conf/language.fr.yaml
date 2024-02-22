@@ -1,4 +1,4 @@
-error_notfound: La ressource que vous recherchez n'a pas pu être trouvée.
+error_notfound: La page recherchée n'a pas été trouvée.
 error_required: Ce champ est obligatoire
 error_min: La valeur doit être d'au moins
 error_max: La valeur ne doit pas dépasser
