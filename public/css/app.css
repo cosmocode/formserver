@@ -262,6 +262,12 @@ div .field.with-tooltip .control {
  * Modal
  */
 
+div.modal-content {
+    width: unset;
+    min-width: 650px;
+    max-width: 75%;
+}
+
 div.modal-content div.box * {
     font-weight: initial;
 }
