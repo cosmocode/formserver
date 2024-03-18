@@ -264,7 +264,6 @@ div .field.with-tooltip .control {
 
 div.modal-content {
     width: unset;
-    min-width: 650px;
     max-width: 75%;
 }
 
