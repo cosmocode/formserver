@@ -1,3 +1,9 @@
+import {init as spinit} from "./sigpad.js";
+import {initSignaturePad} from "./sigpad.js";
+
+spinit();
+initSignaturePad();
+
 /**
  * Init flatpickr
  */
@@ -6,90 +12,25 @@ flatpickr('input:read-write[data-calendar-type="time"]', {'noCalendar' : true, '
 flatpickr('input:read-write[data-calendar-type="datetime"]', {'enableTime' : true, 'time_24hr' : true, 'dateFormat' : 'd.m.Y H:i', 'allowInput' : true});
 
 
-/**
- * Init Signature Pad
- */
-var form = document.getElementById("form");
-var replaceButons = document.querySelectorAll('button.sigreplace');
-var wrappers = document.querySelectorAll(".signature-pad");
 
-// attach event listeners to replace buttons
-Array.from(replaceButons).forEach(function(button) {
-    button.addEventListener('click', function(event) {
-        var id = this.dataset.replacebutton;
-
-        var replacePad = document.querySelector('[data-replacepad=' + id + ']');
-        replacePad.classList.remove('hidden');
-        initSignaturePad(replacePad);
-
-        var replaceContainer = document.querySelector('[data-replacecontainer=' + id + ']');
-        replaceContainer.classList.add('hidden');
-    });
-});
-
-// initialize all (visible) fields
-Array.from(wrappers).forEach(function(wrapper) {
-    initSignaturePad(wrapper);
-});
-
-/**
- * Initializes a clean signature pad for each visible signature element
- *
- * @param wrapper
- */
-function initSignaturePad(wrapper) {
-    var canvas = wrapper.querySelector("canvas");
-    var clearButton = wrapper.querySelector("[data-action=clear]");
-    var dataField = wrapper.querySelector("input");
-
-    if (wrapper && canvas && !wrapper.classList.contains('hidden')) {
-        // reset field value
-        dataField.value = "";
-        var signaturePad = new SignaturePad(canvas, { backgroundColor: "rgb(255,255,255)" });
-
-        // Set height and width
-        width = wrapper.dataset.width;
-        if (width) {
-            canvas.width = width;
-        }
-        height = wrapper.dataset.height;
-        if (height) {
-            canvas.height = height;
-        }
-
-        // Add event listeners
-        clearButton.addEventListener("click", function (event) {
-            signaturePad.clear();
-            dataField.value = "";
-        });
-
-        form.addEventListener("submit", function (event) {
-            if (signaturePad.isEmpty()) {
-                dataField.value = '';
-            } else {
-                dataField.value = signaturePad.toDataURL();
-            }
-        });
-    }
-}
 
 /**
  * Init Toggle
  */
-var fieldsetsWithToggle = document.querySelectorAll('[data-toggle-id]');
+const fieldsetsWithToggle = document.querySelectorAll('[data-toggle-id]');
 
 // Add event listener for every fieldset with toggle
 Array.from(fieldsetsWithToggle).forEach(function(fieldset) {
-    var formInput = getToggleFormInput(fieldset);
+    const formInput = getToggleFormInput(fieldset);
     formInput.addEventListener('change', function(e) {
-        var formInput = e.target;
+        const formInput = e.target;
         toggleFieldset(fieldset, formInput);
     });
 });
 
 // Init fieldset states on page load
 Array.from(fieldsetsWithToggle).forEach(function(fieldset) {
-    var formInput = getToggleFormInput(fieldset);
+    const formInput = getToggleFormInput(fieldset);
     toggleFieldset(fieldset, formInput);
 
 });
@@ -128,7 +69,7 @@ Array.from(document.querySelectorAll('.form-input.file-input')).forEach(function
 
 // Helper function to enable or disable a fieldset
 function toggleFieldset(fieldset, formInput) {
-    var toggleValue = fieldset.getAttribute('data-toggle-value');
+    const toggleValue = fieldset.getAttribute('data-toggle-value');
 
     if (getFormInputValue(formInput) === toggleValue) {
         fieldset.removeAttribute('disabled');
@@ -150,14 +91,14 @@ function toggleFieldset(fieldset, formInput) {
 // Helper function to get form input
 // This function is necessary for radios and checkboxes as they are special
 function getToggleFormInput(fieldset) {
-    var toggleId = fieldset.getAttribute('data-toggle-id');
-    var toggleValue = fieldset.getAttribute('data-toggle-value');
+    const toggleId = fieldset.getAttribute('data-toggle-id');
+    const toggleValue = fieldset.getAttribute('data-toggle-value');
 
-    formInput = document.getElementById(toggleId);
+    const formInput = document.getElementById(toggleId);
     if (formInput.tagName.toLowerCase() !== 'div') {
         return formInput;
     } else {
-        var divFormInput;
+        let divFormInput;
         Array.from(formInput.querySelectorAll('.form-input')).forEach(function(formElement) {
             if (formElement.value === toggleValue) {
                 divFormInput = formElement;
@@ -203,17 +144,17 @@ function clearFormElementValue(formInput) {
  * Double the width of the first column to fit both labels and input fields
  */
 Array.from(document.querySelectorAll('.is-left-label .next-is-double')).forEach(function(elem) {
-    colThird = elem.nextElementSibling.querySelector('.is-one-third');
+    const colThird = elem.nextElementSibling.querySelector('.is-one-third');
     if (colThird) {
         colThird.classList.remove('is-one-third');
         colThird.classList.add('is-two-thirds');
     }
-    colQuarter = elem.nextElementSibling.querySelector('.is-one-quarter');
+    const colQuarter = elem.nextElementSibling.querySelector('.is-one-quarter');
     if (colQuarter) {
         colQuarter.classList.remove('is-one-quarter');
         colQuarter.classList.add('is-two-quarters');
     }
-    colFifth = elem.nextElementSibling.querySelector('.is-one-fifth');
+    const colFifth = elem.nextElementSibling.querySelector('.is-one-fifth');
     if (colFifth) {
         colFifth.classList.remove('is-one-fifth');
         colFifth.classList.add('is-two-fifths');
