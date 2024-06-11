@@ -1,8 +1,26 @@
-import {init as spinit} from "./sigpad.js";
-import {initSignaturePad} from "./sigpad.js";
+import { modals } from "./modal.js";
+import { uploadFeedback } from "./upload.js";
+import { initClonability } from "./clone.js";
+import { tooltips } from "./tooltip.js";
+import { initToggles } from "./toggle.js";
+import { tablestyle } from "./tablestyle.js";
 
-spinit();
-initSignaturePad();
+const form = document.getElementById("form");
+
+const sigPadWrappers = document.querySelectorAll(".signature-pad");
+if (sigPadWrappers.length > 0) {
+    import('./sigpad.js').then((Module => {
+            Module.sigpad(sigPadWrappers);
+        }
+    ));
+}
+
+modals();
+uploadFeedback();
+initClonability();
+tooltips();
+initToggles();
+tablestyle();
 
 /**
  * Init flatpickr
@@ -10,255 +28,3 @@ initSignaturePad();
 flatpickr('input:read-write[data-calendar-type="date"]', {'dateFormat' : 'd.m.Y', 'allowInput' : true});
 flatpickr('input:read-write[data-calendar-type="time"]', {'noCalendar' : true, 'enableTime' : true, 'time_24hr' : true, 'allowInput' : true});
 flatpickr('input:read-write[data-calendar-type="datetime"]', {'enableTime' : true, 'time_24hr' : true, 'dateFormat' : 'd.m.Y H:i', 'allowInput' : true});
-
-
-
-
-/**
- * Init Toggle
- */
-const fieldsetsWithToggle = document.querySelectorAll('[data-toggle-id]');
-
-// Add event listener for every fieldset with toggle
-Array.from(fieldsetsWithToggle).forEach(function(fieldset) {
-    const formInput = getToggleFormInput(fieldset);
-    formInput.addEventListener('change', function(e) {
-        const formInput = e.target;
-        toggleFieldset(fieldset, formInput);
-    });
-});
-
-// Init fieldset states on page load
-Array.from(fieldsetsWithToggle).forEach(function(fieldset) {
-    const formInput = getToggleFormInput(fieldset);
-    toggleFieldset(fieldset, formInput);
-
-});
-
-// Init upload feedback text
-Array.from(document.querySelectorAll('.form-input.file-input')).forEach(function(fileUpload) {
-    fileUpload.addEventListener('input', function (e) {
-        const infoContainerId = e.target.getAttribute('data-info-container-id');
-        const infoContainer = document.getElementById(infoContainerId);
-        const errorContainerId = e.target.getAttribute('data-error-container-id');
-        const errorContainer = document.getElementById(errorContainerId);
-
-        const max = e.target.getAttribute('data-max');
-        const curFiles = this.files;
-
-        let uploadSize = 0;
-
-        for (const file of curFiles) {
-            uploadSize += file.size;
-        }
-
-        const ok = uploadSize < max;
-
-        if (!ok) {
-            this.value = ''
-            errorContainer.classList.remove('hidden');
-            infoContainer.classList.add('hidden');
-        } else {
-            errorContainer.classList.add('hidden');
-            infoContainer.classList.remove('hidden');
-
-        }
-
-    })
-});
-
-// Helper function to enable or disable a fieldset
-function toggleFieldset(fieldset, formInput) {
-    const toggleValue = fieldset.getAttribute('data-toggle-value');
-
-    if (getFormInputValue(formInput) === toggleValue) {
-        fieldset.removeAttribute('disabled');
-        fieldset.classList.remove('hidden');
-        Array.from(fieldset.querySelectorAll('.form-input')).forEach(function(fieldsetFormElement) {
-            fieldsetFormElement.dispatchEvent(new Event("change"));
-        });
-    } else {
-        fieldset.setAttribute('disabled', '');
-        fieldset.classList.add('hidden');
-        Array.from(fieldset.querySelectorAll('.form-input')).forEach(function(fieldsetFormElement) {
-            clearFormElementValue(fieldsetFormElement);
-            // Trigger event in case another fieldset is affected due to this toggle
-            fieldsetFormElement.dispatchEvent(new Event("change"));
-        });
-    }
-}
-
-// Helper function to get form input
-// This function is necessary for radios and checkboxes as they are special
-function getToggleFormInput(fieldset) {
-    const toggleId = fieldset.getAttribute('data-toggle-id');
-    const toggleValue = fieldset.getAttribute('data-toggle-value');
-
-    const formInput = document.getElementById(toggleId);
-    if (formInput.tagName.toLowerCase() !== 'div') {
-        return formInput;
-    } else {
-        let divFormInput;
-        Array.from(formInput.querySelectorAll('.form-input')).forEach(function(formElement) {
-            if (formElement.value === toggleValue) {
-                divFormInput = formElement;
-            } else if (formElement.type === 'radio') {
-                formElement.addEventListener('click', function(e) {
-                    divFormInput.dispatchEvent(new Event("change"));
-                });
-            }
-        });
-
-        return divFormInput;
-    }
-
-}
-
-// Helper function to get input value
-// This function is necessary for radios and checkboxes as they always have a value
-// which gets only returned if this formInput is checked
-function getFormInputValue(formInput) {
-    if (formInput.type === 'checkbox' || formInput.type === 'radio') {
-        if (formInput.checked) {
-            return formInput.value;
-        }
-
-        return '';
-    }
-
-    return formInput.value;
-}
-
-// Helper function to unset input value
-// This function is necessary for radios and checkboxes as they are unset via property 'checked'
-function clearFormElementValue(formInput) {
-    if (formInput.type === 'checkbox' || formInput.type === 'radio') {
-        formInput.checked = false;
-    } else {
-        formInput.value = '';
-    }
-}
-
-/*
- * Table-like style
- * Double the width of the first column to fit both labels and input fields
- */
-Array.from(document.querySelectorAll('.is-left-label .next-is-double')).forEach(function(elem) {
-    const colThird = elem.nextElementSibling.querySelector('.is-one-third');
-    if (colThird) {
-        colThird.classList.remove('is-one-third');
-        colThird.classList.add('is-two-thirds');
-    }
-    const colQuarter = elem.nextElementSibling.querySelector('.is-one-quarter');
-    if (colQuarter) {
-        colQuarter.classList.remove('is-one-quarter');
-        colQuarter.classList.add('is-two-quarters');
-    }
-    const colFifth = elem.nextElementSibling.querySelector('.is-one-fifth');
-    if (colFifth) {
-        colFifth.classList.remove('is-one-fifth');
-        colFifth.classList.add('is-two-fifths');
-    }
-});
-
-
-/*
- * Clone field
- */
-function cloneHandler(e) {
-    if (e.target.matches('button.clone-field')) {
-
-        const elem = e.target;
-        const cloned = elem.parentNode.parentNode.cloneNode(true);
-        const input = cloned.querySelector('input');
-
-        cloned.id = cloned.id.replace(/(\d+$)/, function (match, number) {
-            return (parseInt(number, 10) + 1);
-        });
-
-        const newId = input.id.replace(/(\d+$)/, function(match, number) {
-            return (parseInt(number, 10) + 1);
-        });
-        input.value = '';
-        input.setAttribute('value', '');
-        input.id = newId;
-        const label = cloned.querySelector('label');
-        label.setAttribute('for', newId);
-
-        const pickr = input.dataset.calendarType;
-        if (pickr === 'date') {
-            flatpickr(input, {'dateFormat' : 'd.m.Y', 'allowInput' : true});
-        }
-        if (pickr === 'datetime') {
-            flatpickr(input, {'enableTime' : true, 'time_24hr' : true, 'dateFormat' : 'd.m.Y H:i', 'allowInput' : true});
-        }
-        if (pickr === 'time') {
-            flatpickr(input, {'noCalendar' : true, 'enableTime' : true, 'time_24hr' : true, 'allowInput' : true});
-        }
-
-        elem.parentNode.parentNode.after(cloned);
-        elem.parentNode.removeChild(elem);
-    }
-}
-
-form.addEventListener('click', cloneHandler);
-
-/**
- * Move tooltips inside headings for better styling
- */
-Array.from(document.querySelectorAll('.with-tooltip .control button.tooltip-button')).forEach(function(elem) {
-    const prev = elem.previousElementSibling;
-    const headlines = ['H1', 'H2', 'H3', 'H4', 'H5', 'H6'];
-    if (headlines.includes(prev.tagName)) {
-        prev.appendChild(elem);
-    }
-});
-
-/**
- * Modal
- */
-document.addEventListener('DOMContentLoaded', () => {
-    // Functions to open and close a modal
-    function openModal($el) {
-        $el.classList.add('is-active');
-        document.querySelector('html').classList.add('is-clipped');
-    }
-
-    function closeModal($el) {
-        $el.classList.remove('is-active');
-        document.querySelector('html').classList.remove('is-clipped');
-    }
-
-    function closeAllModals() {
-        (document.querySelectorAll('.modal') || []).forEach(($modal) => {
-            closeModal($modal);
-        });
-    }
-
-    // Add a click event on buttons to open a specific modal
-    (document.querySelectorAll('.js-modal-trigger') || []).forEach(($trigger) => {
-        const modal = $trigger.dataset.target;
-        const $target = document.getElementById(modal);
-
-        $trigger.addEventListener('click', () => {
-            openModal($target);
-        });
-    });
-
-    // Add a click event on various child elements to close the parent modal
-    (document.querySelectorAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button') || []).forEach(($close) => {
-        const $target = $close.closest('.modal');
-
-        $close.addEventListener('click', (evt) => {
-            evt.preventDefault();
-            closeModal($target);
-        });
-    });
-
-    // Add a keyboard event to close all modals
-    document.addEventListener('keydown', (event) => {
-        if(event.key === "Escape") {
-            closeAllModals();
-        }
-    });
-});
