@@ -2,10 +2,6 @@
  * Custom app styles
  */
 
-.file-label {
-    display: inline-block;
-}
-
 canvas {
     border: 1px solid black;
     background: #ffffff;
@@ -24,23 +20,13 @@ input.checkbox-input {
     display: none;
 }
 
-label.label-smaller,
-div.label-smaller {
-    font-weight: normal;
-}
-
 /** Tooltips */
-.label {
-    display: inline-block;
-}
 
-.signature-pad .label {
-    display: block;
-}
 
 button.is-small.tooltip-button {
     border: 0;
     font-size: 0.65rem;
+    margin-left: 0.25rem;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -269,4 +255,32 @@ div.modal-content {
 
 div.modal-content div.box * {
     font-weight: initial;
+}
+
+/**
+ * Labels
+ */
+label.label-smaller,
+div.label-smaller {
+    font-weight: normal;
+}
+
+.file-label {
+    display: inline-block;
+}
+
+.label {
+    display: inline-block;
+}
+
+.signature-pad .label {
+    display: block;
+}
+
+.label:not(:last-child, .fieldset-label) {
+    margin-bottom: unset;
+}
+
+.label-with-tooltip {
+    margin-bottom: 0.25rem;
 }
