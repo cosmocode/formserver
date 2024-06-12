@@ -20,7 +20,7 @@ form:
     children:
       radioset1:
         type: radioset
-        label: 'Toggle different fieldsets (hidden fieldsets lose all their values!)'
+        label: 'Toggle different fieldsets (hidden fieldsets lose all their values when the form is submitted/saved!)'
         column: is-half
         alignment: vertical
         validation:

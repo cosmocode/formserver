@@ -9,22 +9,42 @@ export function initToggles() {
         const formInput = getToggleFormInput(fieldset);
         formInput.addEventListener('change', function(e) {
             const formInput = e.target;
-            toggleFieldset(fieldset, formInput);
+            toggleFieldset(fieldset, formInput, formInput.checkVisibility());
         });
     });
 
     // Init fieldset states on page load
     Array.from(fieldsetsWithToggle).forEach(function(fieldset) {
         const formInput = getToggleFormInput(fieldset);
-        toggleFieldset(fieldset, formInput);
-
+        toggleFieldset(fieldset, formInput, formInput.checkVisibility());
     });
 
-    // Helper function to enable or disable a fieldset
-    function toggleFieldset(fieldset, formInput) {
+    // clear all inputs in hidden fields on submit
+    form.addEventListener("submit", function (event) {
+
+        Array.from(fieldsetsWithToggle).forEach(function(fieldset) {
+            if (!fieldset.classList.contains('hidden')) {
+                return;
+            }
+
+            Array.from(fieldset.querySelectorAll('.form-input')).forEach(function(fieldsetFormElement) {
+                clearFormElementValue(fieldsetFormElement);
+            });
+        });
+    });
+
+    /**
+     * Helper function to enable or disable a fieldset
+     *
+     * @param fieldset Fieldset to toggle
+     * @param formInput Toggle trigger
+     * @param isVisible False if the toggle trigger is not visible (e.g. itself in a hidden fieldset)
+     */
+    function toggleFieldset(fieldset, formInput, isVisible) {
         const toggleValue = fieldset.getAttribute('data-toggle-value');
 
-        if (getFormInputValue(formInput) === toggleValue) {
+        // check if toggleValue matches and is not hidden / in a disabled fieldset
+        if (isVisible && getFormInputValue(formInput) === toggleValue) {
             fieldset.removeAttribute('disabled');
             fieldset.classList.remove('hidden');
             Array.from(fieldset.querySelectorAll('.form-input')).forEach(function(fieldsetFormElement) {
@@ -34,7 +54,6 @@ export function initToggles() {
             fieldset.setAttribute('disabled', '');
             fieldset.classList.add('hidden');
             Array.from(fieldset.querySelectorAll('.form-input')).forEach(function(fieldsetFormElement) {
-                clearFormElementValue(fieldsetFormElement);
                 // Trigger event in case another fieldset is affected due to this toggle
                 fieldsetFormElement.dispatchEvent(new Event("change"));
             });
