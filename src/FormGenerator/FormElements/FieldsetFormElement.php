@@ -169,7 +169,7 @@ class FieldsetFormElement extends AbstractFormElement
     }
 
     /**
-     * Value which triggeres the toggle (show)
+     * Array of values which trigger the toggle (show)
      *
      * @return mixed
      */
@@ -177,7 +177,7 @@ class FieldsetFormElement extends AbstractFormElement
     {
         $toggleConfig = $this->getConfigValue('toggle');
 
-        return $toggleConfig['value'];
+        return htmlspecialchars(json_encode((array)$toggleConfig['value'], JSON_THROW_ON_ERROR));
     }
 
     /**
@@ -195,26 +195,6 @@ class FieldsetFormElement extends AbstractFormElement
             $this->getToggleVariables(),
             $this->processBackgroundVariables()
         );
-    }
-
-    /**
-     * Generate html form id from dotted id
-     * e.g. 'fieldset1.fieldset2.textarea1' --> 'fieldset1[fieldset2][textarea1]'
-     *
-     * @param string $id
-     * @return string
-     */
-    protected function dottetIdToFormId(string $id)
-    {
-        $toggleIdPath = explode('.', $id);
-        $togglePathCount = count($toggleIdPath);
-        $toggleViewId = $toggleIdPath[0];
-
-        for ($i = 1; $i < $togglePathCount; $i++) {
-            $toggleViewId .= '[' .$toggleIdPath[$i] . ']';
-        }
-
-        return $toggleViewId;
     }
 
     /**

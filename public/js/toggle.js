@@ -41,10 +41,10 @@ export function initToggles() {
      * @param isVisible False if the toggle trigger is not visible (e.g. itself in a hidden fieldset)
      */
     function toggleFieldset(fieldset, formInput, isVisible) {
-        const toggleValue = fieldset.getAttribute('data-toggle-value');
+        const toggleValue = JSON.parse(fieldset.getAttribute('data-toggle-value'));
 
         // check if toggleValue matches and is not hidden / in a disabled fieldset
-        if (isVisible && getFormInputValue(formInput) === toggleValue) {
+        if (isVisible && toggleValue.includes(getFormInputValue(formInput))) {
             fieldset.removeAttribute('disabled');
             fieldset.classList.remove('hidden');
             Array.from(fieldset.querySelectorAll('.form-input')).forEach(function(fieldsetFormElement) {
@@ -64,7 +64,7 @@ export function initToggles() {
     // This function is necessary for radios and checkboxes as they are special
     function getToggleFormInput(fieldset) {
         const toggleId = fieldset.getAttribute('data-toggle-id');
-        const toggleValue = fieldset.getAttribute('data-toggle-value');
+        const toggleValue = JSON.parse(fieldset.getAttribute('data-toggle-value'));
 
         const formInput = document.getElementById(toggleId);
         if (formInput.tagName.toLowerCase() !== 'div') {
@@ -72,7 +72,7 @@ export function initToggles() {
         } else {
             let divFormInput;
             Array.from(formInput.querySelectorAll('.form-input')).forEach(function(formElement) {
-                if (formElement.value === toggleValue) {
+                if (toggleValue.includes(formElement.value)) {
                     divFormInput = formElement;
                 } else if (formElement.type === 'radio') {
                     formElement.addEventListener('click', function(e) {
