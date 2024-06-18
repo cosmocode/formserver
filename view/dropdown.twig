@@ -20,11 +20,22 @@
                         {{ multiselect is defined and multiselect ? 'multiple' }}>
 
                     <option value="">{{ empty_label is defined ? empty_label }}</option>
-                    {%- for choice in choices -%}
-                        <option {{ choice in value ? 'selected' }}>{{ choice }}</option>
+
+                    {% if conditional_choices is not empty %}
+                    {%- for select in conditional_choices -%}
+                        {%- for choice in select.choices -%}
+                            <option disabled {{ choice in value ? 'selected' }} data-toggle-id="{{ select.field}}" data-toggle-value="{{ select.value }}">{{ choice }}</option>
+                        {%- endfor -%}
                     {%- endfor -%}
+                    {% else %}
+                        {%- for choice in choices -%}
+                            <option {{ choice in value ? 'selected' }}>{{ choice }}</option>
+                        {%- endfor -%}
+                    {% endif %}
 
                 </select>
+
+
             </div>
         </div>
         {{ renderError(errors) }}
