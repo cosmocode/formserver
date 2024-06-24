@@ -84,8 +84,10 @@ $customErrorHandler = function (
 };
 
  // This middleware should be added last.
-$errorMiddleware = $app->addErrorMiddleware(false, false, false);
-$errorMiddleware->setDefaultErrorHandler($customErrorHandler);
+$errorMiddleware = $app->addErrorMiddleware($displayErrorDetails, false, false);
+if (!$displayErrorDetails) {
+    $errorMiddleware->setDefaultErrorHandler($customErrorHandler);
+}
 
 // Run App & Emit Response
 $response = $app->handle($request);
