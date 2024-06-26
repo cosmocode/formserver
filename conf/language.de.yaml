@@ -19,5 +19,5 @@ button_clone: Feld hinzufügen
 button_upload: Datei hochladen
 button_upload_replace: Datei ersetzen
 uploaded_file: Hochgeladene Dateien
-upload_info: Die ausgewählte Datei wird beim Speichern oder Senden hochgeladen und geprüft
+upload_info: "Die ausgewählten Dateien werden beim Speichern oder Senden hochgeladen und geprüft:"
 upload_error: Die Dateien sind zu groß!
