@@ -14,7 +14,8 @@
     }
   ],
   "require": {
-    "php": ">=7.2",
+    "php": ">=8.2",
+    "ext-json": "*",
     "php-di/php-di": "^6.0",
     "monolog/monolog": "^1.24",
     "slim/psr7": "^1.4",
@@ -24,11 +25,11 @@
     "mustangostang/spyc": "~0.6.2",
     "respect/validation": "^1.1",
     "swiftmailer/swiftmailer": "^6.2",
-    "ralouphie/mimey": "^2.1"
+    "xantios/mimey": "^2.2"
   },
   "config": {
     "platform": {
-      "php": "7.2"
+      "php": "8.2"
     }
   },
   "require-dev": {
