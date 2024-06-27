@@ -68,7 +68,7 @@ abstract class AbstractDynamicFormElement extends AbstractFormElement
     /**
      * @param string $formPath
      */
-    public function clearValue(string $formPath)
+    public function clearValue(string $formPath): void
     {
         $this->value = null;
     }
@@ -160,7 +160,7 @@ abstract class AbstractDynamicFormElement extends AbstractFormElement
      * @inheritDoc
      * @return array
      */
-    public function getViewVariables()
+    public function getViewVariables(): array
     {
         return array_merge(
             parent::getViewVariables(),

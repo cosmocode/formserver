@@ -30,7 +30,7 @@ class ChecklistFormElement extends AbstractDynamicFormElement
      *
      * @return array
      */
-    public function getViewVariables()
+    public function getViewVariables(): array
     {
         $choices = $this->getConfigValue('choices');
         $transformedChoices = [];

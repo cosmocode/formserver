@@ -104,7 +104,7 @@ abstract class AbstractFormElement
      *
      * @return array
      */
-    public function getConfig()
+    public function getConfig(): array
     {
         return $this->config;
     }
@@ -136,7 +136,7 @@ abstract class AbstractFormElement
      *
      * @return bool
      */
-    public function hasParent()
+    public function hasParent(): bool
     {
         return $this->parent !== null;
     }
@@ -148,14 +148,19 @@ abstract class AbstractFormElement
      *
      * @return string
      */
-    protected function parseTooltip()
+    protected function parseTooltip(): string
     {
         $tooltip = $this->getConfigValue('tooltip') ?? '';
 
         return str_replace("\n", '&#10;&#013;', $tooltip);
     }
 
-    protected function parseModal()
+    /**
+     * Applies markdown to modals and corrects image paths
+     *
+     * @return string
+     */
+    protected function parseModal(): string
     {
         $modal = $this->getConfigValue('modal') ?? '';
         if ($modal) {
@@ -170,7 +175,7 @@ abstract class AbstractFormElement
      *
      * @return array
      */
-    public function getViewVariables()
+    public function getViewVariables(): array
     {
         return array_merge(
             $this->config,
@@ -189,7 +194,7 @@ abstract class AbstractFormElement
      * @param string $id
      * @return string
      */
-    protected function dottetIdToFormId(string $id)
+    protected function dottetIdToFormId(string $id): string
     {
         $toggleIdPath = explode('.', $id);
         $togglePathCount = count($toggleIdPath);

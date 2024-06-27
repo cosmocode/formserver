@@ -13,7 +13,7 @@ class SignatureFormElement extends AbstractDynamicFormElement
      * @inheritDoc
      * @return array
      */
-    public function getViewVariables()
+    public function getViewVariables(): array
     {
         return array_merge(
             parent::getViewVariables(),

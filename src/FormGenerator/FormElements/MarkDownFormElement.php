@@ -24,7 +24,7 @@ class MarkDownFormElement extends AbstractFormElement
      *
      * @return array
      */
-    public function getViewVariables()
+    public function getViewVariables(): array
     {
         $markdown = MarkdownExtra::defaultTransform($this->getMarkdown());
 

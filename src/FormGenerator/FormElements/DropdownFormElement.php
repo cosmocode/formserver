@@ -12,7 +12,7 @@ class DropdownFormElement extends AbstractDynamicFormElement
      *
      * @return array
      */
-    public function getViewVariables()
+    public function getViewVariables(): array
     {
         $conf = parent::getViewVariables();
 

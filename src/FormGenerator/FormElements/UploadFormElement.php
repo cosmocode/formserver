@@ -55,10 +55,12 @@ class UploadFormElement extends AbstractDynamicFormElement
     /**
      * Remove old file before resetting the value, useful when clearing the form after submit
      *
-     * @param $formPath
+     * @param string $formPath
+     * @return void
      */
-    public function clearValue($formPath)
+    public function clearValue(string $formPath): void
     {
+        // FIXME when do we want to keep the file?
         if (is_array($this->value)) {
             foreach ($this->value as $value) {
                 if (is_file($formPath . $value)) {
@@ -75,7 +77,7 @@ class UploadFormElement extends AbstractDynamicFormElement
      *
      * @return string
      */
-    public function getAllowedExtensionsAsString()
+    public function getAllowedExtensionsAsString(): string
     {
         return strtolower(
             $this->getConfig()['validation']['fileext'] ?? ''
@@ -137,7 +139,7 @@ class UploadFormElement extends AbstractDynamicFormElement
      * @inheritDoc
      * @return array
      */
-    public function getViewVariables()
+    public function getViewVariables(): array
     {
         return array_merge(
             parent::getViewVariables(),
