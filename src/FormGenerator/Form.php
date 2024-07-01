@@ -274,88 +274,29 @@ class Form
                 $this->submitFormElement($fieldsetChild, $subData, $subFiles);
             }
         } elseif ($formElement instanceof UploadFormElement) {
-            $newUpload = $files[$formElement->getId()] ?? null;
+            $formElement->formDirectory = $this->getFormDirectory();
+            $formElement->formIsPersistent = $this->getMeta('saveButton');
 
             // try to restore previous upload data
-            $previousUpload = json_decode($data[$formElement->getId()]['previous_value']);
+            $previousUpload = json_decode($data[$formElement->getId()]['previous_value'], true);
             $formElement->setPreviousValue($previousUpload);
 
-            // Re-upload: delete old files first
-            if ($newUpload && FileHelper::isReupload($newUpload, $previousUpload)) {
-                $this->deleteFileFromFormElement($formElement);
-            }
+            $newUpload = $files[$formElement->getId()] ?? null;
 
-            if ($newUpload && FileHelper::isValidUpload($newUpload)) {
-                /**
-                 * @var UploadedFile $file
-                 */
-                foreach ($newUpload as $key => $file) {
-                    $fileName = $this->moveUploadedFile($file, $formElement, $key);
-                    $formElement->setValue($fileName);
-                }
-            } else {
+            // no new valid upload
+            if (!$newUpload || !FileHelper::isValidUpload($newUpload)) {
                 // reuse previously uploaded files on new submit
                 $formElement->setValue($previousUpload);
+            } else {
+                // Re-upload? delete old files first
+                !empty($previousUpload) && $formElement->deleteFiles();
+                // save new upload
+                $formElement->saveNewUpload($newUpload);
             }
         } elseif ($formElement instanceof AbstractDynamicFormElement) {
             $value = $data[$formElement->getId()] ?? null;
             // Important! Value must be set, even if empty. User can unset fields
             $formElement->setValue($value);
-        }
-    }
-
-    /**
-     * Moves an uploaded file.
-     * http://www.slimframework.com/docs/v3/cookbook/uploading-files.html
-     *
-     * @param UploadedFile $uploadedFile
-     * @param UploadFormElement $formElement
-     * @param int $key
-     * @return string
-     */
-    protected function moveUploadedFile(
-        UploadedFile $uploadedFile,
-        UploadFormElement $formElement,
-        int $key
-    ) {
-        $extension = FileHelper::getFileExtension(
-            $uploadedFile->getClientFilename()
-        );
-
-        $baseName = $formElement->getId();
-        $parent = $formElement->getParent();
-        while ($parent !== null) {
-            $baseName = $parent->getId() . ".$baseName";
-            $parent = $parent->getParent();
-        }
-
-        if ($this->getMeta('saveButton') === false) {
-            $baseName = time() . '_' . $baseName;
-        }
-        $fileName = sprintf('%s_%s.%0.8s', $baseName, $key, $extension);
-
-        $filePath = $this->getFormDirectory() . $fileName;
-        $uploadedFile->moveTo($filePath);
-
-        return $fileName;
-    }
-
-    /**
-     * Deletes a file (in favor of another uploaded one)
-     *
-     * @param UploadFormElement $formElement
-     * @return void
-     */
-    protected function deleteFileFromFormElement(UploadFormElement $formElement)
-    {
-        $previousUploads = $formElement->getPreviousValue();
-        foreach ($previousUploads as $upload) {
-            $filePath = $this->getFormDirectory() . $upload;
-            if (is_file($filePath)) {
-                unlink($filePath);
-            } else {
-                throw new FormException("Could not delete file: '$filePath'");
-            }
         }
     }
 

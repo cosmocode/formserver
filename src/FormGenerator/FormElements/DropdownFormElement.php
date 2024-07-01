@@ -23,8 +23,13 @@ class DropdownFormElement extends AbstractDynamicFormElement
         // prepare conditional select
         if (isset($conf['conditional_choices']) && is_array($conf['conditional_choices'])) {
             foreach ($conf['conditional_choices'] as $k => $select) {
-                isset($select['field']) && $conf['conditional_choices'][$k]['field'] = $this->dottetIdToFormId($select['field']);
-                isset($select['value']) && $conf['conditional_choices'][$k]['value'] = json_encode((array)$select['value'], JSON_THROW_ON_ERROR);
+                isset($select['field'])
+                    && $conf['conditional_choices'][$k]['field'] = $this->dottedIdToFormId($select['field']);
+                isset($select['value'])
+                    && $conf['conditional_choices'][$k]['value'] = json_encode(
+                        (array)$select['value'],
+                        JSON_THROW_ON_ERROR
+                    );
             }
         }
 

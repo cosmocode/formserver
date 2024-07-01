@@ -79,14 +79,15 @@ abstract class AbstractFormElement
     }
 
     /**
-     * Get unique id as a dash separated string instead of an array.
-     * For use in data attributes.
+     * Get unique id as a string instead of an array, with dash as default separator.
+     * For use in data attributes with default dash
      *
+     * @param string $separator Separator character
      * @return string
      */
-    public function getFormElementIdStringified()
+    public function getFormElementIdStringified(string $separator = '-'): string
     {
-        return str_replace(['[', ']'], ['-', ''], $this->getFormElementId());
+        return str_replace(['[', ']'], [$separator, ''], $this->getFormElementId());
     }
 
     /**
@@ -194,7 +195,7 @@ abstract class AbstractFormElement
      * @param string $id
      * @return string
      */
-    protected function dottetIdToFormId(string $id): string
+    protected function dottedIdToFormId(string $id): string
     {
         $toggleIdPath = explode('.', $id);
         $togglePathCount = count($toggleIdPath);

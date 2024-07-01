@@ -1,8 +1,11 @@
 <?php
+declare(strict_types=1);
 
 namespace CosmoCode\Formserver\FormGenerator\FormElements;
 
+use CosmoCode\Formserver\Exceptions\FormException;
 use CosmoCode\Formserver\Helper\FileHelper;
+use Slim\Psr7\UploadedFile;
 
 /**
  * Representation of a file upload
@@ -10,27 +13,51 @@ use CosmoCode\Formserver\Helper\FileHelper;
 class UploadFormElement extends AbstractDynamicFormElement
 {
     /**
-     * @var array
+     * @var string field address that is part of uploaded file
      */
-    protected $previousValue;
+    public $fieldAddress = '';
 
     /**
-     * Update previous value on every upload.
+     * @var string
+     */
+    protected string $previousValue;
+
+    protected array $originalFilenames = [];
+
+    /**
+     * @var string
+     */
+    public string $formDirectory;
+
+    /** @var bool */
+    public string $formIsPersistent;
+
+
+    public function __construct(string $id, array $config, FieldsetFormElement $parent = null, string $formId = '')
+    {
+        parent::__construct($id, $config, $parent, $formId);
+        $this->fieldAddress = $this->getFormElementIdStringified('.');
+    }
+
+    /**
+     * Additionally update previous value on every upload.
      * Also used when restoring persisted values.
      *
      * @param mixed $value
      */
-    public function setValue($value)
+    public function setValue($value): void
     {
+        if (is_null($value)) {
+            $this->value = null;
+        }
+
         if (! empty($value)) {
             // before introducing multiupload values were simple strings
-            if (is_array($value)) {
-                $this->value = $value;
-            } else {
+            if (!is_array($value)) {
                 $this->value[] = $value;
+            } else {
+                $this->value = $value;
             }
-        } elseif (is_null($value)) {
-            $this->value = null;
         }
         $this->setPreviousValue($this->value);
     }
@@ -38,16 +65,16 @@ class UploadFormElement extends AbstractDynamicFormElement
     /**
      * @return array
      */
-    public function getPreviousValue()
+    public function getPreviousValue(): array
     {
-        return json_decode($this->previousValue) ?? [];
+        return json_decode($this->previousValue, true) ?? [];
     }
 
     /**
      * @param array|null $value
      * @return void
      */
-    public function setPreviousValue($value)
+    public function setPreviousValue($value): void
     {
         $this->previousValue = json_encode($value);
     }
@@ -60,14 +87,7 @@ class UploadFormElement extends AbstractDynamicFormElement
      */
     public function clearValue(string $formPath): void
     {
-        // FIXME when do we want to keep the file?
-        if (is_array($this->value)) {
-            foreach ($this->value as $value) {
-                if (is_file($formPath . $value)) {
-                    unlink($formPath . $value);
-                }
-            }
-        }
+        $this->deleteFiles();
 
         $this->setValue(null);
     }
@@ -145,11 +165,123 @@ class UploadFormElement extends AbstractDynamicFormElement
             parent::getViewVariables(),
             [
                 'is_uploaded' => $this->hasValue(),
+                'uploaded_files' => $this->getUploadedFiles(),
                 'allowed_extensions' => $this->getAllowedExtensionsAsArray(),
                 'previous_value' => json_encode($this->getPreviousValue()),
                 'max_size' => $this->getMaxSize(),
                 'max_size_human' => FileHelper::getMaxSizeHuman($this->getMaxSize()),
             ]
         );
+    }
+
+    /**
+     * Provides original filenames (name) and actual field-address related names (address).
+     *
+     * @return array
+     */
+    public function getUploadedFiles(): array
+    {
+        if (!$this->hasValue()) {
+            return [];
+        }
+
+        $uploaded = [];
+        foreach ($this->value as $key => $filename) {
+            if ($this->formIsPersistent) {
+                $uploaded[$key]['name'] = $filename;
+                $ext = FileHelper::getFileExtension($filename);
+                $uploaded[$key]['address'] = $this->getFormElementIdStringified('.') . "_$key.$ext";
+            } else {
+                // TODO client file name on transient upload
+                $uploaded[$key]['name'] = '?';
+                $uploaded[$key]['address'] = $filename;
+            }
+        }
+
+        return $uploaded;
+    }
+
+    /**
+     * Deletes all files before uploading new one(s) or when resetting the form (save disabled)
+     *
+     * @return void
+     */
+    public function deleteFiles()
+    {
+        if ($this->formIsPersistent) {
+            foreach (new \DirectoryIterator($this->formDirectory) as $fileInfo) {
+                if ($fileInfo->isDot() || !str_starts_with($fileInfo->getFilename(), $this->fieldAddress . '_')) continue;
+                if (unlink($fileInfo->getPathname()) === false) {
+                    throw new FormException('Could not delete file: ' . $fileInfo->getFilename());
+                }
+            }
+        } else {
+            $previousUploads = $this->getPreviousValue();
+            foreach ($previousUploads as $upload) {
+                $filePath = $this->formDirectory . $upload;
+                if (is_file($filePath)) {
+                    unlink($filePath);
+                } else {
+                    throw new FormException("Could not delete file: '$filePath'");
+                }
+            }
+        }
+
+    }
+
+    /**
+     * Persist an uploaded file
+     *
+     * @param $newUpload
+     * @return void
+     */
+    public function saveNewUpload($newUpload)
+    {
+        /**
+         * @var UploadedFile $file
+         */
+        foreach ($newUpload as $key => $file) {
+            $filename = $this->moveUploadedFile($file, $key);
+            $this->originalFilenames[$key] = $filename;
+            if ($this->formIsPersistent) {
+                $value[$key] = $file->getClientFilename();
+            } else {
+                $value[$key] = $filename;
+            }
+        }
+        $this->setValue($value);
+    }
+
+    /**
+     * Moves an uploaded file.
+     * http://www.slimframework.com/docs/v4/cookbook/uploading-files.html
+     *
+     * @param UploadedFile $uploadedFile
+     * @param int $key
+     * @return string path to moved file
+     */
+    protected function moveUploadedFile(UploadedFile $uploadedFile, int $key): string
+    {
+        $extension = FileHelper::getFileExtension(
+            $uploadedFile->getClientFilename()
+        );
+
+        $baseName = $this->getId();
+        $parent = $this->getParent();
+        while ($parent !== null) {
+            $baseName = $parent->getId() . ".$baseName";
+            $parent = $parent->getParent();
+        }
+
+        // to prevent conflicts, add timestamp when saving is disabled (multi-user form)
+        if (!$this->formIsPersistent) {
+            $baseName = time() . '_' . $baseName;
+        }
+        $fileName = sprintf('%s_%s.%0.8s', $baseName, $key, $extension);
+
+        $filePath = $this->formDirectory . $fileName;
+        $uploadedFile->moveTo($filePath);
+
+        return $fileName;
     }
 }

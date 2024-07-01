@@ -54,22 +54,6 @@ class FileHelper
     }
 
     /**
-     * Returns true if both new and old upload data are found and are error free
-     *
-     * @param UploadedFile[] $newUpload
-     * @param array $previousUpload
-     * @return bool
-     */
-    public static function isReupload(array $newUpload, array $previousUpload)
-    {
-        if (empty($previousUpload)) {
-            return false;
-        }
-
-        return self::isValidUpload($newUpload);
-    }
-
-    /**
      * Returns true if there are actual uploads, all error free
      *
      * @param array $uploads

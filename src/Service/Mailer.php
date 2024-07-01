@@ -123,7 +123,7 @@ class Mailer
      *
      * @param array $formElements
      * @param string $formDirectory
-     * @param string $title
+     * @param string|null $title
      * @return string
      */
     protected function formToMessage(
@@ -164,12 +164,14 @@ class Mailer
             $label = $element->getConfigValue('label');
             $value = $element->getValueString();
 
+            // special handling of uploads
             if ($element instanceof UploadFormElement && $value) {
-                // multiple files?
-                $files = explode(', ', $value);
+                $value = '';
+                $files = $element->getUploadedFiles();
                 foreach ($files as $file) {
+                    $value .= $file['address'] . ' (' . LangManager::getString('uploaded_original') . ' ' . $file['name'] . ') ';
                     $this->attachments[]
-                        = \Swift_Attachment::fromPath($formDirectory . $file);
+                        = \Swift_Attachment::fromPath($formDirectory . $file['address']);
                 }
             }
 

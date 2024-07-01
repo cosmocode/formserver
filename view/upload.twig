@@ -7,8 +7,8 @@
             {{ renderModal(modal, id) }}<br />
             {% if is_uploaded %}
                 <ul>
-                    {% for uploaded in value %}
-                        <li><a href="{{ fileUrl(uploaded) }}" target="_blank">{{ uploaded_file_label is not empty ? uploaded_file_label : 'Saved file' }}</a></li>
+                    {% for uploaded in uploaded_files %}
+                        <li>{{ uploaded_original }}: <a href="{{ fileUrl(uploaded.address) }}" target="_blank">{{ uploaded.name }}</a></li>
                     {% endfor %}
                 </ul>
             {% endif %}
@@ -30,9 +30,10 @@
                     </span>
                 </span>
             </label>
-
-            <p class="hidden" id="{{ id }}-upload-info">{{ upload_info }}</p>
-            <p class="hidden has-text-danger" id="{{ id }}-upload-error">{{ upload_error }} (max {{ max_size_human }})</p>
+            <div class="notification is-warning hidden" id="{{ id }}-upload-info">{{ upload_info }}
+                <strong><span class="notification-upload"></span></strong>
+            </div>
+            <div class="notification is-error hidden" id="{{ id }}-upload-error">{{ upload_error }} (max {{ max_size_human }})  </div>
 
             {{ renderError(errors) }}
         </div>

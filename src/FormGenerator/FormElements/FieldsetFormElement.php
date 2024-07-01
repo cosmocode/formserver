@@ -142,7 +142,7 @@ class FieldsetFormElement extends AbstractFormElement
     {
         if ($this->hasToggle()) {
             $toggleId = $this->getToggleFieldId();
-            $toggleViewId = $this->dottetIdToFormId($toggleId);
+            $toggleViewId = $this->dottedIdToFormId($toggleId);
             $toggleValue = $this->getToggleValue();
 
             return [

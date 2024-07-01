@@ -48,7 +48,8 @@ class FormRenderer
 
         $arrayLoader = new \Twig\Loader\ArrayLoader($loadedTemplates);
 
-        $this->twig = new \Twig\Environment($arrayLoader);
+        $this->twig = new \Twig\Environment($arrayLoader, ['debug' => true]);
+        $this->twig->addExtension(new \Twig\Extension\DebugExtension());
     }
 
     /**
@@ -60,29 +61,20 @@ class FormRenderer
     public function render()
     {
         $renderedFormElements = [];
-        $title = $this->form->getMeta('title');
-        $tooltipStyle = $this->form->getMeta('tooltip_style') ?? '';
-        $saveButtonLabel = LangManager::getString('button_save');
-        $sendButtonlabel = LangManager::getString('button_send');
-        $cloneButtonlabel = LangManager::getString('button_clone');
-        $uploadButtonLabel = LangManager::getString('button_upload');
-        $replaceUploadButtonLabel = LangManager::getString('button_upload_replace');
-        $uploadedFileLabel = LangManager::getString('uploaded_file');
-        $uploadInfo = LangManager::getString('upload_info');
-        $uploadError = LangManager::getString('upload_error');
 
         // Global variables available in all templates and macros
         $this->twig->addGlobal('form_id', $this->form->getId());
         $this->twig->addGlobal('form_is_valid', $this->form->isValid());
-        $this->twig->addGlobal('button_save_label', $saveButtonLabel);
-        $this->twig->addGlobal('button_send_label', $sendButtonlabel);
-        $this->twig->addGlobal('button_clone_label', $cloneButtonlabel);
-        $this->twig->addGlobal('button_upload_label', $uploadButtonLabel);
-        $this->twig->addGlobal('button_upload_replace', $replaceUploadButtonLabel);
-        $this->twig->addGlobal('uploaded_file_label', $uploadedFileLabel);
-        $this->twig->addGlobal('upload_info', $uploadInfo);
-        $this->twig->addGlobal('upload_error', $uploadError);
-        $this->twig->addGlobal('tooltip_style', $tooltipStyle);
+        $this->twig->addGlobal('button_save_label', LangManager::getString('button_save'));
+        $this->twig->addGlobal('button_send_label', LangManager::getString('button_send'));
+        $this->twig->addGlobal('button_clone_label', LangManager::getString('button_clone'));
+        $this->twig->addGlobal('button_upload_label', LangManager::getString('button_upload'));
+        $this->twig->addGlobal('button_upload_replace', LangManager::getString('button_upload_replace'));
+        $this->twig->addGlobal('uploaded_file_label', LangManager::getString('uploaded_file'));
+        $this->twig->addGlobal('uploaded_original', LangManager::getString('uploaded_original'));
+        $this->twig->addGlobal('upload_info', LangManager::getString('upload_info'));
+        $this->twig->addGlobal('upload_error', LangManager::getString('upload_error'));
+        $this->twig->addGlobal('tooltip_style', $this->form->getMeta('tooltip_style') ?? '');
 
         foreach ($this->form->getFormElements() as $formElement) {
             if ($formElement instanceof FieldsetFormElement) {
@@ -101,7 +93,7 @@ class FormRenderer
             '_form',
             [
                 'rendered_form_elements' => $renderedFormElements,
-                'title' => $title,
+                'title' => $this->form->getMeta('title'),
                 'notification' => $this->generateNotification(),
                 'css' => $this->form->getMeta('css'),
                 'form_id' => $this->form->getId(),
