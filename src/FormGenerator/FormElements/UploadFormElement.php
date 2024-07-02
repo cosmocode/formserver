@@ -226,7 +226,6 @@ class UploadFormElement extends AbstractDynamicFormElement
                 }
             }
         }
-
     }
 
     /**

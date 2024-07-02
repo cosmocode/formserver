@@ -284,3 +284,14 @@ div.label-smaller {
 .label-with-tooltip {
     margin-bottom: 0.25rem;
 }
+
+/**
+ ** Upload dropzone
+ */
+.dropzone {
+    &.highlight {
+        padding: 0.252rem;
+        background-color: var(--bulma-info);
+        border-radius: 0.25rem;
+    }
+}
