@@ -8,9 +8,8 @@ use CosmoCode\Formserver\FormGenerator\FormElements\AbstractDynamicFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\FieldsetFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\SignatureFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\UploadFormElement;
-use Swift_Mailer;
-use Swift_Message;
-use Swift_SmtpTransport;
+use Nette\Mail\Message;
+use Nette\Mail\SmtpMailer;
 
 /**
  * Mail Service to send completed forms via email
@@ -22,35 +21,23 @@ class Mailer
     /**
      * @var string
      */
-    protected $sender;
+    protected string $sender;
 
-    /**
-     * @var Swift_Mailer
-     */
-    protected $swiftmailer;
-
-    /**
-     * @var array
-     */
-    protected $recipients = [];
+    /** @var SmtpMailer  */
+    protected SmtpMailer $mailer;
 
     /**
      * @var string
      */
-    protected $htmlBody = '';
-
-    /**
-     * @var string
-     */
-    protected $textBody = '';
+    protected string $htmlBody = '';
 
     /**
      * @var array
      */
-    protected $attachments = [];
+    protected array $attachments = [];
 
     /**
-     * Pass mail configuration
+     * Pass mailer configuration
      *
      * @param array $mailerConfiguration
      */
@@ -58,18 +45,13 @@ class Mailer
     {
         $this->sender = $mailerConfiguration['sender'];
 
-        $transport = new Swift_SmtpTransport(
-            $mailerConfiguration['host'],
-            $mailerConfiguration['port'],
-            $mailerConfiguration['encryption']
+        $this->mailer = new SmtpMailer(
+            host: $mailerConfiguration['host'],
+            username: $mailerConfiguration['username'] ?? '',
+            password: $mailerConfiguration['password'] ?? '',
+            port: $mailerConfiguration['port'],
+            encryption: $mailerConfiguration['encryption']
         );
-
-        if (! empty($mailerConf['username']) && ! empty($mailerConf['password'])) {
-            $transport->setUsername($mailerConf['username']);
-            $transport->setPassword($mailerConf['password']);
-        }
-
-        $this->swiftmailer = new Swift_Mailer($transport);
     }
 
     /**
@@ -78,7 +60,7 @@ class Mailer
      * @param Form $form
      * @return void
      */
-    public function sendForm(Form $form)
+    public function sendForm(Form $form): void
     {
         if (empty($form->getMeta('email'))) {
             return;
@@ -96,23 +78,22 @@ class Mailer
                 $form->getMeta('title')
             );
 
-            $message = new Swift_Message();
+            $message = new Message();
             $message
                 ->setSubject($subject)
                 ->setFrom($this->sender)
-                ->setTo($recipients)
-                ->setBody($this->htmlBody, 'text/html')
-                ->addPart($this->textBody, 'text/plain');
+                ->addTo(...$recipients)
+                ->setHtmlBody($this->htmlBody);
 
             if (! empty($cc)) {
-                $message->setCc($cc);
+                $message->addCc(...$cc);
             }
 
             foreach ($this->attachments as $attachment) {
-                $message->attach($attachment);
+                $message->addAttachment(...(array)$attachment);
             }
 
-            $this->swiftmailer->send($message);
+            $this->mailer->send($message);
         } catch (\Exception $e) {
             throw new MailException($e->getMessage());
         }
@@ -124,21 +105,18 @@ class Mailer
      * @param array $formElements
      * @param string $formDirectory
      * @param string|null $title
-     * @return string
      */
     protected function formToMessage(
         array $formElements,
         string $formDirectory,
         string $title = null
-    ) {
+    ): void
+    {
         $htmlHeadline = '<h2>%s</h2>';
-        $textHeadline = "\n\n%s\n\n";
 
         $htmlLine = '<p><strong>%s</strong></p><p>%s</p>';
-        $textLine = "\n%s\n%s\n";
 
         if ($title) {
-            $this->textBody .= sprintf("\n\n%s\n\n", $title);
             $this->htmlBody .= sprintf('<h1>%s</h1>', $title);
         }
 
@@ -149,8 +127,6 @@ class Mailer
             if ($element instanceof FieldsetFormElement
                 && ! $element->isDisabled()
             ) {
-                $this->textBody
-                    .= sprintf($textHeadline, $element->getConfigValue('label'));
                 $this->htmlBody
                     .= sprintf($htmlHeadline, $element->getConfigValue('label'));
                 $this->formToMessage($element->getChildren(), $formDirectory);
@@ -171,23 +147,19 @@ class Mailer
                 foreach ($files as $file) {
                     $value .= $file['address'] . ' (' . LangManager::getString('uploaded_original') . ' ' . $file['name'] . ') ';
                     $this->attachments[]
-                        = \Swift_Attachment::fromPath($formDirectory . $file['address']);
+                        = [$file['name'], file_get_contents($formDirectory . $file['address'])];
                 }
             }
 
             if ($element instanceof SignatureFormElement && $value) {
                 $encoded_image = explode(",", $value)[1];
                 $decoded_image = base64_decode($encoded_image);
-                $this->attachments[] = (new \Swift_Attachment())
-                    ->setFilename($element->getId() . '.jpg')
-                    ->setContentType('image/jpeg')
-                    ->setBody($decoded_image);
+                $this->attachments[] = [$element->getId() . '.jpg', $decoded_image];
 
                 // do not send the image source data
                 $value = LangManager::getString('email_text_attachments');
             }
 
-            $this->textBody .= sprintf($textLine, $label, $value);
             $this->htmlBody .= sprintf($htmlLine, $label, $value);
         }
     }
@@ -199,7 +171,7 @@ class Mailer
      * @param Form $form
      * @return string
      */
-    protected function injectFormValues(string $string, Form $form)
+    protected function injectFormValues(string $string, Form $form): string
     {
         return preg_replace_callback(
             '~{{([a-zA-Z0-9 \.\-\_]*?)}}~',
@@ -216,7 +188,7 @@ class Mailer
      * @param Form $form
      * @return array
      */
-    protected function getCarbonCopyAddresses(Form $form)
+    protected function getCarbonCopyAddresses(Form $form): array
     {
         $ccFields = $form->getMeta('email')['cc'] ?? [];
 

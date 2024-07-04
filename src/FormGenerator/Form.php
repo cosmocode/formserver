@@ -11,7 +11,6 @@ use CosmoCode\Formserver\FormGenerator\FormElements\FieldsetFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\UploadFormElement;
 use CosmoCode\Formserver\Helper\FileHelper;
 use CosmoCode\Formserver\Helper\YamlHelper;
-use Slim\Psr7\UploadedFile;
 
 /**
  * Contains the form and provides basic functionality
@@ -29,22 +28,24 @@ class Form
     /**
      * @var string
      */
-    protected $id;
+    protected string $id;
 
     /**
      * @var array
      */
-    protected $meta;
+    protected array $meta;
 
     /**
      * @var AbstractFormElement[]
      */
-    protected $formElements = [];
+    protected array $formElements = [];
 
     /**
      * @var string
      */
-    protected $mode = self::MODE_SHOW;
+    protected string $mode = self::MODE_SHOW;
+
+    protected bool $isPersistent;
 
     /**
      * Build a form from YAML
@@ -56,13 +57,15 @@ class Form
         $this->id = $formId;
         $config = YamlHelper::parseYaml($this->getFormDirectory() . 'config.yaml');
         $this->meta = $config['meta'] ?? [];
+        $this->isPersistent = (bool)$this->getMeta('saveButton');
 
         foreach ($config['form'] as $formElementId => $formElementConfig) {
             $this->formElements[] = FormElementFactory::createFormElement(
                 $formElementId,
                 $formElementConfig,
                 null,
-                $this->id
+                $this->id,
+                $this->isPersistent
             );
         }
     }
@@ -72,7 +75,7 @@ class Form
      *
      * @return AbstractFormElement[]
      */
-    public function getFormElements()
+    public function getFormElements(): array
     {
         return $this->formElements;
     }
@@ -81,7 +84,7 @@ class Form
      * Returns the value of a form element
      *
      * @param string $fieldId
-     * @return array
+     * @return mixed
      */
     public function getFormElementValue(string $fieldId)
     {
@@ -125,7 +128,7 @@ class Form
      *
      * @return string
      */
-    public function getFormDirectory()
+    public function getFormDirectory(): string
     {
         return self::DATA_DIR . $this->id . '/';
     }
@@ -135,7 +138,7 @@ class Form
      *
      * @return string
      */
-    public function getId()
+    public function getId(): string
     {
         return $this->id;
     }
@@ -145,7 +148,7 @@ class Form
      *
      * @return string
      */
-    public function getMode()
+    public function getMode(): string
     {
         return $this->mode;
     }
@@ -156,8 +159,9 @@ class Form
      * @param array $data $_POST
      * @param array $files $_FILES
      * @return void
+     * @throws \JsonException
      */
-    public function submit(array $data, array $files)
+    public function submit(array $data, array $files): void
     {
         // submit data
         foreach ($this->formElements as $formElement) {
@@ -275,7 +279,6 @@ class Form
             }
         } elseif ($formElement instanceof UploadFormElement) {
             $formElement->formDirectory = $this->getFormDirectory();
-            $formElement->formIsPersistent = $this->getMeta('saveButton');
 
             // try to restore previous upload data
             $previousUpload = json_decode($data[$formElement->getId()]['previous_value'], true);
@@ -305,6 +308,7 @@ class Form
      *
      * @param AbstractFormElement $formElement
      * @return void
+     * @throws \JsonException
      */
     protected function toggleFieldsets(
         AbstractFormElement $formElement
@@ -358,7 +362,7 @@ class Form
      * @param AbstractFormElement $formElement
      * @return void
      */
-    protected function restoreValue(array $values, AbstractFormElement $formElement)
+    protected function restoreValue(array $values, AbstractFormElement $formElement): void
     {
         if ($formElement instanceof FieldsetFormElement) {
             $subValues = $values[$formElement->getId()] ?? [];
@@ -377,7 +381,7 @@ class Form
      * @param AbstractFormElement $formElement
      * @return void
      */
-    protected function setDefaultValues(AbstractFormElement $formElement)
+    protected function setDefaultValues(AbstractFormElement $formElement): void
     {
         if ($formElement instanceof FieldsetFormElement) {
             foreach ($formElement->getChildren() as $fieldsetChild) {
@@ -422,7 +426,7 @@ class Form
      * @param AbstractFormElement $formElement
      * @return bool
      */
-    protected function isFormElementValid(AbstractFormElement $formElement)
+    protected function isFormElementValid(AbstractFormElement $formElement): bool
     {
         if ($formElement instanceof FieldsetFormElement
             && ! $formElement->isDisabled()
@@ -436,7 +440,7 @@ class Form
             return $formElement->isValid();
         }
 
-        // AbstractStaticFormElements dont have an input they are always valid
+        // AbstractStaticFormElements don't have any input and are always valid
         return true;
     }
 }

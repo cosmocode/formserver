@@ -15,13 +15,16 @@ class UploadFormElement extends AbstractDynamicFormElement
     /**
      * @var string field address that is part of uploaded file
      */
-    public $fieldAddress = '';
+    public string $fieldAddress = '';
+
+    protected string $previousValue = '';
 
     /**
-     * @var string
+     * Required for passing client filenames in non-persistent forms.
+     * Otherwise those names are stored in values.yaml
+     *
+     * @var array
      */
-    protected string $previousValue;
-
     protected array $originalFilenames = [];
 
     /**
@@ -29,13 +32,15 @@ class UploadFormElement extends AbstractDynamicFormElement
      */
     public string $formDirectory;
 
-    /** @var bool */
-    public string $formIsPersistent;
-
-
-    public function __construct(string $id, array $config, FieldsetFormElement $parent = null, string $formId = '')
+    public function __construct(
+        string $id,
+        array $config,
+        FieldsetFormElement $parent = null,
+        string $formId = '',
+        bool $formIsPersistent = false
+    )
     {
-        parent::__construct($id, $config, $parent, $formId);
+        parent::__construct($id, $config, $parent, $formId, $formIsPersistent);
         $this->fieldAddress = $this->getFormElementIdStringified('.');
     }
 
@@ -93,7 +98,7 @@ class UploadFormElement extends AbstractDynamicFormElement
     }
 
     /**
-     * Get allowed extension for this upload
+     * Get allowed extensions for this upload
      *
      * @return string
      */
@@ -105,11 +110,11 @@ class UploadFormElement extends AbstractDynamicFormElement
     }
 
     /**
-     * Get allowed extension for this upload (as array)
+     * Get allowed extensions for this upload (as array)
      *
      * @return array
      */
-    public function getAllowedExtensionsAsArray()
+    public function getAllowedExtensionsAsArray(): array
     {
         $allowedExtensions = explode(',', $this->getAllowedExtensionsAsString());
         // remove possible whitespaces after comma (e.g. "pdf, txt, png")
@@ -125,7 +130,7 @@ class UploadFormElement extends AbstractDynamicFormElement
      *
      * @return string
      */
-    public function getAllowedSizeAsString()
+    public function getAllowedSizeAsString(): string
     {
         return strtolower(
             $this->getConfig()['validation']['filesize'] ?? ''
@@ -142,7 +147,7 @@ class UploadFormElement extends AbstractDynamicFormElement
      *
      * @return int
      */
-    public function getMaxSize()
+    public function getMaxSize(): int
     {
         $fieldMax = $this->getAllowedSizeAsString();
 
@@ -175,7 +180,7 @@ class UploadFormElement extends AbstractDynamicFormElement
     }
 
     /**
-     * Provides original filenames (name) and actual field-address related names (address).
+     * Provides original filenames ('name') and actual filesystem names based on field address ('address')
      *
      * @return array
      */
@@ -188,12 +193,14 @@ class UploadFormElement extends AbstractDynamicFormElement
         $uploaded = [];
         foreach ($this->value as $key => $filename) {
             if ($this->formIsPersistent) {
+                // value and YAML storage contain original names, but upload files are named after field id
                 $uploaded[$key]['name'] = $filename;
                 $ext = FileHelper::getFileExtension($filename);
                 $uploaded[$key]['address'] = $this->getFormElementIdStringified('.') . "_$key.$ext";
             } else {
-                // TODO client file name on transient upload
-                $uploaded[$key]['name'] = '?';
+                // client file name on transient upload
+                // hacky: only available on fresh upload or first restore (gets lost after many failed submits)
+                $uploaded[$key]['name'] = $this->originalFilenames[$key] ?? $this->getPreviousValue()[$key];
                 $uploaded[$key]['address'] = $filename;
             }
         }
@@ -206,11 +213,13 @@ class UploadFormElement extends AbstractDynamicFormElement
      *
      * @return void
      */
-    public function deleteFiles()
+    public function deleteFiles(): void
     {
         if ($this->formIsPersistent) {
             foreach (new \DirectoryIterator($this->formDirectory) as $fileInfo) {
-                if ($fileInfo->isDot() || !str_starts_with($fileInfo->getFilename(), $this->fieldAddress . '_')) continue;
+                if ($fileInfo->isDot() || !str_starts_with($fileInfo->getFilename(), $this->fieldAddress . '_')) {
+                    continue;
+                }
                 if (unlink($fileInfo->getPathname()) === false) {
                     throw new FormException('Could not delete file: ' . $fileInfo->getFilename());
                 }
@@ -234,14 +243,15 @@ class UploadFormElement extends AbstractDynamicFormElement
      * @param $newUpload
      * @return void
      */
-    public function saveNewUpload($newUpload)
+    public function saveNewUpload($newUpload): void
     {
         /**
          * @var UploadedFile $file
          */
         foreach ($newUpload as $key => $file) {
             $filename = $this->moveUploadedFile($file, $key);
-            $this->originalFilenames[$key] = $filename;
+            // needed for transient uploads (mon-persistent form)
+            $this->originalFilenames[$key] = $file->getClientFilename();
             if ($this->formIsPersistent) {
                 $value[$key] = $file->getClientFilename();
             } else {

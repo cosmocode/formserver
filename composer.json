@@ -24,7 +24,7 @@
     "michelf/php-markdown": "~1.9.0",
     "mustangostang/spyc": "~0.6.2",
     "respect/validation": "^1.1",
-    "swiftmailer/swiftmailer": "^6.2",
+    "nette/mail": "^4.0",
     "xantios/mimey": "^2.2"
   },
   "config": {

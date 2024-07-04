@@ -12,7 +12,7 @@ class DateFormElement extends AbstractDynamicFormElement
      *
      * @return array
      */
-    public function getViewVariables()
+    public function getViewVariables(): array
     {
         $conf = parent::getViewVariables();
         if (!empty($conf['clone']) && !is_array($conf['value'])) {

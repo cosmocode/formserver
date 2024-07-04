@@ -16,17 +16,17 @@ class FieldsetFormElement extends AbstractFormElement
     /**
      * @var AbstractFormElement[]
      */
-    protected $children;
+    protected array $children;
 
     /**
      * @var string[]
      */
-    protected $renderedChildViews = [];
+    protected array $renderedChildViews = [];
 
     /**
      * @var bool
      */
-    protected $disabled = false;
+    protected bool $disabled = false;
 
     /**
      * @param string $id
@@ -37,7 +37,9 @@ class FieldsetFormElement extends AbstractFormElement
     public function __construct(
         string $id,
         array $config,
-        AbstractFormElement $parent = null
+        FieldsetFormElement $parent = null,
+        string $formId = '',
+        bool $formIsPersistent = false
     ) {
         unset($config['children']); // Children config not needed
         parent::__construct($id, $config, $parent);
@@ -59,7 +61,7 @@ class FieldsetFormElement extends AbstractFormElement
      * @param string $id
      * @return AbstractFormElement
      */
-    public function getChild(string $id)
+    public function getChild(string $id): AbstractFormElement
     {
         foreach ($this->getChildren() as $fieldsetChild) {
             if ($fieldsetChild->getId() === $id) {
@@ -78,7 +80,7 @@ class FieldsetFormElement extends AbstractFormElement
      * @param AbstractFormElement $child
      * @return void
      */
-    public function addChild(AbstractFormElement $child)
+    public function addChild(AbstractFormElement $child): void
     {
         $this->children[] = $child;
     }
@@ -89,7 +91,7 @@ class FieldsetFormElement extends AbstractFormElement
      *
      * @return string[]
      */
-    public function getRenderedChildViews()
+    public function getRenderedChildViews(): array
     {
         return $this->renderedChildViews;
     }
@@ -100,7 +102,7 @@ class FieldsetFormElement extends AbstractFormElement
      * @param string $renderedView
      * @return void
      */
-    public function addRenderedChildView(string $renderedView)
+    public function addRenderedChildView(string $renderedView): void
     {
         $this->renderedChildViews[] = $renderedView;
     }
@@ -110,7 +112,7 @@ class FieldsetFormElement extends AbstractFormElement
      *
      * @return bool
      */
-    public function hasToggle()
+    public function hasToggle(): bool
     {
         return ! empty($this->getConfigValue('toggle'));
     }
@@ -118,7 +120,7 @@ class FieldsetFormElement extends AbstractFormElement
     /**
      * @return bool
      */
-    public function isDisabled()
+    public function isDisabled(): bool
     {
         return $this->disabled;
     }
@@ -127,7 +129,7 @@ class FieldsetFormElement extends AbstractFormElement
      * @param bool $disabled
      * @return void
      */
-    public function setDisabled(bool $disabled)
+    public function setDisabled(bool $disabled): void
     {
         $this->disabled = $disabled;
     }
@@ -138,7 +140,7 @@ class FieldsetFormElement extends AbstractFormElement
      *
      * @return array
      */
-    public function getToggleVariables()
+    public function getToggleVariables(): array
     {
         if ($this->hasToggle()) {
             $toggleId = $this->getToggleFieldId();
@@ -161,7 +163,7 @@ class FieldsetFormElement extends AbstractFormElement
      *
      * @return string
      */
-    public function getToggleFieldId()
+    public function getToggleFieldId(): string
     {
         $toggleConfig = $this->getConfigValue('toggle');
 
@@ -203,7 +205,7 @@ class FieldsetFormElement extends AbstractFormElement
      *
      * @return array
      */
-    protected function processBackgroundVariables()
+    protected function processBackgroundVariables(): array
     {
         $background = $this->getConfigValue('background');
         if (!$background) {

@@ -4,7 +4,6 @@ namespace CosmoCode\Formserver\FormGenerator;
 
 use CosmoCode\Formserver\Exceptions\FormException;
 use CosmoCode\Formserver\FormGenerator\FormElements\AbstractFormElement;
-use CosmoCode\Formserver\FormGenerator\FormElements\AbstractDynamicFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\ChecklistFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\DateFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\DateTimeFormElement;
@@ -37,19 +36,23 @@ class FormElementFactory
      *
      * @param string $id
      * @param array $config
-     * @param AbstractFormElement|null $parent
+     * @param FieldsetFormElement|null $parent
+     * @param string $formId
+     * @param bool $formIsPersistent
      * @return AbstractFormElement
      */
     public static function createFormElement(
         string $id,
         array $config,
         FieldsetFormElement $parent = null,
-        string $formId = ''
-    ) {
+        string $formId = '',
+        bool $formIsPersistent = false
+    ): AbstractFormElement
+    {
         $formType = $config['type'];
         switch ($formType) {
             case 'fieldset':
-                return self::createFieldsetFormElement($id, $config, $parent, $formId);
+                return self::createFieldsetFormElement($id, $config, $parent, $formId, $formIsPersistent);
             case 'markdown':
                 return new MarkDownFormElement($id, $config, $parent, $formId);
             case 'hidden':
@@ -61,7 +64,7 @@ class FormElementFactory
             case 'hr':
                 return new HrFormElement($id, $config, $parent);
             case 'upload':
-                return new UploadFormElement($id, $config, $parent, $formId);
+                return new UploadFormElement($id, $config, $parent, $formId, $formIsPersistent);
             case 'textinput':
                 return new TextInputFormElement($id, $config, $parent, $formId);
             case 'numberinput':
@@ -100,14 +103,18 @@ class FormElementFactory
      * @param array $config
      * @param FieldsetFormElement|null $parent
      * @param string $formId
+     * @param bool $formIsPersistent
      * @return FieldsetFormElement
      */
-    protected static function createFieldsetFormElement(
+    protected static function createFieldsetFormElement
+    (
         string $id,
         array $config,
         FieldsetFormElement $parent = null,
-        string $formId = ''
-    ) {
+        string $formId = '',
+        bool $formIsPersistent = false
+    ): FieldsetFormElement
+    {
         $fieldsetFormElement = new FieldsetFormElement($id, $config, $parent);
 
         foreach ($config['children'] as $childId => $childConfig) {
@@ -115,7 +122,8 @@ class FormElementFactory
                 $childId,
                 $childConfig,
                 $fieldsetFormElement,
-                $formId
+                $formId,
+                $formIsPersistent
             );
 
             $fieldsetFormElement->addChild($childFormElement);

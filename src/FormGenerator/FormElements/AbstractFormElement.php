@@ -32,7 +32,9 @@ abstract class AbstractFormElement
     /**
      * @var string
      */
-    protected $formId;
+    protected string $formId;
+
+    protected bool $formIsPersistent;
 
     /**
      * Inheriting child elements must call this constructor
@@ -46,12 +48,14 @@ abstract class AbstractFormElement
         string $id,
         array $config,
         FieldsetFormElement $parent = null,
-        string $formId = ''
+        string $formId = '',
+        bool $formIsPersistent = false
     ) {
         $this->id = $id;
         $this->config = $config;
         $this->parent = $parent;
         $this->formId = $formId;
+        $this->formIsPersistent = $formIsPersistent;
     }
 
     /**
