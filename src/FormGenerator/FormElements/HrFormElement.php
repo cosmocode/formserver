@@ -7,5 +7,4 @@ namespace CosmoCode\Formserver\FormGenerator\FormElements;
  */
 class HrFormElement extends AbstractStaticFormElement
 {
-
 }

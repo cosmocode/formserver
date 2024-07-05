@@ -9,7 +9,6 @@ use Slim\Psr7\UploadedFile;
  */
 class FileHelper
 {
-
     /**
      * Get file extension from file path
      *
@@ -111,9 +110,9 @@ class FileHelper
      */
     public static function getMaxSizeHuman(int $size)
     {
-        if ($size >= 1024**3) {
+        if ($size >= 1024 ** 3) {
             $fileSize = round($size / 1024 / 1024 / 1024, 1) . 'GB';
-        } elseif ($size >= 1024**2) {
+        } elseif ($size >= 1024 ** 2) {
             $fileSize = round($size / 1024 / 1024, 1) . 'MB';
         } elseif ($size >= 1024) {
             $fileSize = round($size / 1024, 1) . 'KB';

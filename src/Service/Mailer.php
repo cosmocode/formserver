@@ -123,7 +123,8 @@ class Mailer
          * @var AbstractDynamicFormElement $element
          */
         foreach ($formElements as $element) {
-            if ($element instanceof FieldsetFormElement
+            if (
+                $element instanceof FieldsetFormElement
                 && ! $element->isDisabled()
             ) {
                 $this->htmlBody

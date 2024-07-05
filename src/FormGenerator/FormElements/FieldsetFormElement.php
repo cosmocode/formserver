@@ -12,7 +12,6 @@ use CosmoCode\Formserver\FormGenerator\FormValidator;
  */
 class FieldsetFormElement extends AbstractFormElement
 {
-
     /**
      * @var AbstractFormElement[]
      */

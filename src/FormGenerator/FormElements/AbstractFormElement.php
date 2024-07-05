@@ -206,7 +206,7 @@ abstract class AbstractFormElement
         $toggleViewId = $toggleIdPath[0];
 
         for ($i = 1; $i < $togglePathCount; $i++) {
-            $toggleViewId .= '[' .$toggleIdPath[$i] . ']';
+            $toggleViewId .= '[' . $toggleIdPath[$i] . ']';
         }
 
         return $toggleViewId;

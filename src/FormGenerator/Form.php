@@ -387,7 +387,8 @@ class Form
             foreach ($formElement->getChildren() as $fieldsetChild) {
                 $this->setDefaultValues($fieldsetChild);
             }
-        } elseif ($formElement instanceof ChecklistFormElement
+        } elseif (
+            $formElement instanceof ChecklistFormElement
             || $formElement instanceof  DropdownFormElement
         ) {
             if (! $formElement->hasValue()) {
@@ -413,7 +414,8 @@ class Form
                 $this->injectValueToArray($tempValues, $fieldsetChild);
             }
             $values[$formElement->getId()] = $tempValues;
-        } elseif ($formElement instanceof AbstractDynamicFormElement
+        } elseif (
+            $formElement instanceof AbstractDynamicFormElement
             && $formElement->hasValue()
         ) {
             $values[$formElement->getId()] = $formElement->getValue();
@@ -428,7 +430,8 @@ class Form
      */
     protected function isFormElementValid(AbstractFormElement $formElement): bool
     {
-        if ($formElement instanceof FieldsetFormElement
+        if (
+            $formElement instanceof FieldsetFormElement
             && ! $formElement->isDisabled()
         ) {
             foreach ($formElement->getChildren() as $fieldsetChild) {

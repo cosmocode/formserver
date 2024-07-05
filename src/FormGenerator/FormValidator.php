@@ -75,13 +75,15 @@ class FormValidator
      */
     protected function validateFormElement(AbstractFormElement $formElement)
     {
-        if ($formElement instanceof FieldsetFormElement
+        if (
+            $formElement instanceof FieldsetFormElement
             && ! $formElement->isDisabled()
         ) {
             foreach ($formElement->getChildren() as $fieldsetChild) {
                 $this->validateFormElement($fieldsetChild);
             }
-        } elseif ($formElement instanceof  AbstractDynamicFormElement
+        } elseif (
+            $formElement instanceof  AbstractDynamicFormElement
             && ($formElement->hasValue() || $formElement->isRequired())
         ) {
             $value = $formElement->getValue();
@@ -134,7 +136,8 @@ class FormValidator
                          * @var UploadFormElement $formElement
                          */
                         $validators = [];
-                        foreach ($formElement->getAllowedExtensionsAsArray() as $ext
+                        foreach (
+                            $formElement->getAllowedExtensionsAsArray() as $ext
                         ) {
                             $validators[] = Validator::extension(trim($ext));
                         }

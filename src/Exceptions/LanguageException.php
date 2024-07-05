@@ -9,5 +9,4 @@ namespace CosmoCode\Formserver\Exceptions;
  */
 class LanguageException extends \RuntimeException
 {
-
 }

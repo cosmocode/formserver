@@ -36,7 +36,7 @@ class ChecklistFormElement extends AbstractDynamicFormElement
         $transformedChoices = [];
 
         foreach ($choices as $choice) {
-            $transformedChoice= MarkdownExtra::defaultTransform($choice);
+            $transformedChoice = MarkdownExtra::defaultTransform($choice);
 
             // Markdown lib always wraps the content in a <p>...</p>
             // https://github.com/michelf/php-markdown/issues/230
