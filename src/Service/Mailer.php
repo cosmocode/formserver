@@ -110,8 +110,7 @@ class Mailer
         array $formElements,
         string $formDirectory,
         string $title = null
-    ): void
-    {
+    ): void {
         $htmlHeadline = '<h2>%s</h2>';
 
         $htmlLine = '<p><strong>%s</strong></p><p>%s</p>';
@@ -145,7 +144,9 @@ class Mailer
                 $value = '';
                 $files = $element->getUploadedFiles();
                 foreach ($files as $file) {
-                    $value .= $file['address'] . ' (' . LangManager::getString('uploaded_original') . ' ' . $file['name'] . ') ';
+                    $value .= $file['address']
+                        . ' (' . LangManager::getString('uploaded_original')
+                        . ' ' . $file['name'] . ') ';
                     $this->attachments[]
                         = [$file['name'], file_get_contents($formDirectory . $file['address'])];
                 }

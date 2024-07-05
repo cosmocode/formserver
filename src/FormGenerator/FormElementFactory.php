@@ -47,8 +47,7 @@ class FormElementFactory
         FieldsetFormElement $parent = null,
         string $formId = '',
         bool $formIsPersistent = false
-    ): AbstractFormElement
-    {
+    ): AbstractFormElement {
         $formType = $config['type'];
         switch ($formType) {
             case 'fieldset':
@@ -106,15 +105,13 @@ class FormElementFactory
      * @param bool $formIsPersistent
      * @return FieldsetFormElement
      */
-    protected static function createFieldsetFormElement
-    (
+    protected static function createFieldsetFormElement(
         string $id,
         array $config,
         FieldsetFormElement $parent = null,
         string $formId = '',
         bool $formIsPersistent = false
-    ): FieldsetFormElement
-    {
+    ): FieldsetFormElement {
         $fieldsetFormElement = new FieldsetFormElement($id, $config, $parent);
 
         foreach ($config['children'] as $childId => $childConfig) {

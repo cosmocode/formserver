@@ -38,8 +38,7 @@ class UploadFormElement extends AbstractDynamicFormElement
         FieldsetFormElement $parent = null,
         string $formId = '',
         bool $formIsPersistent = false
-    )
-    {
+    ) {
         parent::__construct($id, $config, $parent, $formId, $formIsPersistent);
         $this->fieldAddress = $this->getFormElementIdStringified('.');
     }
