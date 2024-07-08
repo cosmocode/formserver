@@ -308,11 +308,12 @@ Options:
 Representation of a select input.  
 
 Options:
-* `choices` _(required)_ - defines available options. Markdown ist supported.
+* **EITHER** `choices` _(optionally required)_ - defines available options. Markdown is supported.
+*  **OR** `conditional_choices` _(optionally required)_ - defines options available if a condition is met (depending on the value of another form field). This option has priority over `choices`!
 * `empty_label` _(optional)_ - a placeholder text shown if no value was chosen (e.g. "Please select"). **Note:** this is not a real option and has no value that could be saved.
 * `multiselect` _(optional)_ - enables selecting multiple options
 * `size` _(optional)_ - if multiselect is turned on this defines the number of rows shown, otherwise ignored
-* `default` _(optional)_ : Preselects a choice. This is just triggered if the form was never saved before. **Preselect in toggles are not supported yet.** **BREAKING CHANGE until version 1.0.4 this parameter was used for empty_label**
+* `default` _(optional)_ : Preselects a choice. This is only triggered if the form was never saved before. **Preselect in toggles are not supported yet.**
 
 ```yaml
   <id>:
@@ -327,9 +328,25 @@ Options:
       - second choice
 ```
 
+```yaml
+    conditional_choices:
+      -
+        field: fieldsetLevel1.FieldsetLevel2.myFieldname
+        value: 'Value A'
+        choices:
+          - A1
+          - A2
+      - field: fieldsetLevel1.FieldsetLevel2.myFieldname
+        value: 'Value B'
+        choices:
+          - 10 B
+          - 20 B
+          - 30 B
+```
+
 ### Checklist
 
-Representation of a checkbox group.  
+Representation of a checkbox group.
 
 Options:
 * `alignment` _(optional)_ - sets the alignment of the checkboxes, possible values are `vertical` or `horizontal` (default)

@@ -13,8 +13,10 @@ export function initToggles() {
     function resetConditional(option, parent, triggerElement, toggleValue) {
         if (toggleValue.includes(getFormInputValue(triggerElement))) {
             option.removeAttribute('disabled');
+            option.removeAttribute('hidden');
         } else {
             option.setAttribute('disabled', true);
+            option.setAttribute('hidden', true);
             option.setAttribute('selected', false);
             option.setAttribute('checked', false);
         }
@@ -46,6 +48,9 @@ export function initToggles() {
 
         if (toggleValue.includes(getFormInputValue(triggerElement))) {
             option.removeAttribute('disabled');
+            option.removeAttribute('hidden');
+        } else {
+            option.removeAttribute('selected');
         }
 
         triggerElement.addEventListener('change', function(e) {

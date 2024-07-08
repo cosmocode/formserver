@@ -24,7 +24,7 @@
                     {% if conditional_choices is not empty %}
                     {%- for select in conditional_choices -%}
                         {%- for choice in select.choices -%}
-                            <option disabled {{ choice in value ? 'selected' }} data-toggle-id="{{ select.field}}" data-toggle-value="{{ select.value }}">{{ choice }}</option>
+                            <option hidden disabled {{ choice in value ? 'selected' }} data-toggle-id="{{ select.field}}" data-toggle-value="{{ select.value }}">{{ choice }}</option>
                         {%- endfor -%}
                     {%- endfor -%}
                     {% else %}
