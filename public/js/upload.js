@@ -65,7 +65,7 @@ export function uploadFeedback () {
 
     // list filenames of current upload candidates
     function listUploadedFiles(curFiles) {
-        let output = '';
+        let output = '\n';
         for (const file of curFiles) {
             output += `${file.name}\n`;
         }
