@@ -11,7 +11,7 @@ use CosmoCode\Formserver\Helper\FileHelper;
  */
 class FileExporter
 {
-    const ROOT_DIR = __DIR__ . '/../../';
+    public const ROOT_DIR = __DIR__ . '/../../';
 
     /**
      * @var string

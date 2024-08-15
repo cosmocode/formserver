@@ -13,7 +13,7 @@ use Twig\TemplateWrapper;
  */
 class FormRenderer
 {
-    const TEMPLATE_DIR = __DIR__ . '/../../view/';
+    public const TEMPLATE_DIR = __DIR__ . '/../../view/';
 
     /**
      * @var TemplateWrapper

@@ -19,11 +19,11 @@ use CosmoCode\Formserver\Helper\YamlHelper;
  */
 class Form
 {
-    const DATA_DIR = __DIR__ . '/../../data/';
+    public const DATA_DIR = __DIR__ . '/../../data/';
 
-    const MODE_SHOW = 'show';
-    const MODE_SAVE = 'save';
-    const MODE_SEND = 'send';
+    public const MODE_SHOW = 'show';
+    public const MODE_SAVE = 'save';
+    public const MODE_SEND = 'send';
 
     /**
      * @var string

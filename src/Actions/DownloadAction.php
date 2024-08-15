@@ -13,7 +13,7 @@ use Slim\Psr7\Stream;
  */
 class DownloadAction extends AbstractAction
 {
-    const DATA_DIRECTORY = __DIR__ . '/../../data/';
+    public const DATA_DIRECTORY = __DIR__ . '/../../data/';
 
     /**
      * Action to download file

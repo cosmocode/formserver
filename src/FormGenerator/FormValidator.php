@@ -15,7 +15,7 @@ use Respect\Validation\Validator;
  */
 class FormValidator
 {
-    const COLORS_BULMA = [
+    public const COLORS_BULMA = [
         'white',
         'black',
         'light',
