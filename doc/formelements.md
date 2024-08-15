@@ -29,7 +29,7 @@ Options:
 * `scrollable` _(optional)_ can be used with `tablestyle`: The fieldset will not responsively adapt to screen width, but will extend horizontally and can be scrolled. The option may have unpredictable effects in complex forms!
 * `toggle` _(optional)_ - the fieldset is disabled and hidden until the toggle condition is met
   * `field` - dotted path to the field whose value will be evaluated to match the toggle condition
-  * `value` - required value to toggle the fieldset on
+  * `value` - required value to toggle the fieldset on, can be a simple string or a YAML array
 
 ```yaml
 <id>:
