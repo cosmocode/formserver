@@ -47,3 +47,7 @@
         </div>
     {%- endif -%}
 {%- endmacro -%}
+
+{%- macro optionReadonly(is_readonly) -%}
+    {%- if is_readonly is not empty -%}disabled{%- endif -%}
+{%- endmacro -%}

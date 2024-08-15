@@ -1,4 +1,4 @@
-{% from '_macros' import renderError, renderTooltip, renderModal %}
+{% from '_macros' import renderError, renderTooltip, renderModal, optionReadonly %}
 <div class="column {{ column is not empty ? column : 'is-full' }}">
     {% if clone is not empty %}
         {% for val in value %}
@@ -18,9 +18,9 @@
                             id="{{ id }}-{{ loop.index }}"
                             name="{{ id }}[]"
                             value="{{ val }}"
-                            class="input form-input{% if is_readonly%} has-background-grey-lighter{% endif %} {{ errors is not empty ? 'is-danger' }}"
+                            class="input form-input {{ errors is not empty ? 'is-danger' }}"
                             data-calendar-type="datetime"
-                            {% if is_readonly%}readonly{% endif %}
+                            {{ optionReadonly(is_readonly) }}
                             {% if placeholder is not empty -%}
                                 placeholder="{{ placeholder ~ (is_required and label is empty ? ' *') }}"
                             {%- endif %} />
@@ -50,9 +50,9 @@
                     id="{{ id }}"
                     name="{{ id }}"
                     value="{{ value }}"
-                    class="input form-input{% if is_readonly%} has-background-grey-lighter{% endif %} {{ errors is not empty ? 'is-danger' }}"
+                    class="input form-input {{ errors is not empty ? 'is-danger' }}"
                     data-calendar-type="datetime"
-                    {% if is_readonly%}readonly{% endif %}
+                        {{ optionReadonly(is_readonly) }}
                     {% if placeholder is not empty -%}
                         placeholder="{{ placeholder ~ (is_required and label is empty ? ' *') }}"
                     {%- endif %} />
