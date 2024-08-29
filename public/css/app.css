@@ -20,6 +20,11 @@ input.checkbox-input {
     display: none;
 }
 
+/* some selects are empty (e.g. before activating conditional options) */
+.select select[multiple] {
+    min-width: 10rem;
+}
+
 /** Tooltips */
 
 
@@ -294,4 +299,17 @@ div.label-smaller {
         background-color: var(--bulma-info);
         border-radius: 0.25rem;
     }
+}
+
+/**
+ ** Bulma overrides
+ */
+.select fieldset[disabled] select,
+.select select[disabled],
+[disabled].input,
+[disabled].textarea,
+fieldset[disabled] .input,
+fieldset[disabled] .select select,
+fieldset[disabled] .textarea {
+    background-color: var(--bulma-input-disabled-placeholder-color);
 }
