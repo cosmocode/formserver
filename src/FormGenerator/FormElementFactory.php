@@ -112,7 +112,7 @@ class FormElementFactory
         string $formId = '',
         bool $formIsPersistent = false
     ): FieldsetFormElement {
-        $fieldsetFormElement = new FieldsetFormElement($id, $config, $parent);
+        $fieldsetFormElement = new FieldsetFormElement($id, $config, $parent, $formId);
 
         foreach ($config['children'] as $childId => $childConfig) {
             $childFormElement = self::createFormElement(

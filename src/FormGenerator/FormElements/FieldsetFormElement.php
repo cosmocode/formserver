@@ -41,7 +41,7 @@ class FieldsetFormElement extends AbstractFormElement
         bool $formIsPersistent = false
     ) {
         unset($config['children']); // Children config not needed
-        parent::__construct($id, $config, $parent);
+        parent::__construct($id, $config, $parent, $formId, $formIsPersistent);
     }
 
     /**
