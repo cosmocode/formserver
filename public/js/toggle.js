@@ -31,11 +31,13 @@ export function initToggles() {
         const toggleId = fieldset.getAttribute('data-toggle-id');
         const toggleValue = JSON.parse(fieldset.getAttribute('data-toggle-value'));
         const formInput = getToggleFormInput(toggleId, toggleValue);
-        toggleFieldset(fieldset, formInput, formInput.checkVisibility());
-        formInput.addEventListener('change', function(e) {
-            const formInput = e.target;
+        if (formInput) {
             toggleFieldset(fieldset, formInput, formInput.checkVisibility());
-        });
+            formInput.addEventListener('change', function(e) {
+                const formInput = e.target;
+                toggleFieldset(fieldset, formInput, formInput.checkVisibility());
+            });
+        }
     });
 
     // Init state of conditional select options on page load
@@ -45,17 +47,18 @@ export function initToggles() {
         const toggleId = option.getAttribute('data-toggle-id');
         const toggleValue = JSON.parse(option.getAttribute('data-toggle-value'));
         const triggerElement = getToggleFormInput(toggleId, toggleValue);
+        if (triggerElement) {
+            if (toggleValue.includes(getFormInputValue(triggerElement))) {
+                option.removeAttribute('disabled');
+                option.removeAttribute('hidden');
+            } else {
+                option.removeAttribute('selected');
+            }
 
-        if (toggleValue.includes(getFormInputValue(triggerElement))) {
-            option.removeAttribute('disabled');
-            option.removeAttribute('hidden');
-        } else {
-            option.removeAttribute('selected');
+            triggerElement.addEventListener('change', function(e) {
+                resetConditional(option, parent, triggerElement, toggleValue);
+            });
         }
-
-        triggerElement.addEventListener('change', function(e) {
-            resetConditional(option, parent, triggerElement, toggleValue);
-        });
     });
 
     // clear all inputs in hidden fields on submit
@@ -101,6 +104,9 @@ export function initToggles() {
     // This function is necessary for radios and checkboxes as they are special
     function getToggleFormInput(toggleId, toggleValue) {
         const formInput = document.getElementById(toggleId);
+        if (!formInput) {
+            return null;
+        }
         if (formInput.tagName.toLowerCase() !== 'div') {
             return formInput;
         } else {
