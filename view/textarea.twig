@@ -1,4 +1,4 @@
-{% from '_macros' import renderError, renderTooltip, renderModal, optionReadonly %}
+{% from '_macros' import renderError, renderTooltip, renderModal %}
 <div class="column {{ column is not empty ? column : 'is-full' }}">
     <div class="field">
         <label class="label {{ labelsmall is not empty ? 'label-smaller' }}" for="{{ id }}">
@@ -14,8 +14,8 @@
                     name="{{ id }}"
                     {{ cols is defined ? 'cols='~cols }}
                     {{ rows is defined ? 'rows='~rows }}
-                    class="textarea form-input {{ errors is not empty ? 'is-danger' }}"
-                    {{ optionReadonly(is_readonly) }}
+                    class="textarea form-input{% if is_readonly%} has-background-grey-lighter{% endif %} {{ errors is not empty ? 'is-danger' }}"
+                    {% if is_readonly%}readonly{% endif %}
                     {% if placeholder is not empty -%}
                         placeholder="{{ placeholder ~ (is_required and label is empty ? ' *') }}"
                     {%- endif %} />
