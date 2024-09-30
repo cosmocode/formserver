@@ -302,6 +302,13 @@ div.label-smaller {
 }
 
 /**
+ * Readonly field looking more a like disabled one
+ */
+input[readonly] {
+    cursor: not-allowed;
+}
+
+/**
  ** Bulma overrides
  */
 .select fieldset[disabled] select,
