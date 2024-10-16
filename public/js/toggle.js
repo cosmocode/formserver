@@ -10,8 +10,8 @@ export function initToggles() {
      * @param triggerElement
      * @param toggleValue specific to this conditional option
      */
-    function resetConditional(option, parent, triggerElement, toggleValue) {
-        if (toggleValue.includes(getFormInputValue(triggerElement))) {
+    function updateConditionalOptions(option, parent, triggerElement, toggleValue) {
+        if (toggleValue === getFormInputValue(triggerElement)) {
             option.removeAttribute('disabled');
             option.removeAttribute('hidden');
         } else {
@@ -29,15 +29,18 @@ export function initToggles() {
     // Init fieldset states on page load and add event listeners
     Array.from(fieldsetsWithToggle).forEach(function(fieldset) {
         const toggleId = fieldset.getAttribute('data-toggle-id');
-        const toggleValue = JSON.parse(fieldset.getAttribute('data-toggle-value'));
-        const formInput = getToggleFormInput(toggleId, toggleValue);
-        if (formInput) {
-            toggleFieldset(fieldset, formInput, formInput.checkVisibility());
-            formInput.addEventListener('change', function(e) {
-                const formInput = e.target;
-                toggleFieldset(fieldset, formInput, formInput.checkVisibility());
-            });
-        }
+        const toggleValues = JSON.parse(fieldset.getAttribute('data-toggle-value'));
+        // loop over toggleValues
+        Array.from(toggleValues). forEach(function(toggleValue) {
+            const triggerElement = getToggleFormInput(toggleId, toggleValue);
+            if (triggerElement) {
+                toggleFieldset(fieldset, triggerElement, triggerElement.checkVisibility());
+                triggerElement.addEventListener('change', function(e) {
+                    const formInput = e.target;
+                    toggleFieldset(fieldset, formInput, formInput.checkVisibility());
+                });
+            }
+        });
     });
 
     // Init state of conditional select options on page load
@@ -45,20 +48,18 @@ export function initToggles() {
     Array.from(optionsWithToggle).forEach(function(option) {
         const parent = option.parentElement;
         const toggleId = option.getAttribute('data-toggle-id');
-        const toggleValue = JSON.parse(option.getAttribute('data-toggle-value'));
-        const triggerElement = getToggleFormInput(toggleId, toggleValue);
-        if (triggerElement) {
-            if (toggleValue.includes(getFormInputValue(triggerElement))) {
-                option.removeAttribute('disabled');
-                option.removeAttribute('hidden');
-            } else {
-                option.removeAttribute('selected');
-            }
+        const toggleValues = JSON.parse(option.getAttribute('data-toggle-value'));
+        // loop over toggleValues
+        Array.from(toggleValues). forEach(function(toggleValue) {
+            const triggerElement = getToggleFormInput(toggleId, toggleValue);
+            if (triggerElement) {
+                updateConditionalOptions(option, parent, triggerElement, toggleValue);
 
-            triggerElement.addEventListener('change', function(e) {
-                resetConditional(option, parent, triggerElement, toggleValue);
-            });
-        }
+                triggerElement.addEventListener('change', function (e) {
+                    updateConditionalOptions(option, parent, triggerElement, toggleValue);
+                });
+            }
+        });
     });
 
     // clear all inputs in hidden fields on submit
@@ -87,17 +88,15 @@ export function initToggles() {
         if (isVisible && toggleValue.includes(getFormInputValue(formInput))) {
             fieldset.removeAttribute('disabled');
             fieldset.classList.remove('hidden');
-            Array.from(fieldset.querySelectorAll('.form-input')).forEach(function(fieldsetFormElement) {
-                fieldsetFormElement.dispatchEvent(new Event("change"));
-            });
         } else {
             fieldset.setAttribute('disabled', '');
             fieldset.classList.add('hidden');
-            Array.from(fieldset.querySelectorAll('.form-input')).forEach(function(fieldsetFormElement) {
-                // Trigger event in case another fieldset is affected due to this toggle
-                fieldsetFormElement.dispatchEvent(new Event("change"));
-            });
         }
+
+        Array.from(fieldset.querySelectorAll('.form-input')).forEach(function(fieldsetFormElement) {
+            // Trigger event in case another fieldset is affected due to this toggle
+            fieldsetFormElement.dispatchEvent(new Event("change"));
+        });
     }
 
     // Helper function to get form input
@@ -112,9 +111,10 @@ export function initToggles() {
         } else {
             let divFormInput;
             Array.from(formInput.querySelectorAll('.form-input')).forEach(function(formElement) {
-                if (toggleValue.includes(formElement.value)) {
+                if (toggleValue === formElement.value) {
                     divFormInput = formElement;
-                } else if (formElement.type === 'radio') {
+                }
+                if (formElement.type === 'radio') {
                     formElement.addEventListener('click', function(e) {
                         divFormInput.dispatchEvent(new Event("change"));
                     });
@@ -123,6 +123,12 @@ export function initToggles() {
 
             return divFormInput;
         }
+    }
+
+    function attachToggleHandlerToInput(divFormInput, formElement) {
+        formElement.addEventListener('click', function(e) {
+            divFormInput.dispatchEvent(new Event("change"));
+        });
     }
 
     // Helper function to get input value
