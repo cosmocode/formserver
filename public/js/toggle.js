@@ -3,24 +3,27 @@
  */
 export function initToggles() {
     /**
-     * Change handler for the trigger element: updates state of options and clears the selected value.
+     * Change handler for the trigger element: updates state of options and clears the parent value.
      *
      * @param option
      * @param parent parent element containing all options
      * @param triggerElement
      * @param toggleValue specific to this conditional option
+     * @param {boolean} clear clearing the parent value is optional
      */
-    function updateConditionalOptions(option, parent, triggerElement, toggleValue) {
+    function updateConditionalOptions(option, parent, triggerElement, toggleValue, clear = true) {
         if (toggleValue === getFormInputValue(triggerElement)) {
             option.removeAttribute('disabled');
             option.removeAttribute('hidden');
         } else {
             option.setAttribute('disabled', true);
             option.setAttribute('hidden', true);
-            option.setAttribute('selected', false);
-            option.setAttribute('checked', false);
+            option.removeAttribute('selected');
+            option.removeAttribute('checked');
         }
-        clearFormElementValue(parent);
+        if (clear) {
+            clearFormElementValue(parent);
+        }
     }
 
     const fieldsetsWithToggle = document.querySelectorAll('fieldset[data-toggle-id]');
@@ -53,7 +56,8 @@ export function initToggles() {
         Array.from(toggleValues). forEach(function(toggleValue) {
             const triggerElement = getToggleFormInput(toggleId, toggleValue);
             if (triggerElement) {
-                updateConditionalOptions(option, parent, triggerElement, toggleValue);
+                // prevent clearing the value on initial load
+                updateConditionalOptions(option, parent, triggerElement, toggleValue, false);
 
                 triggerElement.addEventListener('change', function (e) {
                     updateConditionalOptions(option, parent, triggerElement, toggleValue);
