@@ -8,14 +8,16 @@ namespace CosmoCode\Formserver\FormGenerator\FormElements;
 class DropdownFormElement extends AbstractDynamicFormElement
 {
     /**
-     * On multiselect elements discard the size attribute
+     * Process select-specific configuration
      *
      * @return array
+     * @throws \JsonException
      */
     public function getViewVariables(): array
     {
         $conf = parent::getViewVariables();
 
+        // on non-multiselect elements discard the size attribute
         if (empty($conf['multiselect'])) {
             unset($conf['size']);
         }
