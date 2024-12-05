@@ -14,12 +14,11 @@
                 </div>
                 <div class="control is-cloneable">
                     <input
-                            type="text"
+                            type="datetime-local"
                             id="{{ id }}-{{ loop.index }}"
                             name="{{ id }}[]"
                             value="{{ val }}"
                             class="input form-input{% if is_readonly%} has-background-grey-lighter{% endif %} {{ errors is not empty ? 'is-danger' }}"
-                            data-calendar-type="datetime"
                             {% if is_readonly%}readonly{% endif %}
                             {% if placeholder is not empty -%}
                                 placeholder="{{ placeholder ~ (is_required and label is empty ? ' *') }}"
@@ -46,12 +45,11 @@
             </div>
             <div class="control">
                 <input
-                    type="text"
+                    type="datetime-local"
                     id="{{ id }}"
                     name="{{ id }}"
                     value="{{ value }}"
                     class="input form-input{% if is_readonly%} has-background-grey-lighter{% endif %} {{ errors is not empty ? 'is-danger' }}"
-                    data-calendar-type="datetime"
                     {% if is_readonly%}readonly{% endif %}
                     {% if placeholder is not empty -%}
                         placeholder="{{ placeholder ~ (is_required and label is empty ? ' *') }}"

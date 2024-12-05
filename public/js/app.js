@@ -21,10 +21,3 @@ initClonability();
 tooltips();
 initToggles();
 tablestyle();
-
-/**
- * Init flatpickr
- */
-flatpickr('input:read-write[data-calendar-type="date"]', {'dateFormat' : 'd.m.Y', 'allowInput' : true});
-flatpickr('input:read-write[data-calendar-type="time"]', {'noCalendar' : true, 'enableTime' : true, 'time_24hr' : true, 'allowInput' : true});
-flatpickr('input:read-write[data-calendar-type="datetime"]', {'enableTime' : true, 'time_24hr' : true, 'dateFormat' : 'd.m.Y H:i', 'allowInput' : true});
