@@ -13,12 +13,12 @@
         <div class="control">
             <div class="grouped-form-elements" id="{{ id }}">
                 {%- for choice in choices -%}
-                    <label class="radio {{ labelsmall is not empty ? 'label-smaller' }}">
+                    <label class="radio {{ labelsmall is not empty ? 'label-smaller' }}{% if is_readonly%} readonly-choices{% endif %}">
                         <input
                                 type="radio"
                                 id="{{ id~'['~loop.index0~']' }}"
                                 name="{{ id }}"
-                                class="form-input"
+                                class="form-input{% if is_readonly%} readonly-choices{% endif %}"
                                 value="{{ choice }}"
                                 {{ value == choice ? 'checked' }} />
                         {{ choice }}

@@ -15,7 +15,7 @@
                 <select
                         id="{{ id }}"
                         name="{{ id }}[]"
-                        class="form-input"
+                        class="form-input{% if is_readonly%} readonly-select{% endif %}"
                         {{ size is defined ? 'size='~size }}
                         {{ multiselect is defined and multiselect ? 'multiple' }}>
 

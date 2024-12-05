@@ -13,14 +13,14 @@
         <div class="control">
             <div class="grouped-form-elements" id="{{ id }}">
                 {%- for choice in choices -%}
-                    <label class="checkbox {{ labelsmall is not empty ? 'label-smaller' }}">
+                    <label class="checkbox {{ labelsmall is not empty ? 'label-smaller' }}{% if is_readonly%} readonly-choices{% endif %}">
                         <input
                                 type="checkbox"
                                 id="{{ id~'['~loop.index0~']' }}"
                                 name="{{ id~'['~loop.index0~']' }}"
                                 value="{{ choice }}"
                                 {{ choice in value ? 'checked' }}
-                                class="checkbox-input form-input" />
+                                class="checkbox-input form-input{% if is_readonly%} readonly-choices{% endif %}" />
                                 {{- transformed_choices[loop.index0] | raw -}}
                     </label>
                     {%- if alignment is defined and alignment == 'vertical' -%}

@@ -152,7 +152,7 @@ They are required by default.
 
 Options:
 * `validation` _(optional)_ - used to apply [validation](validation.md)
-* `readonly` _(optional)_ - Disables user input. Available only for fields where users type in values. Useful when values are pre-filled from `values.yaml`
+* `readonly` _(optional)_ - Disables user input but keeps any pre-filled values intact. Fields where users type in values get an actual HTML attribute `readonly`. Select fields like dropdowns and radios, where this property is not allowed, are visually toned down and are non-interactive. Useful when values are pre-filled from `values.yaml`
 
 ```yaml
   <id>:

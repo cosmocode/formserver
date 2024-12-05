@@ -302,10 +302,21 @@ div.label-smaller {
 }
 
 /**
- * Readonly field looking more a like disabled one
+ * Readonly field looking more like disabled ones,
+ * simulate readonly look for inputs that have no HTML readonly attribute
  */
 input[readonly] {
     cursor: not-allowed;
+}
+
+select.readonly-select {
+    pointer-events:none;
+    background: var(--bulma-input-disabled-placeholder-color);
+}
+
+.readonly-choices {
+    pointer-events:none;
+    opacity: 0.7;
 }
 
 /**
