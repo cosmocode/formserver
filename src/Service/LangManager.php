@@ -78,4 +78,9 @@ class LangManager
     {
         return self::$translations[$id] ?? '';
     }
+
+    public static function getTranslations()
+    {
+        return self::$translations;
+    }
 }

@@ -6,12 +6,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{{ title is defined ? title : 'Form'}}</title>
         <link rel="stylesheet" href="/css/bulma.min.css" />
-        <link rel="stylesheet" href="/css/bulma-tooltip.min.css" />
-        <link rel="stylesheet" href="/css/app.css" />
+        <link rel="stylesheet" href="/css/style.css" />
         {%- if css is not empty -%}
             <link rel="stylesheet" href={{ fileUrl(css) }} >
         {% endif %}
-        <script src="/js/signature_pad.min.js"></script>
     </head>
     <body>
         <section class="section">
@@ -24,43 +22,15 @@
                     <h1 class="title">{{ title }}</h1>
                 {%- endif -%}
 
-                <form id="form" method="post" enctype="multipart/form-data">
-                    <div class="columns">
-                        <div class="column">
-                            {{ renderNotification(notification) }}
-                        </div>
-                    </div>
-                    <div class="columns is-multiline">
-                        {% for rendered_form_element in rendered_form_elements %}
-                            {{ rendered_form_element | raw }}
-                        {% endfor %}
-                    </div>
-                    <div class="columns is-multiline">
-                        <div class="column is-full">
-                            <div class="field is-grouped has-addons has-addons-centered">
-                                {% if save_button_visible %}
-                                    <div class="control">
-                                        <button class="button is-link" type="submit" name="formcontrol[save]">
-                                            {{ button_save_label is not empty ? button_save_label : 'Save'}}
-                                        </button>
-                                    </div>
-                                {% endif %}
-                                {% if send_button_visible %}
-                                    <div class="control">
-                                        <button class="button is-link" type="submit" name="formcontrol[send]">
-                                            {{ button_send_label is not empty ? button_send_label : 'Send'}}
-                                        </button>
-                                    </div>
-                                {% endif %}
-                            </div>
-                        </div>
-                        <div class="column is-full">
-                            {{ renderNotification(notification) }}
-                        </div>
-                    </div>
-                </form>
+                <script id="formConfig">
+                    const formconfig = {{ configJSON | raw }};
+                </script>
+
+                <form-component></form-component>
+
             </div>
         </section>
-        <script src="/js/app.js" type="module"></script>
+
+        <script src="/js/bundle.js"></script>
     </body>
 </html>

@@ -2,8 +2,12 @@
 .idea
 *.iml
 
-# composer
+# dependencies
 vendor
+node_modules
+
+# build
+public/js/bundle.js
 
 # data
 data/*

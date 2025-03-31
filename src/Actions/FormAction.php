@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace CosmoCode\Formserver\Actions;
 
 use CosmoCode\Formserver\Exceptions\FormException;
-use CosmoCode\Formserver\Exceptions\LanguageException;
 use CosmoCode\Formserver\Exceptions\MailException;
 use CosmoCode\Formserver\FormGenerator\Form;
 use CosmoCode\Formserver\FormGenerator\FormRenderer;
@@ -56,7 +55,6 @@ class FormAction extends AbstractAction
             $id = $this->resolveArg('id');
             $form = new Form($id);
 
-            LangManager::init($form->getMeta('language'));
             $formRenderer = new FormRenderer($form);
             $formValidator = new FormValidator($form);
 
@@ -77,8 +75,7 @@ class FormAction extends AbstractAction
                     $this->handleFileExport($form);
                     // finally clean up if it is a non-persistent form
                     if ($form->getMeta('saveButton') === false) {
-                        $formElements = $form->getFormElements();
-                        $form->reset($formElements);
+//                        $form->reset($formElements);
                     }
                 }
             } elseif ($this->request->getMethod() === 'GET') {

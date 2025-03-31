@@ -3,8 +3,6 @@
 namespace CosmoCode\Formserver\FormGenerator;
 
 use CosmoCode\Formserver\Exceptions\TwigException;
-use CosmoCode\Formserver\FormGenerator\FormElements\FieldsetFormElement;
-use CosmoCode\Formserver\FormGenerator\FormElements\AbstractFormElement;
 use CosmoCode\Formserver\Service\LangManager;
 use Twig\TemplateWrapper;
 
@@ -60,9 +58,10 @@ class FormRenderer
      */
     public function render()
     {
-        $renderedFormElements = [];
 
         // Global variables available in all templates and macros
+        $this->twig->addGlobal('configJSON', $this->form->getJSON());
+
         $this->twig->addGlobal('form_id', $this->form->getId());
         $this->twig->addGlobal('form_is_valid', $this->form->isValid());
         $this->twig->addGlobal('button_save_label', LangManager::getString('button_save'));
@@ -76,23 +75,11 @@ class FormRenderer
         $this->twig->addGlobal('upload_error', LangManager::getString('upload_error'));
         $this->twig->addGlobal('tooltip_style', $this->form->getMeta('tooltip_style') ?? '');
 
-        foreach ($this->form->getFormElements() as $formElement) {
-            if ($formElement instanceof FieldsetFormElement) {
-                $renderedFormElements[] = $this->renderFieldsetFormElement(
-                    $formElement
-                );
-            } else {
-                $renderedFormElements[] = $this->renderTemplate(
-                    $formElement->getType(),
-                    $formElement->getViewVariables()
-                );
-            }
-        }
+
 
         return $this->renderTemplate(
             '_form',
             [
-                'rendered_form_elements' => $renderedFormElements,
                 'title' => $this->form->getMeta('title'),
                 'notification' => $this->generateNotification(),
                 'css' => $this->form->getMeta('css'),
@@ -104,35 +91,6 @@ class FormRenderer
         );
     }
 
-    /**
-     * Renders the view of a FormElement
-     *
-     * @param FieldsetFormElement $fieldsetFormElement
-     * @return string
-     * @throws TwigException
-     */
-    protected function renderFieldsetFormElement(
-        FieldsetFormElement $fieldsetFormElement
-    ) {
-        foreach ($fieldsetFormElement->getChildren() as $childFormElement) {
-            if ($childFormElement instanceof FieldsetFormElement) {
-                $renderedChildView = $this->renderFieldsetFormElement(
-                    $childFormElement
-                );
-            } else {
-                $renderedChildView = $this->renderTemplate(
-                    $childFormElement->getType(),
-                    $childFormElement->getViewVariables()
-                );
-            }
-            $fieldsetFormElement->addRenderedChildView($renderedChildView);
-        }
-
-        return $this->renderTemplate(
-            $fieldsetFormElement->getType(),
-            $fieldsetFormElement->getViewVariables()
-        );
-    }
 
     /**
      * Helper function to render a twig block

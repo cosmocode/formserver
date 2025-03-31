@@ -10,7 +10,9 @@ use CosmoCode\Formserver\FormGenerator\FormElements\DropdownFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\FieldsetFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\UploadFormElement;
 use CosmoCode\Formserver\Helper\FileHelper;
+use CosmoCode\Formserver\Helper\LegacyHelper;
 use CosmoCode\Formserver\Helper\YamlHelper;
+use CosmoCode\Formserver\Service\LangManager;
 
 /**
  * Contains the form and provides basic functionality
@@ -30,15 +32,13 @@ class Form
      */
     protected string $id;
 
-    /**
-     * @var array
-     */
+    protected array $elements;
+
     protected array $meta;
 
-    /**
-     * @var AbstractFormElement[]
-     */
-    protected array $formElements = [];
+    protected array $values;
+
+    protected array $lang;
 
     /**
      * @var string
@@ -56,60 +56,20 @@ class Form
     {
         $this->id = $formId;
         $config = YamlHelper::parseYaml($this->getFormDirectory() . 'config.yaml');
+        $this->elements = $config['form'];
         $this->meta = $config['meta'] ?? [];
         $this->isPersistent = (bool)$this->getMeta('saveButton');
 
-        foreach ($config['form'] as $formElementId => $formElementConfig) {
-            $this->formElements[] = FormElementFactory::createFormElement(
-                $formElementId,
-                $formElementConfig,
-                null,
-                $this->id,
-                $this->isPersistent
-            );
-        }
-    }
+        LangManager::init($this->getMeta('language'));
+        $this->lang = LangManager::getTranslations();
 
-    /**
-     * Returns all form elements
-     *
-     * @return AbstractFormElement[]
-     */
-    public function getFormElements(): array
-    {
-        return $this->formElements;
-    }
-
-    /**
-     * Returns the value of a form element
-     *
-     * @param string $fieldId
-     * @return mixed
-     */
-    public function getFormElementValue(string $fieldId)
-    {
-        $formElementIdPath = explode('.', $fieldId);
-        $rootElementId = array_shift($formElementIdPath);
-
-        foreach ($this->formElements as $formElement) {
-            if ($formElement->getId() === $rootElementId) {
-                foreach ($formElementIdPath as $formId) {
-                    if ($formElement instanceof FieldsetFormElement) {
-                        $formElement = $formElement->getChild($formId);
-                    } else {
-                        throw new FormException(
-                            "Cant get value of $fieldId. It does not exist."
-                        );
-                    }
-                }
-
-                if ($formElement instanceof AbstractDynamicFormElement) {
-                    return $formElement->getValue();
-                }
-            }
+        try {
+            $this->values = YamlHelper::parseYaml($this->getFormDirectory() . 'values.yaml');
+        } catch (\Exception $exception) {
+            // no stored values.yaml
+            $this->values = [];
         }
 
-        throw new FormException("Cant get value of $fieldId. It does not exist.");
     }
 
     /**
@@ -259,86 +219,6 @@ class Form
     }
 
     /**
-     * Helper function to submit data to a form element
-     *
-     * @param AbstractFormElement $formElement
-     * @param array $data
-     * @param array $files
-     * @return void
-     */
-    protected function submitFormElement(
-        AbstractFormElement $formElement,
-        array $data,
-        array $files
-    ) {
-        if ($formElement instanceof FieldsetFormElement) {
-            foreach ($formElement->getChildren() as $fieldsetChild) {
-                $subData = $data[$formElement->getId()] ?? [];
-                $subFiles = $files[$formElement->getId()] ?? [];
-                $this->submitFormElement($fieldsetChild, $subData, $subFiles);
-            }
-        } elseif ($formElement instanceof UploadFormElement) {
-            $formElement->formDirectory = $this->getFormDirectory();
-
-            // try to restore previous upload data
-            $previousUpload = json_decode($data[$formElement->getId()]['previous_value'], true);
-            $formElement->setPreviousValue($previousUpload);
-
-            $newUpload = $files[$formElement->getId()] ?? null;
-
-            // no new valid upload
-            if (!$newUpload || !FileHelper::isValidUpload($newUpload)) {
-                // reuse previously uploaded files on new submit
-                $formElement->setValue($previousUpload);
-            } else {
-                // Re-upload? delete old files first
-                !empty($previousUpload) && $formElement->deleteFiles();
-                // save new upload
-                $formElement->saveNewUpload($newUpload);
-            }
-        } elseif ($formElement instanceof AbstractDynamicFormElement) {
-            $value = $data[$formElement->getId()] ?? null;
-            // Important! Value must be set, even if empty. User can unset fields
-            $formElement->setValue($value);
-        }
-    }
-
-    /**
-     * Helper function to en-/disable fieldsets depending on toggle value
-     *
-     * @param AbstractFormElement $formElement
-     * @return void
-     * @throws \JsonException
-     */
-    protected function toggleFieldsets(
-        AbstractFormElement $formElement
-    ) {
-        if ($formElement instanceof FieldsetFormElement) {
-            if ($formElement->hasToggle()) {
-                $submittedValue = $this->getFormElementValue(
-                    $formElement->getToggleFieldId()
-                );
-                $toggleValue = $formElement->getToggleValue();
-
-                // Checklist can have multiple values
-                if (is_array($submittedValue)) {
-                    $disabled = ! in_array($toggleValue, $submittedValue);
-                } else {
-                    $disabled = $submittedValue !== $toggleValue;
-                }
-
-                $formElement->setDisabled($disabled);
-            }
-
-            if (! $formElement->isDisabled()) {
-                foreach ($formElement->getChildren() as $fieldsetChild) {
-                    $this->toggleFieldsets($fieldsetChild);
-                }
-            }
-        }
-    }
-
-    /**
      * Sets the current mode
      *
      * @param array $data
@@ -356,94 +236,17 @@ class Form
     }
 
     /**
-     * Helper function to restore a specific value to a form element
-     *
-     * @param array $values
-     * @param AbstractFormElement $formElement
-     * @return void
+     * Form JSON to be processed in FE
+     * @return string
      */
-    protected function restoreValue(array $values, AbstractFormElement $formElement): void
+    public function getJSON()
     {
-        if ($formElement instanceof FieldsetFormElement) {
-            $subValues = $values[$formElement->getId()] ?? [];
-            foreach ($formElement->getChildren() as $fieldsetChild) {
-                $this->restoreValue($subValues, $fieldsetChild);
-            }
-        } elseif ($formElement instanceof AbstractDynamicFormElement) {
-            $value = $values[$formElement->getId()] ?? null;
-            $formElement->setValue($value);
-        }
-    }
-
-    /**
-     * Helper function to restore a specific value to a form element
-     *
-     * @param AbstractFormElement $formElement
-     * @return void
-     */
-    protected function setDefaultValues(AbstractFormElement $formElement): void
-    {
-        if ($formElement instanceof FieldsetFormElement) {
-            foreach ($formElement->getChildren() as $fieldsetChild) {
-                $this->setDefaultValues($fieldsetChild);
-            }
-        } elseif (
-            $formElement instanceof ChecklistFormElement
-            || $formElement instanceof  DropdownFormElement
-        ) {
-            if (! $formElement->hasValue()) {
-                $formElement->setDefaultValue();
-            }
-        }
-    }
-
-    /**
-     * Helper function to restore a specific value to a form element
-     *
-     * @param array $values
-     * @param AbstractFormElement $formElement
-     * @return void
-     */
-    protected function injectValueToArray(
-        array &$values,
-        AbstractFormElement $formElement
-    ) {
-        if ($formElement instanceof FieldsetFormElement) {
-            $tempValues = [];
-            foreach ($formElement->getChildren() as $fieldsetChild) {
-                $this->injectValueToArray($tempValues, $fieldsetChild);
-            }
-            $values[$formElement->getId()] = $tempValues;
-        } elseif (
-            $formElement instanceof AbstractDynamicFormElement
-            && $formElement->hasValue()
-        ) {
-            $values[$formElement->getId()] = $formElement->getValue();
-        }
-    }
-
-    /**
-     * Helper function to check form elements recursively if they are valid
-     *
-     * @param AbstractFormElement $formElement
-     * @return bool
-     */
-    protected function isFormElementValid(AbstractFormElement $formElement): bool
-    {
-        if (
-            $formElement instanceof FieldsetFormElement
-            && ! $formElement->isDisabled()
-        ) {
-            foreach ($formElement->getChildren() as $fieldsetChild) {
-                if (! $this->isFormElementValid($fieldsetChild)) {
-                    return false;
-                }
-            }
-        } elseif ($formElement instanceof AbstractDynamicFormElement) {
-            return $formElement->isValid();
-        }
-
-        // AbstractStaticFormElements don't have any input and are always valid
-        return true;
+        return json_encode([
+            'meta' => $this->meta,
+            'form' => LegacyHelper::transform($this->elements),
+            'lang' => $this->lang,
+            'values' => $this->values,
+            ],
+        JSON_PRETTY_PRINT);
     }
 }

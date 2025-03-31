@@ -1,0 +1,158 @@
+body {
+    background-color: greenyellow;
+}
+
+/**
+ * tables
+ */
+table label,
+table .label {
+    display: none; /* hide labels */
+}
+
+table tr th {
+    min-width: 10rem; /* fields without labels are really narrow */
+}
+
+/** Required to preserve Bulma's column system */
+checklist-component,
+date-component,
+datetime-component,
+download-component,
+dropdown-component,
+email-component,
+fieldset-component,
+hr-component,
+image-component,
+markdown-component,
+numberinput-component,
+radioset-component,
+signature-component,
+table-component,
+textarea-component,
+textinput-component,
+time-component,
+upload-component,
+fieldset {
+    display: contents;
+}
+
+/**
+ * Readonly field looking more like disabled ones,
+ * simulate readonly look for inputs that have no HTML readonly attribute
+ */
+input[readonly], textarea[readonly] {
+    background: var(--bulma-input-disabled-placeholder-color);
+    cursor: not-allowed;
+}
+
+select.readonly-select {
+    pointer-events:none;
+    background: var(--bulma-input-disabled-placeholder-color);
+}
+
+.readonly-choices {
+    pointer-events:none;
+    opacity: 0.7;
+}
+
+/**
+ * Errors
+ */
+form .has-errors {
+    & input,
+    & textarea,
+    & select,
+    & .signature-pad canvas {
+        border-color: hsl(var(--bulma-danger-h),var(--bulma-danger-s),var(--bulma-danger-on-scheme-l));
+    }
+
+    & label,
+    & .label,
+    & option {
+        color: hsl(var(--bulma-danger-h),var(--bulma-danger-s),var(--bulma-danger-on-scheme-l));
+    }
+}
+
+/**
+ ** Bulma overrides
+ */
+.select fieldset[disabled] select,
+.select select[disabled],
+[disabled].input,
+[disabled].textarea,
+fieldset[disabled] .input,
+fieldset[disabled] .select select,
+fieldset[disabled] .textarea {
+    background-color: var(--bulma-input-disabled-placeholder-color);
+}
+
+/** Signature Pad  */
+canvas {
+    display: block;
+    border-color: rgb(214, 217, 224);
+    border-style: solid;
+    border-width: 1px;
+    border-radius: var(--bulma-input-radius);
+    background: #ffffff;
+}
+
+/** Tooltips */
+.label {
+    display: inline-block; /* prevents line break between label and tooltip */
+}
+
+span.tooltip-hint,
+span.modal-hint {
+    position: relative;
+    margin-left: 0.5rem;
+    padding: 0.2rem 0.5rem;
+    border: rgb(214, 217, 224) 1px solid;
+    border-radius: 0.375rem;
+    background: hsl(0, 0%, 96%);
+}
+
+span.tooltip {
+    /* basic styles for bubble */
+    &:before, &:after {
+        position: absolute;
+        top: 50%; /* vertically center */
+        transform: translateY(-50%);
+        left: 100%; /* move to right */
+        display: none;
+    }
+
+    /* tooltip box */
+    &:before {
+        content: attr(data-tooltip);
+        margin-left: 0.5rem;
+        width: 15rem;
+        padding: 1rem;
+        border-radius: 0.375rem;
+        background: rgba(0, 0, 0, 0.8);
+        color: #fff;
+        text-align: center;
+    }
+
+    /* tooltip arrow */
+    &:after {
+        content: "";
+        margin-left: -0.5rem;
+        border: 0.5rem solid;
+        border-color: transparent rgba(0, 0, 0, 0.8) transparent transparent;
+    }
+
+    &:hover:before, &:hover:after,
+    &:focus:before, &:focus:after {
+        display:block;
+        z-index: 20;
+    }
+}
+
+/**
+ * Modals
+ */
+div.modal-content {
+    width: unset;
+    max-width: 75%;
+}
