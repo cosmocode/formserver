@@ -1,0 +1,16 @@
+{
+  "devDependencies": {
+    "esbuild": "^0.25.0"
+  },
+  "scripts": {
+    "build": "esbuild js_src/main.js --bundle --sourcemap --minify --outfile=public/js/bundle.js",
+    "watch": "esbuild js_src/main.js --bundle --sourcemap --outfile=public/js/bundle.js --watch"
+  },
+  "dependencies": {
+    "dot-prop": "^9.0.0",
+    "expr-eval": "^2.0.2",
+    "html-template-tag": "^4.1.1",
+    "morphdom": "^2.7.4",
+    "signature_pad": "^5.0.4"
+  }
+}
