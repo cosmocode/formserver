@@ -242,6 +242,13 @@ export class U {
                 }
             });
 
+            // overwrite "in" to handle comparisons with sets as well as strings
+            parser.binaryOps.in = (left, right) => {
+                const a = new Set(typeof left === 'string' ? new Array(left) : left);
+                const b = new Set(right);
+                return !!a.intersection(b).size;
+            };
+
             return parser.parse(visible);
         } catch (e) {
             console.error(`Error parsing visibility expression ${visible}`, e);
@@ -262,7 +269,6 @@ export class U {
 
             // create an object with the variables and their values
             // initializes non-existing variables with null
-            // FIXME null doesn't work with 'in' operand
             const data = {};
             vars.forEach(v => {
                 setProperty(data, v, state.values[v]);
