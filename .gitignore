@@ -7,7 +7,7 @@ vendor
 node_modules
 
 # build
-public/js/bundle.js
+public/js/*
 
 # data
 data/*
