@@ -65,12 +65,12 @@ export class FormComponent extends HTMLElement {
         formControlButtons.innerHTML =
             `<div class="field is-grouped has-addons has-addons-centered">
                 <div class="control">
-                    <button class="button is-link" type="submit" name="formcontrol[save]">
+                    <button class="button is-link" type="submit" name="save">
                         ${U.getLang("button_save")}
                     </button>
                 </div>
                 <div class="control">
-                    <button class="button is-link" type="submit" name="formcontrol[send]">
+                    <button class="button is-link" type="submit" name="send">
                         ${U.getLang("button_send")}
                     </button>
                 </div>
@@ -99,6 +99,30 @@ export class FormComponent extends HTMLElement {
 
         console.log('SUBMIT', this.#state.values);
         console.log('SUBMIT VALIDATION', isValid);
+
+        fetch(window.location.href, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                "mode": event.submitter.name, /* submit or save */
+                "data": this.#state.values
+            }),
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then((data) => {
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+
     }
 
     #displayFormStatusNotofication(isValid) {
