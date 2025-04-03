@@ -35,6 +35,9 @@ export class SignatureComponent extends BaseComponent {
         wrapper.appendChild(field);
 
         const signaturePad = new SignaturePad(canvas);
+        if (this.myState.value) {
+            signaturePad.fromDataURL(this.myState.value);
+        }
         // default input event is of no use here
         signaturePad.addEventListener("endStroke", () => {
             this.myState.value = signaturePad.toDataURL();
@@ -53,9 +56,9 @@ export class SignatureComponent extends BaseComponent {
         clearButton.classList.add("button", "clear");
         clearButton.type = "button";
         clearButton.innerText = U.getLang('label_signature_delete');
-        clearButton.addEventListener("click", function (event) {
+        clearButton.addEventListener("click",  (event) => {
             signaturePad.clear();
-            this.myState.value.value = null;
+            this.myState.value = null;
         });
 
         controlButton.appendChild(clearButton);

@@ -142,6 +142,7 @@ export class BaseComponent extends HTMLElement {
      */
     htmlWrap(html) {
         const wrapper = document.createElement('div');
+        // FIXME multiple classes
         wrapper.classList.add('column', this.config.column ?? 'is-full');
 
         if (typeof html === 'string') {
