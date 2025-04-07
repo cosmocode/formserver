@@ -4,7 +4,7 @@ namespace CosmoCode\Formserver\Tests;
 
 use PHPUnit\Framework\TestCase;
 
-class LegacyTest extends TestCase
+class ConfigTransformTest extends TestCase
 {
     public function testTransformToggleFlat(): void
     {
@@ -37,7 +37,7 @@ class LegacyTest extends TestCase
             ],
         ];
 
-        $actual = \CosmoCode\Formserver\Helper\LegacyHelper::transform($elements);
+        $actual = \CosmoCode\Formserver\Helper\ConfigTransformHelper::transform($elements);
 
         $this->assertSame($expected, $actual);
     }
@@ -113,7 +113,7 @@ class LegacyTest extends TestCase
             ]
         ];
 
-        $actual = \CosmoCode\Formserver\Helper\LegacyHelper::transform($elements);
+        $actual = \CosmoCode\Formserver\Helper\ConfigTransformHelper::transform($elements);
 
         $this->assertSame($expected, $actual);
     }
@@ -247,7 +247,7 @@ class LegacyTest extends TestCase
                 ],
             ],
         ];
-        $actual = \CosmoCode\Formserver\Helper\LegacyHelper::transform($elements);
+        $actual = \CosmoCode\Formserver\Helper\ConfigTransformHelper::transform($elements);
 
         $this->assertSame($expected, $actual);
     }
@@ -319,7 +319,7 @@ class LegacyTest extends TestCase
             ]
         ];
 
-        $actual = \CosmoCode\Formserver\Helper\LegacyHelper::transform($elements);
+        $actual = \CosmoCode\Formserver\Helper\ConfigTransformHelper::transform($elements);
 
         $this->assertEquals($expected, $actual);
     }

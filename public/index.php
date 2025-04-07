@@ -43,6 +43,9 @@ $displayErrorDetails = $container->get('settings')['displayErrorDetails'];
 $serverRequestCreator = ServerRequestCreatorFactory::create();
 $request = $serverRequestCreator->createServerRequestFromGlobals();
 
+// Parse json, form data and xml
+$app->addBodyParsingMiddleware();
+
 // Add Routing Middleware
 $app->addRoutingMiddleware();
 

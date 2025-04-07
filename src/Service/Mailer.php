@@ -58,9 +58,10 @@ class Mailer
      * Prepares the data of a form and sends it
      *
      * @param Form $form
+     * @param array $data
      * @return void
      */
-    public function sendForm(Form $form): void
+    public function sendForm(Form $form, array $data): void
     {
         if (empty($form->getMeta('email'))) {
             return;

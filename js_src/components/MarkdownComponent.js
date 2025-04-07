@@ -7,7 +7,7 @@ export class MarkdownComponent extends BaseComponent {
         return html`
             <div class="field">
                 <div class="control">
-                    ${this.config.markdown}
+                    $${this.config.markdown}
                 </div>
             </div>
         `;

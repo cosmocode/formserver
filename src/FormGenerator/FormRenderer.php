@@ -63,7 +63,6 @@ class FormRenderer
         $this->twig->addGlobal('configJSON', $this->form->getJSON());
 
         $this->twig->addGlobal('form_id', $this->form->getId());
-        $this->twig->addGlobal('form_is_valid', $this->form->isValid());
         $this->twig->addGlobal('button_save_label', LangManager::getString('button_save'));
         $this->twig->addGlobal('button_send_label', LangManager::getString('button_send'));
         $this->twig->addGlobal('button_clone_label', LangManager::getString('button_clone'));
@@ -81,7 +80,6 @@ class FormRenderer
             '_form',
             [
                 'title' => $this->form->getMeta('title'),
-                'notification' => $this->generateNotification(),
                 'css' => $this->form->getMeta('css'),
                 'form_id' => $this->form->getId(),
                 'logo' => $this->form->getMeta('logo'),
@@ -108,34 +106,6 @@ class FormRenderer
             throw new TwigException(
                 "Could not render form element '$template': " . $e->getMessage()
             );
-        }
-    }
-
-    /**
-     * Generate global form notification, to indicate to the user what happened
-     *
-     * @return string|null
-     */
-    protected function generateNotification()
-    {
-        $formMode = $this->form->getMode();
-        $formValid = $this->form->isValid();
-
-        switch ($formMode) {
-            case Form::MODE_SAVE:
-                if ($formValid) {
-                    return LangManager::getString('form_valid');
-                }
-
-                return LangManager::getString('form_invalid');
-            case Form::MODE_SEND:
-                if ($formValid) {
-                    return LangManager::getString('send_success');
-                }
-
-                return LangManager::getString('send_prevented');
-            case Form::MODE_SHOW:
-                return null;
         }
     }
 }

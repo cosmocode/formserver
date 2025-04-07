@@ -38,7 +38,7 @@ export class ChecklistComponent extends BaseComponent {
      * @returns {string}
      */
     htmlCheckboxElement(optionLabel) {
-        const checked = (this.myState.value && this.myState.value.has(optionLabel)) ? 'checked' : '';
+        const checked = (this.myState.value && this.myState.value instanceof Set && this.myState.value.has(optionLabel)) ? 'checked' : '';
         return `
             <label class="checkbox ${this.config.readonly ? 'readonly-choices' : ''}">
                 <input type="checkbox" name="${this.config.name}" value="${optionLabel}" ${checked} />

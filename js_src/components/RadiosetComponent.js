@@ -16,6 +16,11 @@ export class RadiosetComponent extends BaseComponent {
         const tooltip = U.tooltipHint(this.config);
         radioset.insertAdjacentHTML('beforeend', tooltip);
 
+        if (this.config.modal) {
+            radioset.appendChild(U.modalHint(this.config));
+            radioset.appendChild(U.modal(this.config));
+        }
+
         const control = document.createElement('div');
         control.classList.add('control');
         radioset.appendChild(control);

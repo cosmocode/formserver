@@ -2,31 +2,39 @@
 
 namespace CosmoCode\Formserver\Helper;
 
+use Michelf\MarkdownExtra;
+
+
 /**
- * Legacy config transformations for toggle -> visible, tablestyle -> table, conditional_choices
+ * Legacy config transformations for toggle -> visible, tablestyle -> table, conditional_choices.
+ * Field name conversion minus -> undescore
+ * Markdown parsing
+ * FIXME Image and download paths?
  *
  * @package CosmoCode\Formserver\Helper
  */
-class LegacyHelper
+class ConfigTransformHelper
 {
     /**
      * Apply transformations to config array
      *
      * @param array $elements
+     * @param string $formId
      * @return array
      */
-    public static function transform(array $elements): array
+    public static function transform(array $elements, string $formId = ''): array
     {
         // rewrite field names first
         $elements = self::minus($elements);
         $elements = self::toggle($elements);
         $elements = self::options($elements);
         $elements = self::tablestyle($elements);
+        $elements = self::markdown($elements, $formId);
 
         // recursively apply the transform to children
         foreach ($elements as $key => $conf) {
             if (is_array($conf)) {
-                $elements[$key] = self::transform($conf);
+                $elements[$key] = self::transform($conf, $formId);
             }
         }
         return $elements;
@@ -113,6 +121,24 @@ class LegacyHelper
      */
     protected static function tablestyle(array $elements): array
     {
+        return $elements;
+    }
+
+    /**
+     * @param array $elements
+     * @return array
+     */
+    protected static function markdown(array $elements, string $formId): array
+    {
+        if (isset($elements['markdown'])) {
+            $elements['markdown'] = MarkdownExtra::defaultTransform($elements['markdown']);
+        }
+
+        if (isset($elements['modal'])) {
+            $elements['modal'] = MarkdownExtra::defaultTransform($elements['modal']);
+            $elements['modal'] = str_replace('<img src="', '<img src="/download/' . $formId . '?file=', $elements['modal']);
+        }
+
         return $elements;
     }
 

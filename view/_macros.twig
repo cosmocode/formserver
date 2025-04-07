@@ -17,12 +17,3 @@
         </p>
     {%- endif -%}
 {%- endmacro -%}
-
-{%- macro renderNotification(notification) -%}
-    {%- if notification is not empty -%}
-        <div class="notification {{ form_is_valid ? 'is-success' : 'is-danger' -}}">
-            {{ notification }}
-        </div>
-    {%- endif -%}
-{%- endmacro -%}
-

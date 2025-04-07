@@ -51,7 +51,7 @@ abstract class AbstractAction
         } catch (YamlException $e) {
             throw new HttpNotFoundException($this->request, $e->getMessage());
         } catch (\Exception $e) {
-            throw new FormException($this->request, $e->getMessage());
+            throw new FormException($e->getMessage());
         }
     }
 

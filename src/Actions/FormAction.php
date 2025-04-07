@@ -8,7 +8,6 @@ use CosmoCode\Formserver\Exceptions\FormException;
 use CosmoCode\Formserver\Exceptions\MailException;
 use CosmoCode\Formserver\FormGenerator\Form;
 use CosmoCode\Formserver\FormGenerator\FormRenderer;
-use CosmoCode\Formserver\FormGenerator\FormValidator;
 use CosmoCode\Formserver\Service\FileExporter;
 use CosmoCode\Formserver\Service\LangManager;
 use CosmoCode\Formserver\Service\Mailer;
@@ -25,12 +24,12 @@ class FormAction extends AbstractAction
     /**
      * @var Mailer
      */
-    protected $mailer;
+    protected Mailer $mailer;
 
     /**
      * @var FileExporter
      */
-    protected $fileExporter;
+    protected FileExporter $fileExporter;
 
     /**
      * Constructor to inject dependencies
@@ -51,46 +50,44 @@ class FormAction extends AbstractAction
      */
     protected function action(): Response
     {
+        $code = 200;
         try {
             $id = $this->resolveArg('id');
             $form = new Form($id);
 
             $formRenderer = new FormRenderer($form);
-            $formValidator = new FormValidator($form);
-
 
             if ($this->request->getMethod() === 'POST') {
-                $form->submit(
-                    $this->request->getParsedBody(),
-                    $this->request->getUploadedFiles()
-                );
-                $formValidator->validate();
+                $body = $this->request->getParsedBody();
+                $files = $this->request->getUploadedFiles();
 
-                if ($form->getMeta('saveButton') !== false) {
-                    $form->persist();
+                // TODO process files
+                if ($form->isPersistent()) {
+                    $form->persist($body['data']);
                 }
 
-                if ($form->isValid() && $form->getMode() === Form::MODE_SEND) {
-                    $this->mailer->sendForm($form);
+                if ($body['mode'] === Form::MODE_SEND) {
+                    $this->mailer->sendForm($form, $body['data']);
                     $this->handleFileExport($form);
-                    // finally clean up if it is a non-persistent form
-                    if ($form->getMeta('saveButton') === false) {
-//                        $form->reset($formElements);
-                    }
                 }
-            } elseif ($this->request->getMethod() === 'GET') {
-                $form->restore();
+
+                $this->response->getBody()->write(json_encode('ok'));
+                return $this->response
+                    ->withStatus($code)
+                    ->withHeader('content-type', 'application/json');
             }
 
             $formHtml = $formRenderer->render();
             $this->response->getBody()->write($formHtml);
         } catch (HttpBadRequestException $e) {
             $this->response->getBody()->write(LangManager::getString('error_notfound'));
+            $code = $e->getCode();
         } catch (MailException $e) {
             $this->response->getBody()->write(LangManager::getString('send_failed'));
+            $code = 500;
         }
 
-        return $this->response;
+        return $this->response->withStatus($code);
     }
 
     /**
@@ -100,7 +97,7 @@ class FormAction extends AbstractAction
      * @return void
      * @throws FormException
      */
-    protected function handleFileExport(Form $form)
+    protected function handleFileExport(Form $form): void
     {
         $file = $form->getMeta('export') ?? '';
         if ($file !== '') {

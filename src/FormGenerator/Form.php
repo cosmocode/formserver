@@ -10,7 +10,7 @@ use CosmoCode\Formserver\FormGenerator\FormElements\DropdownFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\FieldsetFormElement;
 use CosmoCode\Formserver\FormGenerator\FormElements\UploadFormElement;
 use CosmoCode\Formserver\Helper\FileHelper;
-use CosmoCode\Formserver\Helper\LegacyHelper;
+use CosmoCode\Formserver\Helper\ConfigTransformHelper;
 use CosmoCode\Formserver\Helper\YamlHelper;
 use CosmoCode\Formserver\Service\LangManager;
 
@@ -40,12 +40,7 @@ class Form
 
     protected array $lang;
 
-    /**
-     * @var string
-     */
-    protected string $mode = self::MODE_SHOW;
-
-    protected bool $isPersistent;
+    protected bool $persistent;
 
     /**
      * Build a form from YAML
@@ -58,7 +53,7 @@ class Form
         $config = YamlHelper::parseYaml($this->getFormDirectory() . 'config.yaml');
         $this->elements = $config['form'];
         $this->meta = $config['meta'] ?? [];
-        $this->isPersistent = (bool)$this->getMeta('saveButton');
+        $this->persistent = (bool)$this->getMeta('saveButton');
 
         LangManager::init($this->getMeta('language'));
         $this->lang = LangManager::getTranslations();
@@ -104,134 +99,28 @@ class Form
     }
 
     /**
-     * Returns the current mode (user intend)
+     * Is saving data enabled in this form?
      *
-     * @return string
+     * @return bool
      */
-    public function getMode(): string
+    public function isPersistent(): bool
     {
-        return $this->mode;
-    }
-
-    /**
-     * Submit data to the form
-     *
-     * @param array $data $_POST
-     * @param array $files $_FILES
-     * @return void
-     * @throws \JsonException
-     */
-    public function submit(array $data, array $files): void
-    {
-        // submit data
-        foreach ($this->formElements as $formElement) {
-            $this->submitFormElement($formElement, $data, $files);
-        }
-
-        // En-/disable fieldsets depending on toggle value
-        // This must happen after all POST data was submitted
-        foreach ($this->formElements as $formElement) {
-            $this->toggleFieldsets($formElement);
-        }
-
-        $this->setMode($data);
+        return $this->persistent;
     }
 
     /**
      * Persist all submitted data to YAML
      *
-     * @return void
-     */
-    public function persist()
-    {
-        $values = [];
-        foreach ($this->formElements as $formElement) {
-            $this->injectValueToArray($values, $formElement);
-        }
-
-        if (! empty($values)) {
-            YamlHelper::persistYaml(
-                $values,
-                $this->getFormDirectory() . 'values.yaml'
-            );
-        }
-    }
-
-    /**
-     * Restore all persisted data or load defaults
-     *
-     * @return void
-     */
-    public function restore()
-    {
-        // Form was saved before. Restore data
-        if (is_file($this->getFormDirectory() . 'values.yaml')) {
-            $values = YamlHelper::parseYaml(
-                $this->getFormDirectory() . 'values.yaml'
-            );
-
-            foreach ($this->formElements as $formElement) {
-                $this->restoreValue($values, $formElement);
-            }
-        } else {
-            // Form was never saved before. Set default values
-            foreach ($this->formElements as $formElement) {
-                $this->setDefaultValues($formElement);
-            }
-        }
-    }
-
-    /**
-     * Returns boolean if all form elements of this form are valid
-     *
-     * @return bool
-     */
-    public function isValid()
-    {
-        foreach ($this->formElements as $formElement) {
-            if (! $this->isFormElementValid($formElement)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * Reset all form elements to either empty or default values
-     *
-     * @param $formElements
-     */
-    public function reset($formElements)
-    {
-        foreach ($formElements as $formElement) {
-            if ($formElement instanceof FieldsetFormElement) {
-                $childElements = $formElement->getChildren();
-                $this->reset($childElements);
-            } elseif ($formElement instanceof AbstractDynamicFormElement) {
-                $formElement->clearValue($this->getFormDirectory());
-            }
-        }
-
-        foreach ($formElements as $formElement) {
-            $this->setDefaultValues($formElement);
-        }
-    }
-
-    /**
-     * Sets the current mode
-     *
      * @param array $data
      * @return void
      */
-    protected function setMode(array $data)
+    public function persist(array $data): void
     {
-        if (isset($data['formcontrol']['send'])) {
-            $this->mode = self::MODE_SEND;
-        } elseif (isset($data['formcontrol']['save'])) {
-            $this->mode = self::MODE_SAVE;
-        } else {
-            $this->mode = self::MODE_SHOW;
+        if (! empty($data)) {
+            YamlHelper::persistYaml(
+                $data,
+                $this->getFormDirectory() . 'values.yaml'
+            );
         }
     }
 
@@ -239,11 +128,11 @@ class Form
      * Form JSON to be processed in FE
      * @return string
      */
-    public function getJSON()
+    public function getJSON(): string
     {
         return json_encode([
             'meta' => $this->meta,
-            'form' => LegacyHelper::transform($this->elements),
+            'form' => ConfigTransformHelper::transform($this->elements, $this->id),
             'lang' => $this->lang,
             'values' => $this->values,
             ],
