@@ -126,6 +126,7 @@ class ConfigTransformHelper
 
     /**
      * @param array $elements
+     * @param string $formId
      * @return array
      */
     protected static function markdown(array $elements, string $formId): array
@@ -156,16 +157,11 @@ class ConfigTransformHelper
         foreach ($elements as $key => $element) {
             $newKey = str_replace('-', '_', $key);
 
-            if (is_array($element)) {
-                if (isset($element['field'])) {
-                    $element['field'] = str_replace('-', '_', $element['field']);
-                }
-                $newElement = self::minus($element);
-            } else {
-                $newElement = $element;
+            // in conditions, transform value instead of key (toggle => [field, value])
+            if (is_array($element) && isset($element['field'])) {
+                $element['field'] = str_replace('-', '_', $element['field']);
             }
-
-            $transformed[$newKey] = $newElement;
+            $transformed[$newKey] = $element;
         }
 
         return $transformed;
