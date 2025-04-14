@@ -83,7 +83,7 @@ export class DropdownComponent extends BaseComponent {
             return super.updateStateOnInput(target);
         }
 
-        let state = this.myState.value || new Set();
+        let state = U.stateMultivalue(this.myState.value);
 
         // FIXME handle removal of last option (only click event is fired)
         if (state.has(target.value)) {

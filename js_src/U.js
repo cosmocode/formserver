@@ -211,7 +211,7 @@ export class U {
      * Returns the "values" object from form config supplied by backend
      * @returns {Object}
      */
-    static loadFormState() {
+    static loadFormValues() {
         return formconfig.values || {};
     }
 
@@ -280,5 +280,47 @@ export class U {
             return true; // on error, show the element
         }
 
+    }
+
+    /**
+     * Takes a nested object structure and converts any found sets into arrays.
+     * Needed to post JSON data to backend, otherwise set entries are lost.
+     *
+     * @param {Object} data
+     * @returns {{}|T[]|*}
+     */
+    static convertSetsToArray(data) {
+        if (data instanceof Set) {
+            return Array.from(data);
+        } else if (typeof data === 'object' && data !== null) {
+            if (Array.isArray(data)) {
+                return data.map(item => this.convertSetsToArray(item));
+            } else {
+                const newObject = {};
+                for (const key in data) {
+                    if (data.hasOwnProperty(key)) {
+                        newObject[key] = this.convertSetsToArray(data[key]);
+                    }
+                }
+                return newObject;
+            }
+        }
+        return data; // Return primitive values as is
+    }
+
+    /**
+     * Enforces state of multivalue components to s Set object
+     *
+     * @param {*} value
+     * @returns {Set}
+     */
+    static stateMultivalue(value) {
+        if (value instanceof Set) {
+            return value;
+        }
+        if (Array.isArray(value)) {
+            return new Set(value);
+        }
+        return new Set();
     }
 }

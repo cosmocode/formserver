@@ -21,8 +21,10 @@ export class ChecklistComponent extends BaseComponent {
         control.classList.add('control');
         checklist.appendChild(control);
 
-        for (const option of this.config.choices) {
-            control.insertAdjacentHTML("beforeend", this.htmlCheckboxElement(option));
+        // use literal choice items for values, but markdown transformed choices for labels
+        let i = 0;
+        for (i; i < this.config.transformed_choices.length; i++) {
+            control.insertAdjacentHTML("beforeend", this.htmlCheckboxElement(this.config.transformed_choices[i], this.config.choices[i]));
         }
 
         return checklist;
@@ -35,21 +37,22 @@ export class ChecklistComponent extends BaseComponent {
      * breaks spacing in Bulma https://github.com/jgthms/bulma/issues/1049
      *
      * @param {string} optionLabel
+     * @param {string} optionValue
      * @returns {string}
      */
-    htmlCheckboxElement(optionLabel) {
-        const checked = (this.myState.value && this.myState.value instanceof Set && this.myState.value.has(optionLabel)) ? 'checked' : '';
+    htmlCheckboxElement(optionLabel, optionValue) {
+        const checked = (this.myState.value && this.myState.value instanceof Set && this.myState.value.has(optionValue)) ? 'checked' : '';
         return `
             <label class="checkbox ${this.config.readonly ? 'readonly-choices' : ''}">
-                <input type="checkbox" name="${this.config.name}" value="${optionLabel}" ${checked} />
+                <input type="checkbox" name="${this.config.name}" value="${optionValue}" ${checked} />
                 ${optionLabel}
             </label>${(this.config.alignment && this.config.alignment === 'vertical') ? '<br>' : ''}
         `;
     }
 
     /** @override */
-    updateStateOnInput(target) {
-        let state = this.myState.value || new Set();
+    async updateStateOnInput(target) {
+        let state = U.stateMultivalue(this.myState.value);
         if (!target.checked) {
             state.delete(target.value);
         } else {

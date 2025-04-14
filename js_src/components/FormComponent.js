@@ -37,7 +37,7 @@ export class FormComponent extends HTMLElement {
         this.#form = document.createElement('form');
         this.appendChild(this.#form);
         this.#formConfig = U.loadFormConfig();
-        this.#state = new State(U.loadFormState());
+        this.#state = new State(U.loadFormValues()); // loads "values" part of JSON config
     }
 
     connectedCallback() {
@@ -98,7 +98,7 @@ export class FormComponent extends HTMLElement {
         this.#displayFormStatusNotofication(isValid);
 
         console.log('SUBMIT', this.#state.values);
-        console.log('SUBMIT VALIDATION', isValid);
+        console.log('SUBMIT has validation errors?', isValid);
 
         fetch(window.location.href, {
             method: 'POST',
@@ -107,7 +107,7 @@ export class FormComponent extends HTMLElement {
             },
             body: JSON.stringify({
                 "mode": event.submitter.name, /* submit or save */
-                "data": this.#state.values
+                "data": U.convertSetsToArray(this.#state.values)
             }),
         })
             .then((response) => {
