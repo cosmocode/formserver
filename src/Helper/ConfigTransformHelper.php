@@ -30,6 +30,7 @@ class ConfigTransformHelper
         $elements = self::options($elements);
         $elements = self::tablestyle($elements);
         $elements = self::markdown($elements, $formId);
+        $elements = self::filesize($elements);
 
         // recursively apply the transform to children
         foreach ($elements as $key => $conf) {
@@ -138,6 +139,23 @@ class ConfigTransformHelper
         if (isset($elements['modal'])) {
             $elements['modal'] = MarkdownExtra::defaultTransform($elements['modal']);
             $elements['modal'] = str_replace('<img src="', '<img src="/download/' . $formId . '?file=', $elements['modal']);
+        }
+        if (isset($elements['choices'])) {
+            // Markdown lib always wraps the content in a <p>...</p>
+            // https://github.com/michelf/php-markdown/issues/230
+            $elements['transformed_choices'] = array_map(
+                fn($choice) => str_replace(['<p>', '</p>'], '', MarkdownExtra::defaultTransform($choice)),
+                $elements['choices']
+            );
+        }
+
+        return $elements;
+    }
+
+    protected static function filesize(array $elements)
+    {
+        if (isset($elements['filesize'])) {
+            $elements['filesize'] = FileHelper::humanToBytes($elements['filesize']);
         }
 
         return $elements;

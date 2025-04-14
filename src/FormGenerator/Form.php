@@ -2,14 +2,6 @@
 
 namespace CosmoCode\Formserver\FormGenerator;
 
-use CosmoCode\Formserver\Exceptions\FormException;
-use CosmoCode\Formserver\FormGenerator\FormElements\AbstractDynamicFormElement;
-use CosmoCode\Formserver\FormGenerator\FormElements\AbstractFormElement;
-use CosmoCode\Formserver\FormGenerator\FormElements\ChecklistFormElement;
-use CosmoCode\Formserver\FormGenerator\FormElements\DropdownFormElement;
-use CosmoCode\Formserver\FormGenerator\FormElements\FieldsetFormElement;
-use CosmoCode\Formserver\FormGenerator\FormElements\UploadFormElement;
-use CosmoCode\Formserver\Helper\FileHelper;
 use CosmoCode\Formserver\Helper\ConfigTransformHelper;
 use CosmoCode\Formserver\Helper\YamlHelper;
 use CosmoCode\Formserver\Service\LangManager;
@@ -32,7 +24,7 @@ class Form
      */
     protected string $id;
 
-    protected array $elements;
+    protected array $elementsConfig;
 
     protected array $meta;
 
@@ -51,7 +43,7 @@ class Form
     {
         $this->id = $formId;
         $config = YamlHelper::parseYaml($this->getFormDirectory() . 'config.yaml');
-        $this->elements = $config['form'];
+        $this->elementsConfig = $config['form'];
         $this->meta = $config['meta'] ?? [];
         $this->persistent = (bool)$this->getMeta('saveButton');
 
@@ -132,7 +124,7 @@ class Form
     {
         return json_encode([
             'meta' => $this->meta,
-            'form' => ConfigTransformHelper::transform($this->elements, $this->id),
+            'form' => ConfigTransformHelper::transform($this->elementsConfig, $this->id),
             'lang' => $this->lang,
             'values' => $this->values,
             ],
