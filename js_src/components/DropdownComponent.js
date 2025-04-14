@@ -71,7 +71,7 @@ export class DropdownComponent extends BaseComponent {
     }
 
     /** @override */
-    updateStateOnInput(target) {
+    async updateStateOnInput(target) {
         // null state when empty / placeholder option has been selected
         if (target.value === '') {
             this.myState.value = null;

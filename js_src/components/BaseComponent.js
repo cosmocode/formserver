@@ -275,7 +275,7 @@ export class BaseComponent extends HTMLElement {
      *
      * @param {HTMLInputElement|HTMLTextAreaElement} target
      */
-    updateStateOnInput(target) {
+    async updateStateOnInput(target) {
         this.myState.value = target.value;
     }
 

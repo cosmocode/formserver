@@ -1,16 +1,161 @@
 import {BaseComponent} from './BaseComponent.js';
 import html from 'html-template-tag';
+import {U} from "../U";
 
 export class UploadComponent extends BaseComponent {
 
+    /** @type {FileList} Currently uploaded files */
+    #currentFiles;
+
     html() {
-        return html`
-            <div class="field">
-                <div class="control">
-                    FIXME upload
-                </div>
-            </div>
-        `;
+        const field = document.createElement("div");
+        field.classList.add("field", "file", "dropzone");
+
+        const label = document.createElement("label");
+        label.classList.add("label")
+        label.innerText = html`${this.config.label}` + U.requiredMark(this.config);
+
+        field.appendChild(label);
+        field.insertAdjacentHTML('beforeend', U.tooltipHint(this.config));
+        if (this.config.modal) {
+            field.appendChild(U.modalHint(this.config));
+            field.appendChild(U.modal(this.config));
+        }
+
+        const control = document.createElement("div");
+        control.classList.add("control");
+
+        field.appendChild(control);
+
+        const fileLabel = document.createElement('label');
+        fileLabel.classList.add('file-label');
+
+        control.appendChild(fileLabel);
+
+        // actual file input and Bulma call-to-action (cta) element
+        const input = document.createElement("input");
+        input.type = "file";
+        input.name = this.config.name;
+        input.classList.add("file-input", "form-input");
+        input.multiple = true;
+        if (!!this.config.validation.fileext) {
+            input.accept = this.config.validation.fileext.split(",").map(ext => "." + ext.trim()).join(",");
+        }
+        if (!!this.config.validation.filesize) {
+            input.dataset['max'] = this.config.validation.filesize;
+        }
+
+        fileLabel.appendChild(input);
+
+        const cta = document.createElement("span");
+        cta.classList.add("file-cta");
+        fileLabel.appendChild(cta);
+
+        const labelSpan = document.createElement("span");
+        labelSpan.classList.add("file-label");
+        labelSpan.innerText = U.getLang("button_upload");
+        cta.appendChild(labelSpan);
+
+        // notification containers
+        const infoContainer = document.createElement("div");
+        infoContainer.classList.add("notification", "hidden", "is-warning");
+        control.appendChild(infoContainer);
+
+        // upload status from state
+        this.#showStatus(infoContainer);
+
+        const errorContainer = document.createElement("div");
+        errorContainer.classList.add("notification", "hidden", "is-danger");
+        control.appendChild(errorContainer);
+
+        return field;
+    }
+
+    /** @override */
+    async updateStateOnInput(target) {
+        this.#currentFiles = target.files;
+        const ok = this.#checkSize();
+
+        // reject upload and don't change state
+        if (!ok) {
+            const errorNotification = this.querySelector(".notification.is-danger");
+            errorNotification.innerText = U.getLang("upload_error");
+            errorNotification.classList.remove("hidden");
+            return;
+        }
+
+        let state = U.stateMultivalue(this.myState.value);
+
+        if (this.#currentFiles.length > 0) {
+            for (const file of this.#currentFiles) {
+                const dataURI = await this.#getFileDataURI(file);
+                state.add(new Object({"file": file.name, "content": dataURI}));
+            }
+        }
+
+        this.myState.value = state;
+
+        this.#showStatus(this.querySelector(".notification.is-warning"));
+    }
+
+    /**
+     * Display info about files belonging to this component
+     * FIXME on initial form load, display infos about previous uploads (present in JSON "values")
+     *
+     * @param {HTMLElement} infoNotification
+     */
+    #showStatus(infoNotification) {
+        if (!this.myState.value) {
+            console.log('no value in state for ', this.config.name);
+            return;
+        }
+        const uploads = document.createElement("ul");
+        infoNotification.appendChild(uploads);
+        for (const fileInfo of this.myState.value) {
+            uploads.insertAdjacentHTML(
+                "beforeend",
+                `<li><a href="${fileInfo.content}">${fileInfo.file}</a></li>`)
+        }
+        infoNotification.classList.remove("hidden");
+    }
+
+    /**
+     * Read file and get its dataURI
+     *
+     * @param {File} file
+     * @returns {Promise<unknown>}
+     */
+    #getFileDataURI(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+
+            reader.onload = (event) => {
+                resolve(event.target.result);
+            };
+
+            reader.onerror = (error) => {
+                reject(error);
+            };
+
+            reader.readAsDataURL(file);
+        });
+    }
+
+    /**
+     * Checks if current uploads are within max size, if defined in validation rules
+     *
+     * @returns {boolean}
+     */
+    #checkSize() {
+        if (!this.config.validation || !this.config.validation.filesize) {
+            return true;
+        }
+
+        let uploadSize = 0;
+        for (const file of this.#currentFiles) {
+            uploadSize += file.size;
+        }
+        return uploadSize < this.config.validation.filesize;
     }
 }
 
