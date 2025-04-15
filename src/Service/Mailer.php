@@ -83,8 +83,11 @@ class Mailer
             $message
                 ->setSubject($subject)
                 ->setFrom($this->sender)
-                ->addTo(...$recipients)
                 ->setHtmlBody($this->htmlBody);
+
+            foreach ($recipients as $recipient) {
+                $message->addTo($recipient);
+            }
 
             if (! empty($cc)) {
                 $message->addCc(...$cc);
