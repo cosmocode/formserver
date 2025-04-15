@@ -60,13 +60,12 @@ class FormAction extends AbstractAction
             if ($this->request->getMethod() === 'POST') {
                 $body = $this->request->getParsedBody();
 
-                // TODO process files
                 if ($form->isPersistent()) {
                     $form->persist($body['data']);
                 }
 
                 if ($body['mode'] === Form::MODE_SEND) {
-//                    $this->mailer->sendForm($form, $body['data']);
+                    $this->mailer->sendForm($form, $body['data']);
                     $this->handleFileExport($form);
                 }
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CosmoCode\Formserver\FormGenerator;
 
 use CosmoCode\Formserver\Exceptions\TwigException;

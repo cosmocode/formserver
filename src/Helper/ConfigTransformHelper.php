@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CosmoCode\Formserver\Helper;
 
 use Michelf\MarkdownExtra;
-
 
 /**
  * Legacy config transformations for toggle -> visible, tablestyle -> table, conditional_choices.
@@ -79,7 +80,8 @@ class ConfigTransformHelper
             // we want to keep the keys and the order
             foreach ($elements as $key => $conf) {
                 if ($key === 'toggle') {
-                    $transformed['visible'] = $conf['field'] . self::getOperator($conf) . self::getRightOperand($conf['value']);
+                    $transformed['visible'] =
+                        $conf['field'] . self::getOperator($conf) . self::getRightOperand($conf['value']);
                 } else {
                     $transformed[$key] = $conf;
                 }
@@ -104,7 +106,8 @@ class ConfigTransformHelper
             foreach ($elements['conditional_choices'] as $key => $conf) {
                 $transformed['choices'] = $conf['choices'];
                 if (isset($conf['field']) && isset($conf['value'])) {
-                    $transformed['visible'] = $conf['field'] . self::getOperator($conf) . self::getRightOperand($conf['value']);
+                    $transformed['visible'] =
+                        $conf['field'] . self::getOperator($conf) . self::getRightOperand($conf['value']);
                 }
                 $elements['conditional_choices'][$key] = $transformed;
             }
@@ -138,7 +141,11 @@ class ConfigTransformHelper
 
         if (isset($elements['modal'])) {
             $elements['modal'] = MarkdownExtra::defaultTransform($elements['modal']);
-            $elements['modal'] = str_replace('<img src="', '<img src="/download/' . $formId . '?file=', $elements['modal']);
+            $elements['modal'] = str_replace(
+                '<img src="',
+                '<img src="/download/' . $formId . '?file=',
+                $elements['modal']
+            );
         }
         if (isset($elements['choices'])) {
             // Markdown lib always wraps the content in a <p>...</p>

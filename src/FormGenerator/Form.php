@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CosmoCode\Formserver\FormGenerator;
 
 use CosmoCode\Formserver\Helper\ConfigTransformHelper;
@@ -14,8 +16,6 @@ use CosmoCode\Formserver\Service\LangManager;
 class Form
 {
     public const DATA_DIR = __DIR__ . '/../../data/';
-
-    public const MODE_SHOW = 'show';
     public const MODE_SAVE = 'save';
     public const MODE_SEND = 'send';
 
@@ -56,7 +56,6 @@ class Form
             // no stored values.yaml
             $this->values = [];
         }
-
     }
 
     /**
@@ -117,17 +116,29 @@ class Form
     }
 
     /**
+     * Part of form config that contains the elements
+     *
+     * @return array
+     */
+    public function getElementsConfig(): array
+    {
+        return $this->elementsConfig;
+    }
+
+    /**
      * Form JSON to be processed in FE
      * @return string
      */
     public function getJSON(): string
     {
-        return json_encode([
-            'meta' => $this->meta,
-            'form' => ConfigTransformHelper::transform($this->elementsConfig, $this->id),
-            'lang' => $this->lang,
-            'values' => $this->values,
+        return json_encode(
+            [
+                'meta' => $this->meta,
+                'form' => ConfigTransformHelper::transform($this->elementsConfig, $this->id),
+                'lang' => $this->lang,
+                'values' => $this->values,
             ],
-        JSON_PRETTY_PRINT);
+            JSON_PRETTY_PRINT
+        );
     }
 }

@@ -1,13 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CosmoCode\Formserver\Service;
 
+use CosmoCode\Formserver\Data\FormData;
 use CosmoCode\Formserver\Exceptions\MailException;
 use CosmoCode\Formserver\FormGenerator\Form;
-use CosmoCode\Formserver\FormGenerator\FormElements\AbstractDynamicFormElement;
-use CosmoCode\Formserver\FormGenerator\FormElements\FieldsetFormElement;
-use CosmoCode\Formserver\FormGenerator\FormElements\SignatureFormElement;
-use CosmoCode\Formserver\FormGenerator\FormElements\UploadFormElement;
 use Nette\Mail\Message;
 use Nette\Mail\SmtpMailer;
 
@@ -68,14 +67,19 @@ class Mailer
         }
 
         try {
+            $formData = FormData::getFormData($data, $form->getElementsConfig());
+
             $recipients = $form->getMeta('email')['recipients'];
             $subject = $form->getMeta('email')['subject'] ?? 'Formular ausgefüllt';
-            $subject = $this->injectFormValues($subject, $form);
-            $cc = $this->getCarbonCopyAddresses($form);
+            $subject = $this->injectFormValues($subject, $formData);
+            $cc = $this->getCarbonCopyAddresses($form, $formData);
+
+            if (empty($recipients) && empty($cc)) {
+                return;
+            }
 
             $this->formToMessage(
-                $form->getFormElements(),
-                $form->getFormDirectory(),
+                $formData,
                 $form->getMeta('title')
             );
 
@@ -106,13 +110,11 @@ class Mailer
     /**
      * Convert form data to message parts and attachments
      *
-     * @param array $formElements
-     * @param string $formDirectory
+     * @param array $formData
      * @param string|null $title
      */
     protected function formToMessage(
-        array $formElements,
-        string $formDirectory,
+        array $formData,
         string $title = null
     ): void {
         $htmlHeadline = '<h2>%s</h2>';
@@ -123,44 +125,38 @@ class Mailer
             $this->htmlBody .= sprintf('<h1>%s</h1>', $title);
         }
 
-        /**
-         * @var AbstractDynamicFormElement $element
-         */
-        foreach ($formElements as $element) {
-            if (
-                $element instanceof FieldsetFormElement
-                && ! $element->isDisabled()
-            ) {
-                $this->htmlBody
-                    .= sprintf($htmlHeadline, $element->getConfigValue('label'));
-                $this->formToMessage($element->getChildren(), $formDirectory);
-            }
-
-            // skip static elements
-            if (! $element instanceof AbstractDynamicFormElement) {
+        foreach ($formData as $fullId => $element) {
+            if ($element['type'] === 'fieldset') {
+                $this->htmlBody .= sprintf($htmlHeadline, $element['label']);
                 continue;
             }
 
-            $label = $element->getConfigValue('label');
-            $value = $element->getValueString();
+            $label = $element['label'];
+            $value = $element['value'];
+
+            if (empty($value)) {
+                continue;
+            }
 
             // special handling of uploads
-            if ($element instanceof UploadFormElement && $value) {
-                $value = '';
-                $files = $element->getUploadedFiles();
+            if ($element['type'] === 'upload') {
+                $files = $value;
+                $value = ''; // do not send source data
                 foreach ($files as $file) {
-                    $value .= $file['address']
+                    $value .= $fullId
                         . ' (' . LangManager::getString('uploaded_original')
-                        . ' ' . $file['name'] . ') ';
+                        . ' ' . $file['file'] . ') ';
+                    $encoded = explode(",", $file['content'])[1];
+                    $decoded = base64_decode($encoded);
                     $this->attachments[]
-                        = [$file['name'], file_get_contents($formDirectory . $file['address'])];
+                        = [$file['file'], $decoded];
                 }
             }
 
-            if ($element instanceof SignatureFormElement && $value) {
+            if ($element['type'] === 'signature') {
                 $encoded_image = explode(",", $value)[1];
                 $decoded_image = base64_decode($encoded_image);
-                $this->attachments[] = [$element->getId() . '.jpg', $decoded_image];
+                $this->attachments[] = [$fullId . '.jpg', $decoded_image];
 
                 // do not send the image source data
                 $value = LangManager::getString('email_text_attachments');
@@ -174,15 +170,15 @@ class Mailer
      * Replaces {{fieldId}} placeholders with form values
      *
      * @param string $string
-     * @param Form $form
+     * @param array $formData
      * @return string
      */
-    protected function injectFormValues(string $string, Form $form): string
+    protected function injectFormValues(string $string, array $formData): string
     {
         return preg_replace_callback(
             '~{{([a-zA-Z0-9 \.\-\_]*?)}}~',
-            function ($matches) use ($form) {
-                return $form->getFormElementValue($matches[1]);
+            function ($matches) use ($formData) {
+                return isset($formData[$matches[1]]) ? $formData[$matches[1]]['value'] : '';
             },
             $string
         );
@@ -194,15 +190,14 @@ class Mailer
      * @param Form $form
      * @return array
      */
-    protected function getCarbonCopyAddresses(Form $form): array
+    protected function getCarbonCopyAddresses(Form $form, array $formData): array
     {
         $ccFields = $form->getMeta('email')['cc'] ?? [];
 
         $cc = [];
         foreach ($ccFields as $ccField) {
-            $address = $form->getFormElementValue($ccField);
-            if (! empty($address)) {
-                $cc[] = $address;
+            if (isset($formData[$ccField])) {
+                $cc[] = $formData[$ccField]['value'];
             }
         }
 

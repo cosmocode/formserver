@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CosmoCode\Formserver\Helper;
 
 use CosmoCode\Formserver\Exceptions\YamlException;

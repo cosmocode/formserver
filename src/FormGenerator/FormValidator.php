@@ -2,7 +2,6 @@
 
 namespace CosmoCode\Formserver\FormGenerator;
 
-
 /**
  * Validates all form elements of a form
  *
