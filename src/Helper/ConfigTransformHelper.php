@@ -10,7 +10,6 @@ use Michelf\MarkdownExtra;
  * Legacy config transformations for toggle -> visible, tablestyle -> table, conditional_choices.
  * Field name conversion minus -> undescore
  * Markdown parsing
- * FIXME Image and download paths?
  *
  * @package CosmoCode\Formserver\Helper
  */
@@ -180,7 +179,7 @@ class ConfigTransformHelper
         $transformed = [];
 
         foreach ($elements as $key => $element) {
-            $newKey = str_replace('-', '_', $key);
+            $newKey = str_replace('-', '_', (string) $key);
 
             // in conditions, transform value instead of key (toggle => [field, value])
             if (is_array($element) && isset($element['field'])) {
