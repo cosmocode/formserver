@@ -2,6 +2,7 @@
 import './components/BaseComponent.js';
 
 import './components/ChecklistComponent.js';
+import './components/CloneComponent.js';
 import './components/DateComponent.js';
 import './components/DatetimeComponent.js';
 import './components/DownloadComponent.js';

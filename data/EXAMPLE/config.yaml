@@ -217,3 +217,29 @@ form:
               required: false
               min: 18
               max: 99
+  fieldset_clone:
+    type: fieldset
+    label: Clone container
+    visible: fieldset0.radioset1 == 'Cloning'
+    children:
+      persons:
+        type: clone
+        label: Cloneable Person
+        children:
+          first_name:
+            type: textinput
+            label: First name
+            placeholder: First name
+          last_name:
+            type: textinput
+            label: Last name
+            placeholder: Last name
+          emails:
+            type: clone
+            label: Email addresses
+            children:
+              email:
+                type: email
+                label: Email
+                validation:
+                  required: false
