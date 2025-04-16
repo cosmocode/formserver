@@ -206,7 +206,7 @@ export class BaseComponent extends HTMLElement {
 
         if (
             (!this.config.validation || this.config.validation.required !== false) &&
-            (this.myState.value === null || this.myState.value === '')
+            (this.myState.value === null || this.myState.value.length === 0)
         ) {
             throw new ValidatorError(this.name, U.getLang("error_required"));
         }
