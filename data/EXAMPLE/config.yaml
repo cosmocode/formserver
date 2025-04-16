@@ -29,6 +29,9 @@ form:
           - 'Static elements'
           - 'Dynamic elements'
           - 'Fieldset columns'
+          - 'Tables'
+          - 'Cloning'
+          - 'Tabs'
       hr0:
         type: hr
         column: is-full
@@ -137,7 +140,7 @@ form:
             label: signature
             height: 400
             width: 600
-  fieldset4:
+  fieldset_columns:
     type: fieldset
     column: is-full
     label: 'Fieldset forcing 100% width for its children'
@@ -189,3 +192,28 @@ form:
                 type: textarea
                 validation:
                   required: false
+  fieldset_tables:
+    type: fieldset
+    label: Tables
+    visible: fieldset0.radioset1 == 'Tables'
+    children:
+      person:
+        type: table
+        label: Personal data
+        repeat: 3
+        children:
+          first_name:
+            type: textinput
+            label: First name
+            placeholder: First name
+          last_name:
+            type: textinput
+            label: Last name
+            placeholder: Last name
+          age:
+            type: numberinput
+            label: Age
+            validation:
+              required: false
+              min: 18
+              max: 99
