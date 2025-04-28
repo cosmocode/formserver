@@ -161,3 +161,12 @@ div.modal-content {
     width: unset;
     max-width: 75%;
 }
+
+/**
+ * Tabs
+ */
+
+/* hide legends of first-level fieldsets so they don't duplicate tabs */
+div.tabs-container fieldset:not(fieldset fieldset) legend {
+    display: none;
+}

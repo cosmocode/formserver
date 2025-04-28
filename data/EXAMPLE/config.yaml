@@ -222,7 +222,7 @@ form:
     label: Clone container
     visible: fieldset0.radioset1 == 'Cloning'
     children:
-      persons:
+      person:
         type: clone
         label: Cloneable Person
         children:
@@ -234,7 +234,7 @@ form:
             type: textinput
             label: Last name
             placeholder: Last name
-          emails:
+          email:
             type: clone
             label: Email addresses
             children:
@@ -243,3 +243,35 @@ form:
                 label: Email
                 validation:
                   required: false
+  fieldset_tabs:
+    type: pages
+    label: Tabs
+    visible: fieldset0.radioset1 == 'Tabs'
+    children:
+      personal:
+        type: fieldset
+        label: Personal data
+        children:
+          first_name:
+            type: textinput
+            label: First name
+          last_name:
+            type: textinput
+            label: Last name
+          age:
+            type: numberinput
+            label: Age
+            validation:
+              required: false
+              min: 18
+              max: 99
+      additional:
+        type: fieldset
+        label: Additional data
+        children:
+          first_name:
+            type: textinput
+            label: Info 1
+          last_name:
+            type: textinput
+            label: Info x2

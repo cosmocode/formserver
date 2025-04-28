@@ -6,6 +6,7 @@ export class FieldsetComponent extends BaseComponent {
         const fieldSetElement = document.createElement('fieldset');
         // fieldsets need a name for building full dotted paths
         fieldSetElement.name = this.config.name;
+        fieldSetElement.id = this.config.name;
         fieldSetElement.classList.add('box');
 
         if (this.config.label) {

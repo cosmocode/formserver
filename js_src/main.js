@@ -14,6 +14,7 @@ import './components/HrComponent.js';
 import './components/ImageComponent.js';
 import './components/MarkdownComponent.js';
 import './components/NumberinputComponent.js';
+import './components/PagesComponent.js';
 import './components/RadiosetComponent.js';
 import './components/SignatureComponent.js';
 import './components/TableComponent.js';
