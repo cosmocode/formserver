@@ -52,7 +52,7 @@ export class BaseComponent extends HTMLElement {
      * @param {object} fieldConfig The configuration for this component as defined in the main YAML/JSON
      */
     initialize(state, fieldConfig) {
-        this.myState = new ComponentState(state, fieldConfig.name);
+        this.myState = this.stateHook(state, fieldConfig.name);
         this.config = fieldConfig;
         this.name = fieldConfig.name;
         this.classList.add('component');
@@ -62,6 +62,18 @@ export class BaseComponent extends HTMLElement {
         }
 
         this.#isInitialized = true;
+    }
+
+    /**
+     * Components can overwrite this to influence their own initial state.
+     * Relevant when value type in not represented in JSON (e.g. a Set object).
+     *
+     * @param {State} state
+     * @param {string} name
+     * @returns {ComponentState}
+     */
+    stateHook(state, name) {
+        return new ComponentState(state, name);
     }
 
     /**
