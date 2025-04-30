@@ -30,6 +30,7 @@ class ConfigTransformHelper
         $elements = self::options($elements);
         $elements = self::tablestyle($elements);
         $elements = self::markdown($elements, $formId);
+        $elements = self::fileDispatcher($elements, $formId);
         $elements = self::filesize($elements);
 
         // recursively apply the transform to children
@@ -118,13 +119,39 @@ class ConfigTransformHelper
     /**
      * Transform "tablestyle" fieldsets into table elements
      *
-     * @FIXME implement
+     * @FIXME implement legacy transformer or delete
      * @param array $elements
      * @return array
      */
     protected static function tablestyle(array $elements): array
     {
         return $elements;
+    }
+
+    /**
+     * Prepends download url to files if needed
+     *
+     * @param array $elements
+     * @param string $formId
+     * @return array
+     */
+    protected static function fileDispatcher(array $elements, string $formId): array
+    {
+        if (isset($elements['href'])) {
+            $elements['href'] = self::prepareFilePath($elements['href'], $formId);
+        }
+        if (isset($elements['src'])) {
+            $elements['src'] = self::prepareFilePath($elements['src'], $formId);
+        }
+        return $elements;
+    }
+
+    protected static function prepareFilePath($file, $formId)
+    {
+        if (str_starts_with($file, 'http') || str_starts_with($file, '/')) {
+            return $file;
+        }
+        return '/download/' . $formId . '?file=' . $file;
     }
 
     /**
