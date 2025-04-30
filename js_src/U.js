@@ -151,28 +151,6 @@ export class U {
         });
     }
 
-    static attachCloneableChildren(parentElement, childrenConfig, state, counter = 1) {
-        const parentName = parentElement.name ? parentElement.name + '.' : '';
-
-        // an additional wrapper is needed for Bulma columns
-        const columnWrapper = document.createElement('div');
-        columnWrapper.classList.add('columns', 'is-multiline');
-        parentElement.appendChild(columnWrapper);
-
-        Object.keys(childrenConfig).forEach(key => {
-            const fieldConfig = childrenConfig[key];
-            fieldConfig.name = `${parentName}${key}---${counter}`; // add full dotted field ID to config
-            if (fieldConfig.label) {
-                fieldConfig.label = `${fieldConfig.label} ${counter}`;
-            }
-            const element = document.createElement(`${fieldConfig.type}-component`);
-            element.initialize(state, fieldConfig);
-
-            columnWrapper.appendChild(element);
-            element.render(); // initial rendering
-        });
-    }
-
     /**
      * Attaches and renders children of the table parent
      *

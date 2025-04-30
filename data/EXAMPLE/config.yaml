@@ -222,7 +222,7 @@ form:
     label: Clone container
     visible: fieldset0.radioset1 == 'Cloning'
     children:
-      person:
+      persons:
         type: clone
         label: Cloneable Person
         children:
@@ -234,7 +234,7 @@ form:
             type: textinput
             label: Last name
             placeholder: Last name
-          email:
+          emails:
             type: clone
             label: Email addresses
             children:
