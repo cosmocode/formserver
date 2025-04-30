@@ -1,25 +1,11 @@
 import {BaseComponent} from './BaseComponent.js';
-import html from 'html-template-tag';
 import {U} from '../U.js';
 import {ValidatorError} from "../ValidatorError";
 
 export class TextinputComponent extends BaseComponent {
 
     html() {
-        const field = document.createElement("div");
-        field.classList.add("field");
-
-        const label = document.createElement("label");
-        label.classList.add("label")
-        label.innerText = html`${this.config.label}` + U.requiredMark(this.config);
-
-
-        field.appendChild(label);
-        field.insertAdjacentHTML('beforeend', U.tooltipHint(this.config));
-        if (this.config.modal) {
-            field.appendChild(U.modalHint(this.config));
-            field.appendChild(U.modal(this.config));
-        }
+        const field = U.createField(this.config);
 
         const control = document.createElement("div");
         control.classList.add("control");

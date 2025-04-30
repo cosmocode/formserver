@@ -1,16 +1,23 @@
 import {BaseComponent} from './BaseComponent.js';
 import html from 'html-template-tag';
+import {U} from "../U";
 
 export class ImageComponent extends BaseComponent {
 
     html() {
-        return html`
-            <div class="field">
-                <div class="control">
-                    FIXME image
-                </div>
-            </div>
-        `;
+        const field = U.createField(this.config);
+
+        const control = document.createElement("div");
+        control.classList.add("control");
+
+        field.appendChild(control);
+
+        const img = document.createElement("img");
+        img.src = this.config.src;
+
+        control.appendChild(img);
+
+        return field;
     }
 
     executeValidators() {

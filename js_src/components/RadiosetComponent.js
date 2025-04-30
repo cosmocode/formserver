@@ -5,31 +5,17 @@ export class RadiosetComponent extends BaseComponent {
 
     /** @override */
     html() {
-        const radioset = document.createElement('div');
-        radioset.classList.add('field');
-
-        const label = document.createElement('label');
-        label.classList.add('label');
-        label.innerText = this.config.label + U.requiredMark(this.config);
-        radioset.appendChild(label);
-
-        const tooltip = U.tooltipHint(this.config);
-        radioset.insertAdjacentHTML('beforeend', tooltip);
-
-        if (this.config.modal) {
-            radioset.appendChild(U.modalHint(this.config));
-            radioset.appendChild(U.modal(this.config));
-        }
+        const field = U.createField(this.config);
 
         const control = document.createElement('div');
         control.classList.add('control');
-        radioset.appendChild(control);
+        field.appendChild(control);
 
         for (const option of this.config.choices) {
             control.insertAdjacentHTML("beforeend", this.htmlRadioElement(option));
         }
 
-        return radioset;
+        return field;
     }
 
     /**

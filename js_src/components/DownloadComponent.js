@@ -1,16 +1,24 @@
 import {BaseComponent} from './BaseComponent.js';
-import html from 'html-template-tag';
+import {U} from "../U";
 
 export class DownloadComponent extends BaseComponent {
 
     html() {
-        return html`
-            <div class="field">
-                <div class="control">
-                    FIXME download
-                </div>
-            </div>
-        `;
+        const field = U.createField(this.config, [], null, true);
+
+        const control = document.createElement("div");
+        control.classList.add("control");
+
+        field.appendChild(control);
+
+        const link = document.createElement("a");
+        link.href = this.config.href;
+        link.target = "_blank";
+        link.innerText = this.config.label;
+
+        control.appendChild(link);
+
+        return field;
     }
 
     executeValidators() {

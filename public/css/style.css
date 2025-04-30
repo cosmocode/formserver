@@ -2,9 +2,16 @@
  * General
  */
 
-
 .hidden {
     display: none;
+}
+
+/**
+ * Labels
+ */
+label.label-smaller,
+div.label-smaller {
+    font-weight: normal;
 }
 
 /**

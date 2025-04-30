@@ -1,10 +1,13 @@
 import expression from "expr-eval";
 import {setProperty} from "dot-prop";
+import html from 'html-template-tag';
 
 /**
  * Utility class
  */
 export class U {
+
+    static staticTypes = new Set(["image", "download", "hidden", "hr", "markdown"]);
 
     /**
      * Return an HTML attribute string formatted as name="value" (default)
@@ -23,13 +26,49 @@ export class U {
     }
 
     /**
+     * Creates field with label.
+     * Components will create, fill and attach control to the field element.
+     *
+     * @param {Object} fieldConfig
+     * @param {Array|null} additionalClasses Optional additional CSS classes for field element
+     * @param {boolean|null} labelIsDiv Render label content in <div> rather than <label>
+     * @param {boolean|null} suppressLabel Suppress label
+     * @returns {HTMLDivElement}
+     */
+    static createField(fieldConfig, additionalClasses = [], labelIsDiv = false, suppressLabel = false) {
+        const field = document.createElement("div");
+        field.classList.add("field", ...additionalClasses);
+
+        if (fieldConfig.label && !suppressLabel) {
+            const labelTag = labelIsDiv ? "div" : "label";
+            const label = document.createElement(labelTag);
+            label.classList.add("label");
+            if (fieldConfig.labelsmall) {
+                label.classList.add("label-smaller");
+            }
+            label.innerText = html`${fieldConfig.label}` + this.requiredMark(fieldConfig);
+
+            field.appendChild(label);
+        }
+
+        field.insertAdjacentHTML('beforeend', this.tooltipHint(fieldConfig));
+        if (fieldConfig.modal) {
+            field.appendChild(this.modalHint(fieldConfig));
+            field.appendChild(this.modal(fieldConfig));
+        }
+
+        return field;
+    }
+
+    /**
      * Adds visual mark for required form fields
      *
      * @param {object} config
      * @returns {string}
      */
     static requiredMark(config) {
-        return (!config.validation || config.validation.required !== false) ? ' *' : '';
+        const isStaticType = this.staticTypes.has(config.type);
+        return (!isStaticType && (!config.validation || config.validation.required !== false)) ? ' *' : '';
     }
 
     /**
