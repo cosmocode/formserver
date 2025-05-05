@@ -5,7 +5,7 @@ export class HrComponent extends BaseComponent {
 
     html() {
         return html`
-            <hr style="background-color: ${this.config.color ?? 'silver'} height: ${this.config.height ?? 1}px;">
+            <hr style="background-color: ${this.config.color ?? 'silver'}; height: ${this.config.height ?? 1}px;">
         `;
     }
 

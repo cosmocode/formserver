@@ -7,10 +7,9 @@ export class FieldsetComponent extends BaseComponent {
         // fieldsets need a name for building full dotted paths
         fieldSetElement.name = this.config.name;
         fieldSetElement.id = this.config.name;
-        fieldSetElement.classList.add('box');
 
         if (this.config.label) {
-            fieldSetElement.insertAdjacentHTML('afterbegin', `<legend>${this.config.label}</legend>`);
+            fieldSetElement.insertAdjacentHTML('afterbegin', `<div class="label">${this.config.label}</div>`);
         }
 
         U.attachChildren(fieldSetElement, this.config['children'], this.myState.state);
@@ -18,6 +17,23 @@ export class FieldsetComponent extends BaseComponent {
         return fieldSetElement;
     }
 
+    /** @override */
+    htmlWrap(html) {
+        const wrapper = document.createElement('div');
+        const classes = this.config.column ?? "is-full";
+        wrapper.classList.add('column',  ...classes.split(/\s+/));
+
+        // custom background as Bulma color name or CSS color
+        if (this.config.backgroundName) {
+            wrapper.classList.add(`has-background-${this.config.backgroundName}`);
+        }
+        if (this.config.backgroundNumber) {
+            wrapper.style.backgroundColor = this.config.backgroundNumber;
+        }
+        wrapper.appendChild(html);
+
+        return wrapper;
+    }
 
     executeValidators() {
         return true;

@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace CosmoCode\Formserver\Helper;
 
+use CosmoCode\Formserver\FormGenerator\FormValidator;
 use Michelf\MarkdownExtra;
 
 /**
- * Legacy config transformations for toggle -> visible, tablestyle -> table, conditional_choices.
- * Field name conversion minus -> undescore
+ * Legacy config transformations for toggle -> visible, conditional_choices.
+ * Field name conversion minus -> underscore
  * Markdown parsing
  *
  * @package CosmoCode\Formserver\Helper
@@ -28,7 +29,7 @@ class ConfigTransformHelper
         $elements = self::minus($elements);
         $elements = self::toggle($elements);
         $elements = self::options($elements);
-        $elements = self::tablestyle($elements);
+        $elements = self::fieldsetStyle($elements);
         $elements = self::markdown($elements, $formId);
         $elements = self::fileDispatcher($elements, $formId);
         $elements = self::filesize($elements);
@@ -117,14 +118,23 @@ class ConfigTransformHelper
     }
 
     /**
-     * Transform "tablestyle" fieldsets into table elements
+     * Transform fieldset background config.
+     * Both Bulma colors and CSS colors are allowed. Invalid definitions are ignored.
      *
-     * @FIXME implement legacy transformer or delete
      * @param array $elements
      * @return array
      */
-    protected static function tablestyle(array $elements): array
+    protected static function fieldsetStyle(array $elements): array
     {
+        if (isset($elements['background'])) {
+            if (in_array($elements['background'], FormValidator::COLORS_BULMA)) {
+                $elements['backgroundName'] = $elements['background'];
+            }
+            if (preg_match(FormValidator::COLORS_REGEX, $elements['background'])) {
+                $elements['backgroundNumber'] = $elements['background'];
+            }
+            unset($elements['background']);
+        }
         return $elements;
     }
 

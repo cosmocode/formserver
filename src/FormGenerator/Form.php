@@ -28,7 +28,7 @@ class Form
 
     protected array $meta;
 
-    protected $values;
+    protected array|\stdClass $values;
 
     protected array $lang;
 
@@ -53,7 +53,7 @@ class Form
         try {
             $this->values = YamlHelper::parseYaml($this->getFormDirectory() . 'values.yaml');
         } catch (\Exception $exception) {
-            // no stored values.yaml
+            // no stored values.yaml, an empty object in JSON
             $this->values = new \stdClass();
         }
     }

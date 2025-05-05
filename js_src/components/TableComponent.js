@@ -32,11 +32,8 @@ export class TableComponent extends BaseComponent {
         if (this.config.scrollable) {
             wrapper.classList.add('table-container');
         }
-        if (typeof html === 'string') {
-            wrapper.innerHTML = html;
-        } else {
-            wrapper.appendChild(html);
-        }
+        wrapper.appendChild(html);
+
         return wrapper;
     }
 

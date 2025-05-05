@@ -217,6 +217,18 @@ form:
               required: false
               min: 18
               max: 99
+      scrollable:
+        type: table
+        label: Scrollable table
+        scrollable: true
+        repeat: 16
+        children:
+          address:
+            type: textinput
+            label: Address
+          code:
+            type: textinput
+            label: Code
   fieldset_clone:
     type: fieldset
     label: Clone container
