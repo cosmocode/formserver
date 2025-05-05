@@ -49,12 +49,12 @@ export class U {
             label.innerText = html`${fieldConfig.label}` + this.requiredMark(fieldConfig);
 
             field.appendChild(label);
-        }
 
-        field.insertAdjacentHTML('beforeend', this.tooltipHint(fieldConfig));
-        if (fieldConfig.modal) {
-            field.appendChild(this.modalHint(fieldConfig));
-            field.appendChild(this.modal(fieldConfig));
+            field.insertAdjacentHTML('beforeend', this.tooltipHint(fieldConfig));
+            if (fieldConfig.modal) {
+                field.appendChild(this.modalHint(fieldConfig));
+                field.appendChild(this.modal(fieldConfig));
+            }
         }
 
         return field;

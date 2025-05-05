@@ -18,6 +18,13 @@ export class DownloadComponent extends BaseComponent {
 
         control.appendChild(link);
 
+        // tooltips and modals get appended to links, not label
+        control.insertAdjacentHTML('beforeend', U.tooltipHint(this.config));
+        if (this.config.modal) {
+            control.appendChild(U.modalHint(this.config));
+            control.appendChild(U.modal(this.config));
+        }
+
         return field;
     }
 
