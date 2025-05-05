@@ -15,6 +15,13 @@ export class ImageComponent extends BaseComponent {
         const img = document.createElement("img");
         img.src = this.config.src;
 
+        if (this.config.width) {
+            img.width = this.config.width;
+        }
+        if (this.config.height) {
+            img.height = this.config.height;
+        }
+
         control.appendChild(img);
 
         return field;
