@@ -105,11 +105,13 @@ class ConfigTransformHelper
         if (isset($elements['conditional_choices'])) {
             $transformed = [];
             foreach ($elements['conditional_choices'] as $key => $conf) {
-                $transformed['choices'] = $conf['choices'];
                 if (isset($conf['field']) && isset($conf['value'])) {
+                    // this is executed before minus() can transform children so we must do the replacement here
+                    $conf['field'] = str_replace('-', '_', $conf['field']);
                     $transformed['visible'] =
                         $conf['field'] . self::getOperator($conf) . self::getRightOperand($conf['value']);
                 }
+                $transformed['choices'] = $conf['choices'];
                 $elements['conditional_choices'][$key] = $transformed;
             }
         }
@@ -187,7 +189,7 @@ class ConfigTransformHelper
             // Markdown lib always wraps the content in a <p>...</p>
             // https://github.com/michelf/php-markdown/issues/230
             $elements['transformed_choices'] = array_map(
-                fn($choice) => str_replace(['<p>', '</p>'], '', MarkdownExtra::defaultTransform($choice)),
+                fn($choice) => trim(str_replace(['<p>', '</p>'], '', MarkdownExtra::defaultTransform($choice))),
                 $elements['choices']
             );
         }
@@ -219,6 +221,7 @@ class ConfigTransformHelper
             $newKey = str_replace('-', '_', (string) $key);
 
             // in conditions, transform value instead of key (toggle => [field, value])
+            // this is done in options() as well
             if (is_array($element) && isset($element['field'])) {
                 $element['field'] = str_replace('-', '_', $element['field']);
             }

@@ -73,7 +73,34 @@ class ConfigTransformTest extends TestCase
                                     0 => 'Static elements',
                                     1 => 'Dynamic elements',
                                 ],
-                            ]
+                            ],
+                            'dropdown-1' => [
+                                'type' => 'dropdown',
+                                'label' => 'Conditional',
+                                'column' => 'is-half',
+                                'alignment' => 'vertical',
+                                'validation' => [
+                                    'required' => false,
+                                ],
+                                'conditional_choices' => [
+                                    [
+                                        'field' => 'fieldset-1.fieldset_1-1.radioset-1',
+                                        'value' => 'Static - elements',
+                                        'choices' => [
+                                            1,
+                                            2
+                                        ],
+                                    ],
+                                    [
+                                        'field' => 'fieldset-1.fieldset_1-1.radioset-1',
+                                        'value' => 'Dynamic - elements',
+                                        'choices' => [
+                                            "A",
+                                            "B"
+                                        ],
+                                    ],
+                                ],
+                            ],
                         ],
                     ],
                 ]
@@ -106,7 +133,44 @@ class ConfigTransformTest extends TestCase
                                     0 => 'Static elements',
                                     1 => 'Dynamic elements',
                                 ],
-                            ]
+                                'transformed_choices' => [
+                                    0 => 'Static elements',
+                                    1 => 'Dynamic elements',
+                                ],
+                            ],
+                            'dropdown_1' => [
+                                'type' => 'dropdown',
+                                'label' => 'Conditional',
+                                'column' => 'is-half',
+                                'alignment' => 'vertical',
+                                'validation' => [
+                                    'required' => false,
+                                ],
+                                'conditional_choices' => [
+                                    [
+                                        'visible' => 'fieldset_1.fieldset_1_1.radioset_1 == \'Static - elements\'',
+                                        'choices' => [
+                                            1,
+                                            2
+                                        ],
+                                        'transformed_choices' => [
+                                            '1',
+                                            '2'
+                                        ],
+                                    ],
+                                    [
+                                        'visible' => 'fieldset_1.fieldset_1_1.radioset_1 == \'Dynamic - elements\'',
+                                        'choices' => [
+                                            "A",
+                                            "B"
+                                        ],
+                                        'transformed_choices' => [
+                                            "A",
+                                            "B"
+                                        ],
+                                    ],
+                                ],
+                            ],
                         ],
                     ],
                 ],

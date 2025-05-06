@@ -207,7 +207,6 @@ div.tabs-container fieldset:not(fieldset fieldset) legend {
     display: none;
 }
 
-
 /**
  ** Upload dropzone
  */
@@ -217,4 +216,9 @@ div.tabs-container fieldset:not(fieldset fieldset) legend {
         background-color: var(--bulma-info);
         border-radius: 0.25rem;
     }
+}
+
+/* some selects are empty (e.g. before activating conditional options) */
+.select select {
+    min-width: 10rem;
 }
