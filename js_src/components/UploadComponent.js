@@ -11,19 +11,19 @@ export class UploadComponent extends BaseComponent {
         const field = document.createElement("div");
         field.classList.add("field", "file", "dropzone");
 
+        const control = document.createElement("div");
+        control.classList.add("control");
+
         const label = document.createElement("label");
         label.classList.add("label")
         label.innerText = html`${this.config.label}` + U.requiredMark(this.config);
 
-        field.appendChild(label);
-        field.insertAdjacentHTML('beforeend', U.tooltipHint(this.config));
+        control.appendChild(label);
+        control.insertAdjacentHTML('beforeend', U.tooltipHint(this.config));
         if (this.config.modal) {
-            field.appendChild(U.modalHint(this.config));
-            field.appendChild(U.modal(this.config));
+            control.appendChild(U.modalHint(this.config));
+            control.appendChild(U.modal(this.config));
         }
-
-        const control = document.createElement("div");
-        control.classList.add("control");
 
         field.appendChild(control);
 
@@ -68,6 +68,30 @@ export class UploadComponent extends BaseComponent {
         errorContainer.classList.add("notification", "hidden", "is-danger");
         control.appendChild(errorContainer);
 
+        // drag & drop handling
+        field.addEventListener("drop", e => {
+            e.preventDefault();
+            e.stopPropagation();
+            e.target.classList.remove("highlight");
+
+            input.files = e.dataTransfer.files;
+
+            // update state on "drop"
+            this.updateStateOnInput(e.dataTransfer);
+        });
+
+        field.addEventListener("dragover", function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            e.target.classList.add("highlight");
+        });
+
+        field.addEventListener("dragleave", function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            e.target.classList.remove("highlight");
+        });
+
         return field;
     }
 
@@ -100,13 +124,11 @@ export class UploadComponent extends BaseComponent {
 
     /**
      * Display info about files belonging to this component
-     * FIXME on initial form load, display infos about previous uploads (present in JSON "values")
      *
      * @param {HTMLElement} infoNotification
      */
     #showStatus(infoNotification) {
         if (!this.myState.value) {
-            console.log('no value in state for ', this.config.name);
             return;
         }
         const uploads = document.createElement("ul");
@@ -114,7 +136,7 @@ export class UploadComponent extends BaseComponent {
         for (const fileInfo of this.myState.value) {
             uploads.insertAdjacentHTML(
                 "beforeend",
-                `<li><a href="${fileInfo.content}">${fileInfo.file}</a></li>`)
+                `<li><a href="${fileInfo.content}" download="${fileInfo.file}">${fileInfo.file}</a></li>`)
         }
         infoNotification.classList.remove("hidden");
     }

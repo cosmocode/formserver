@@ -132,6 +132,7 @@ form:
           upload1:
             type: upload
             label: 'Upload'
+            tooltip: "Select or drag a file to upload"
             validation:
               filesize: 2MB
               fileext: jpg, pdf, txt
