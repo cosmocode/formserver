@@ -59,11 +59,19 @@ export class DropdownComponent extends BaseComponent {
 
         const label = document.createElement('label');
         label.classList.add('label');
+        if (this.config.labelsmall) {
+            label.classList.add("label-smaller");
+        }
         label.innerText = this.config.label + U.requiredMark(this.config);
 
         field.appendChild(label);
         const tooltip = U.tooltipHint(this.config);
         field.insertAdjacentHTML('beforeend', tooltip);
+
+        if (this.config.modal) {
+            field.appendChild(U.modalHint(this.config));
+            field.appendChild(U.modal(this.config));
+        }
 
         field.appendChild(control);
 

@@ -19,11 +19,16 @@ export class SignatureComponent extends BaseComponent {
 
         const label = document.createElement("div");
         label.classList.add("label");
+        if (this.config.labelsmall) {
+            label.classList.add("label-smaller");
+        }
         label.innerText = this.config.label + U.requiredMark(this.config);
         control.appendChild(label);
 
         const tooltip = U.tooltipHint(this.config);
         control.insertAdjacentHTML('beforeend', tooltip);
+
+
 
         const input = document.createElement("input");
         input.type = "hidden";

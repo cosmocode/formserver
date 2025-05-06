@@ -7,7 +7,7 @@ export class DownloadComponent extends BaseComponent {
         const field = U.createField(this.config, [], null, true);
 
         const control = document.createElement("div");
-        control.classList.add("control");
+        control.classList.add("control", "with-tooltip");
 
         field.appendChild(control);
 

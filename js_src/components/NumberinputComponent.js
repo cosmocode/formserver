@@ -6,16 +6,25 @@ import {ValidatorError} from "../ValidatorError";
 export class NumberinputComponent extends BaseComponent {
 
     html() {
-        return html`
-            <div class="field">
-                <label class="label">${this.config.label}${U.requiredMark(this.config)}</label>$${U.tooltipHint(this.config)}
-                <div class="control">
-                    <input class="input" type="number" step="1" 
-                           name="${this.name}" value="${this.myState.value ?? ''}"
-                           ${this.config.readonly ? 'readonly' : ''}>
-                </div>
-            </div>
-        `;
+        const field = U.createField(this.config);
+
+        const control = document.createElement("div");
+        control.classList.add("control");
+
+        field.appendChild(control);
+
+        const input = document.createElement("input");
+        input.type = "number";
+        input.step = 1;
+        input.name = this.name;
+        input.classList.add("input");
+        input.placeholder = this.config.placeholder || "";
+        input.value = this.myState.value ?? null;
+        input.readOnly = !!this.config.readonly;
+
+        control.appendChild(input);
+
+        return field;
     }
 
     /**

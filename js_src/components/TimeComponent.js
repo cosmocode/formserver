@@ -4,17 +4,24 @@ import {U} from '../U.js';
 
 export class TimeComponent extends BaseComponent {
     html() {
-        return html`
-            <div class="field">
-                <label class="label">${this.config.label}${U.requiredMark(this.config)}</label>$${U.tooltipHint(this.config)}
-                <div class="control">
-                    <input class="input" type="time" name="${this.name}"
-                           ${U.attrHTML('placeholder', this.config.placeholder, false)}
-                           value="${this.myState.value ?? ''}"
-                           ${this.config.readonly ? 'readonly' : ''}>
-                </div>
-            </div>
-        `;
+        const field = U.createField(this.config);
+
+        const control = document.createElement("div");
+        control.classList.add("control");
+
+        field.appendChild(control);
+
+        const input = document.createElement("input");
+        input.type = "time";
+        input.name = this.name;
+        input.classList.add("input");
+        input.placeholder = this.config.placeholder || "";
+        input.value = this.myState.value ?? null;
+        input.readOnly = !!this.config.readonly;
+
+        control.appendChild(input);
+
+        return field;
     }
 }
 

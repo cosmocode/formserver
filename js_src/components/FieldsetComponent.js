@@ -1,5 +1,6 @@
 import {BaseComponent} from './BaseComponent.js';
 import {U} from '../U.js';
+import html from "html-template-tag";
 
 export class FieldsetComponent extends BaseComponent {
     html() {
@@ -9,7 +10,19 @@ export class FieldsetComponent extends BaseComponent {
         fieldSetElement.id = this.config.name;
 
         if (this.config.label) {
-            fieldSetElement.insertAdjacentHTML('afterbegin', `<div class="label">${this.config.label}</div>`);
+            const label = document.createElement("div");
+            label.classList.add("label");
+            if (this.config.labelsmall) {
+                label.classList.add("label-smaller");
+            }
+            label.innerText = this.config.label;
+            fieldSetElement.appendChild(label);
+
+            fieldSetElement.insertAdjacentHTML('beforeend', U.tooltipHint(this.config));
+            if (this.config.modal) {
+                fieldSetElement.appendChild(U.modalHint(this.config));
+                fieldSetElement.appendChild(U.modal(this.config));
+            }
         }
 
         U.attachChildren(fieldSetElement, this.config['children'], this.myState.state);

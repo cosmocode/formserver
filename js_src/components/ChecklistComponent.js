@@ -5,21 +5,29 @@ export class ChecklistComponent extends BaseComponent {
 
     /** @override */
     html() {
-        const checklist = document.createElement('div');
-        checklist.classList.add('field');
+        const field = document.createElement('div');
+        field.classList.add('field');
 
         const label = document.createElement('label');
         label.classList.add('label');
+        if (this.config.labelsmall) {
+            label.classList.add("label-smaller");
+        }
         label.innerText = this.config.label + U.requiredMark(this.config);
 
-        checklist.appendChild(label);
+        field.appendChild(label);
 
         const tooltip = U.tooltipHint(this.config);
-        checklist.insertAdjacentHTML('beforeend', tooltip);
+        field.insertAdjacentHTML('beforeend', tooltip);
+
+        if (this.config.modal) {
+            field.appendChild(U.modalHint(this.config));
+            field.appendChild(U.modal(this.config));
+        }
 
         const control = document.createElement('div');
         control.classList.add('control');
-        checklist.appendChild(control);
+        field.appendChild(control);
 
         // use literal choice items for values, but markdown transformed choices for labels
         let i = 0;
@@ -27,7 +35,7 @@ export class ChecklistComponent extends BaseComponent {
             control.insertAdjacentHTML("beforeend", this.htmlCheckboxElement(this.config.transformed_choices[i], this.config.choices[i]));
         }
 
-        return checklist;
+        return field;
     }
 
     /**

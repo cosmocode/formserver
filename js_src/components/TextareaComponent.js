@@ -4,18 +4,31 @@ import {U} from '../U.js';
 
 export class TextareaComponent extends BaseComponent {
     html() {
-        return html`
-            <div class="field">
-                <label class="label">${this.config.label}${U.requiredMark(this.config)}</label>$${U.tooltipHint(this.config)}
-                <div class="control">
-                    <textarea class="textarea"
-                        ${U.attrHTML('placeholder', this.config.placeholder, false)}
-                        ${U.attrHTML('cols', this.config.cols, false)}
-                        ${U.attrHTML('rows', this.config.rows, false)}
-                        name="${this.name}" ${this.config.readonly ? 'readonly' : ''}>${this.myState.value ?? ''}</textarea>
-                </div>
-            </div>
-        `;
+
+        const field = U.createField(this.config);
+
+        const control = document.createElement("div");
+        control.classList.add("control");
+
+        field.appendChild(control);
+
+        const input = document.createElement("textarea");
+        input.name = this.name;
+        input.classList.add("textarea");
+        input.placeholder = this.config.placeholder || "";
+        input.value = this.myState.value ?? null;
+        input.readOnly = !!this.config.readonly;
+        if (this.config.cols) {
+            input.cols = this.config.cols;
+        }
+        if (this.config.rows) {
+            input.rows = this.config.rows;
+        }
+
+        control.appendChild(input);
+
+        return field;
+
     }
 }
 

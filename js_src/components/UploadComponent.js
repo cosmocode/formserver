@@ -15,7 +15,10 @@ export class UploadComponent extends BaseComponent {
         control.classList.add("control");
 
         const label = document.createElement("label");
-        label.classList.add("label")
+        label.classList.add("label");
+        if (this.config.labelsmall) {
+            label.classList.add("label-smaller");
+        }
         label.innerText = html`${this.config.label}` + U.requiredMark(this.config);
 
         control.appendChild(label);
