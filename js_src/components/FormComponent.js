@@ -95,10 +95,13 @@ export class FormComponent extends HTMLElement {
 
         const isValid = this.validate();
 
-        this.#displayFormStatusNotofication(isValid);
-
         console.log('SUBMIT', this.#state.values);
-        console.log('SUBMIT has validation errors?', isValid);
+        console.log('SUBMIT valid?', isValid);
+
+        if (event.submitter.name === "send" && !isValid) {
+            this.#displayFormStatusNotification("send_prevented");
+            return;
+        }
 
         fetch(window.location.href, {
             method: 'POST',
@@ -117,29 +120,37 @@ export class FormComponent extends HTMLElement {
                 return response.json();
             })
             .then((data) => {
-                console.log('Success:', data);
+                this.#displayFormStatusNotification(!isValid ? "form_invalid" : (event.submitter.name === "send" ? "send_success" : "form_valid"));
             })
             .catch((error) => {
+                this.#displayFormStatusNotification("send_failed");
                 console.error('Error:', error);
             });
-
     }
 
-    #displayFormStatusNotofication(isValid) {
+    #displayFormStatusNotification(status) {
         const notification = this.querySelector('.notification');
 
-        if (!isValid) {
-            notification.classList.add('is-danger');
-            notification.classList.remove('is-success');
-            notification.innerHTML = `<p>${U.getLang("form_invalid")}</p>`;
-        } else {
-            notification.classList.remove('is-danger');
-            notification.classList.add('is-success');
-            notification.innerHTML = `<p>${U.getLang("form_valid")}</p>`;
+        switch (status) {
+            case "send_prevented":
+            case "send_failed":
+            case "form_invalid":
+                notification.classList.add('is-danger');
+                notification.classList.remove('is-success');
+                notification.innerHTML = `<p>${U.getLang(status)}</p>`;
+                break;
+            case "form_valid":
+            case "send_success":
+                notification.classList.add('is-success');
+                notification.classList.remove('is-danger');
+                notification.innerHTML = `<p>${U.getLang(status)}</p>`;
+                break;
+            default:
+                console.log(`Unknown status: "${status}."`);
         }
 
         notification.style.display = 'block';
-
+        notification.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 }
 
