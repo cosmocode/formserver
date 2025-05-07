@@ -93,7 +93,6 @@ export class DropdownComponent extends BaseComponent {
 
         let state = U.stateMultivalue(this.myState.value);
 
-        // FIXME handle removal of last option (only click event is fired)
         if (state.has(target.value)) {
             state.delete(target.value);
         } else {
@@ -128,6 +127,7 @@ export class DropdownComponent extends BaseComponent {
      * @override
      */
     restoreState() {
+        if (!this.myState.state.oldValues[this.name]) return;
         this.myState.clear();
     }
 
