@@ -1,14 +1,18 @@
 # Form element types
 
 Each form element must be declared using a unique id (inside its group) and an element definition.  
-The id will be used in HTML as is, so mind the standards: no spaces, start with a letter, stick to ASCII characters and use - or _ as separators.  
-Form elements can be grouped visually and/or logically in [fieldsets](#fieldsets).  
+
+The id will be used in HTML as is, so mind the standards: no spaces, start with a letter, stick to ASCII characters and use `_` as separator. **Note:** no mathematical symbols are allowed, which means `-` is no longer allowed.
+
+Form elements can be grouped visually and/or logically in [fieldsets](#fieldset). Other container elements provide their functionality: [pages](#pages), [table](#table) and [clone](#clone). 
+
 The element definition must contain at least the type of the form element.  
+
 Options:  
 * `label` _(optional)_ - the label of the form element (excluded: [hidden](#hidden), [markdown](#markdown))
 * `labelsmall` _(optional)_ - if set to true, the label will be rendered in regular font instead of default bold
-* `tooltip` _(optional)_ - Shows a hint for the element. Ignored in structure elements like spacers and HR. Also see [Tooltip styling](meta.md#Tooltips)
-* `modal` _(optional)_ - Content of a simple Bulma modal in markdown syntax. Refer to the bundled EXAMPLE configuration. Images are interpreted as files located directly in your form directory. The option is ignored in structure elements like spacers and HR.  
+* `tooltip` _(optional)_ - Shows a hint for the element. Ignored in structure elements like HR. Also see [Tooltip styling](meta.md#Tooltips)
+* `modal` _(optional)_ - Content of a simple Bulma modal in markdown syntax. Refer to the bundled EXAMPLE configuration. Images are interpreted as files located directly in your form directory. The option is ignored in structure elements like HR.  
 * `column` _(optional)_ - [bulma column sizes](https://bulma.io/documentation/columns/sizes/) defining the width of the form element (excluded: [hidden](#hidden)). You can use [offset](https://bulma.io/documentation/columns/sizes/#offset) to position the columns, for example `is-half is-offset-one-quarter` to center a half-width column.
 ```yaml
 <id>:
@@ -17,31 +21,97 @@ Options:
     column: <column>
 ```
 
+## Containers
 
-## Fieldsets
+### Fieldset
 
-Fieldsets group other form elements (including nested fieldsets).  
+Fieldsets group other form elements (including nested fieldsets).
 
 Options:
 * `children` _(required)_ - containing child form elements
 * `background` _(optional)_ the background color may be one of [https://bulma.io/documentation/helpers/color-helpers/#background-color](Bulma's colors) (without the prefix `has-background-`) or a valid CSS definition.
-* `tablestyle` _(optional)_ set table view true or false. This will order the contained fieldsets as if they were table columns. The columns will have alternating colors ("zebra"). The head column will be populated by the labels of the children of the first fieldset. Labels in other columns will be hidden to avoid duplication. If cells in the first row must be skipped then [Spacers](#Spacer) can be used.
-* `scrollable` _(optional)_ can be used with `tablestyle`: The fieldset will not responsively adapt to screen width, but will extend horizontally and can be scrolled. The option may have unpredictable effects in complex forms!
-* `toggle` _(optional)_ - the fieldset is disabled and hidden until the toggle condition is met
-  * `field` - dotted path to the field whose value will be evaluated to match the toggle condition
-  * `value` - required value to toggle the fieldset on, can be a simple string or a YAML array
+* `visible` _(optional)_ - the fieldset is disabled and hidden until the visible condition is met
 
 ```yaml
 <id>:
     type: fieldset
-    toggle:
-      field: <fieldset1>.<fieldset2>.<text1>
-      value: 'toogle value'
+    visible: <fieldset1>.<fieldset2>.<text1> == 'toogle value'
     children:
       text1:
         type: textinput
       ...
 ```
+
+### Table
+
+Options:
+* `children` _(required)_ - content of a single table column, all inputs are allowed
+* `label` _(required)_ - column headers consist of the table label and consecutive number. In a future release it will be possible to specify a list of column headers.
+* `repeat` _(required)_ - number of columns. In a future release it will be possible to specify a list of column headers.
+* `scrollable` _(optional)_ - makes the table scrollable horizontally, useful if you have many columns
+
+```yaml
+<id>:
+  type: table
+  label: Table label
+  repeat: 13
+  scrollable: true
+  children:
+    first_name:
+      type: textinput
+      label: First input
+      placeholder: Placeholder
+    last_name:
+      type: textinput
+      label: Second input
+      placeholder: Placeholder
+```
+
+### Clone
+
+A clone container can have one or more fields. A clone buton is attached at the bottom of the container. 
+
+Options:
+* `children` _(required)_ - field or fields that can be cloned
+
+```yaml
+<id>:
+  type: clone
+  label: Cloneable
+  children:
+    email:
+      type: email
+      label: Label
+```
+
+Refer to the bundled EXAMPLE configuration for a more complex, nested clone container.
+
+### Pages
+
+With this container you can split long forms into pages. Tabs to switch between the pages will be created automatically from the labels of immediate children (usually fieldsets).
+
+Refer to the bundled EXAMPLE configuration.
+
+```yaml
+<id>:
+    type: pages
+    children:
+      <id>:
+        type: fieldset
+        label: Tab 1
+        children:
+          <id>:
+            type: <type>
+            label: <label>
+      <id>:
+        type: fieldset
+        label: Tab 2
+        children:
+          <id>:
+            type: <type>
+            label: <label>
+```
+
 
 ## Static fields
 
@@ -114,21 +184,6 @@ Options:
     value: "hidden value"
 ```
 
-
-### Spacer
-
-Representation of a empty table cell. Should be used in table fieldset (tableStyle: true).
-Options:
-* `label` _(required)_ - The label. If the spacer is inside the first fieldset of a table fieldset (tableStyle: true) then the label will be used
-* `double` _(optional)_ - If set to true also skips cell below
-
-```yaml
-  <id>:
-    type: spacer
-    label: "label"
-    double: true
-```
-
 ### Horizontal line
 Representation of a hr.
 
@@ -178,8 +233,6 @@ Simple text input.
       required: false
 ```
 
-* `clone` _(optional)_ - When set to `true`, adds a clone button to the field. That way you can repeat the same input to create a list of variable length.
-
 ### Numberinput
 
 Simple number (integer) input.
@@ -193,8 +246,6 @@ Simple number (integer) input.
     validation:
       required: false
 ```
-
-* `clone` _(optional)_ - When set to `true`, adds a clone button to the field. That way you can repeat the same input to create a list of variable length.
 
 ### Textarea
 
@@ -230,9 +281,6 @@ Text input that expects a date and provides a calendar picker.
       required: false
 ```
 
-Options:
-* `clone` _(optional)_ - When set to `true`, adds a clone button to the field. That way you can repeat the same input to create a list of variable length.
-
 ### Time
 
 Text input that expects a time and provides a time picker.
@@ -246,8 +294,6 @@ Text input that expects a time and provides a time picker.
     validation:
       required: false
 ```
-Options:
-* `clone` _(optional)_ - When set to `true`, adds a clone button to the field. That way you can repeat the same input to create a list of variable length.
 
 ### Datetime
 
@@ -262,8 +308,6 @@ Text input that expects a date and a time and provides a combined picker.
     validation:
       required: false
 ```
-Options:
-* `clone` _(optional)_ - When set to `true`, adds a clone button to the field. That way you can repeat the same input to create a list of variable length.
 
 ### Email
 
@@ -278,9 +322,6 @@ Text input that expects a valid email (the HTML5 validation is handled by the br
     validation:
       required: false
 ```
-
-Options:
-    * `clone` _(optional)_ - When set to `true`, adds a clone button to the field. That way you can repeat the same input to create a list of variable length.
 
 ### Radioset
 
@@ -331,13 +372,12 @@ Options:
 ```yaml
     conditional_choices:
       -
-        field: fieldsetLevel1.FieldsetLevel2.myFieldname
-        value: 'Value A'
+        visible: fieldsetLevel1.FieldsetLevel2.myFieldname == 'Value A'
         choices:
           - A1
           - A2
-      - field: fieldsetLevel1.FieldsetLevel2.myFieldname
-        value: 'Value B'
+      -  
+        visible: fieldsetLevel1.FieldsetLevel2.myFieldname == 'Value B'
         choices:
           - 10 B
           - 20 B
@@ -368,12 +408,14 @@ Options:
 
 ### Upload
 
-The uploaded file will be stored with the form element's id as filename. The file extension is preserved, but the original file name is not. It will be sent as an attachment if the form data is configured to be sent by email.  
+You can select multiple files. Drag and drop is supported.
+
+The uploaded file will be sent as an attachment if the form data is configured to be sent by email.
 
 Options:
 * `validation` _(optional)_ - the upload form element has special validation rules
-  * `filesize` - max upload size, example values: `1048576B`, `1024KB`, `1MB` 
-  * `fileext` - allowed file extensions, example value (will be lower cased automatically): `jpg, pdf, txt`
+  * `filesize` - max upload size, example values: `1048576B`, `1024KB`, `1MB`
+  * `fileext` - allowed file extensions, example value (will be lowercased automatically): `jpg, pdf, txt`
 
 ```yaml
   <id>:
@@ -386,7 +428,7 @@ Options:
 
 ### Signature
 
-This element lets a user draw a signature on screen to sign the form. If the form data is configured to be sent by email, a JPG image of the signature will be attached. Otherwise it is simply stored along with the rest of inputs  as data points to be processed as you wish.  
+This element lets a user draw a signature on screen to sign the form. If the form data is configured to be sent by email, a JPG image of the signature will be attached. Otherwise it is simply stored along with the rest of inputs as data points to be processed as you wish.  
 
 Options:
 * `width` _(optional)_ - sets the width of the signature field

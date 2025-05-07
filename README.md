@@ -28,7 +28,7 @@ The [reference](doc/index.md) details all available options. A demo form is prov
 
 ## Requirements
 
-* PHP 7.2
+* PHP 8.2
 * mail server
 
 ## Current limitations
@@ -41,14 +41,24 @@ End users can simply download the [current release](https://github.com/cosmocode
 
 Unzip the file and point your PHP enabled webserver to the `public` directory. For Apache a rewrite configuration is provided in a `.htaccess` file. Users of other webservers may need to setup URL rewriting manually.
 
+## Changes in v2
 
+You may need to adjust existing form configuration files to accommodate the following changes:
+
+* Field names may no longer include `-`. This was a recommemded word separator in previous versions. Now all mathematical symbols are not allowed in field names, as it will break conditional visibility logic.
+* `tablestyle` fieldsets are no longer supported. Use the new [table element](doc/formelements.md#table) instead.
+* `clone` property of fields is no longer supported. Use the new [clone container](doc/formelements.md#clone) to wrap cloneable fields.
+
+Long forms can now be split into [tabbed pages](doc/formelements.md#pages).
 
 ## Development
 
-Clone the repository and install the dependencies with
+Clone the repository, install dependencies and build:
 
 ```bash
 composer install
+npm install
+npm run build
 ```
 
 You can test run on the built-in PHP server
