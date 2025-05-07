@@ -1,5 +1,6 @@
 import {BaseComponent} from './BaseComponent.js';
 import {U} from "../U";
+import {ComponentState} from "../ComponentState";
 
 export class ChecklistComponent extends BaseComponent {
 
@@ -67,6 +68,12 @@ export class ChecklistComponent extends BaseComponent {
             state.add(target.value);
         }
         this.myState.value = state;
+    }
+
+    stateHook(state, name) {
+        let myState = new ComponentState(state, name);
+        myState.value = U.stateMultivalue(myState.value);
+        return myState;
     }
 }
 
