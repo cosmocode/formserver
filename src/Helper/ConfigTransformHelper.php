@@ -8,9 +8,7 @@ use CosmoCode\Formserver\FormGenerator\FormValidator;
 use Michelf\MarkdownExtra;
 
 /**
- * Legacy config transformations for toggle -> visible, conditional_choices.
- * Field name conversion minus -> underscore
- * Markdown parsing
+ * Config transformations
  *
  * @package CosmoCode\Formserver\Helper
  */
@@ -25,10 +23,6 @@ class ConfigTransformHelper
      */
     public static function transform(array $elements, string $formId = ''): array
     {
-        // rewrite field names first
-        $elements = self::minus($elements);
-        $elements = self::toggle($elements);
-        $elements = self::options($elements);
         $elements = self::fieldsetStyle($elements);
         $elements = self::markdown($elements, $formId);
         $elements = self::fileDispatcher($elements, $formId);
@@ -40,82 +34,6 @@ class ConfigTransformHelper
                 $elements[$key] = self::transform($conf, $formId);
             }
         }
-        return $elements;
-    }
-
-    /**
-     * @param array|string $element
-     * @return string
-     */
-    protected static function getOperator(array|string $element): string
-    {
-        return is_array($element['value']) ? ' in ' : ' == ';
-    }
-
-    /**
-     * @param array|string $value
-     * @return string
-     */
-    protected static function getRightOperand(array|string $value): string
-    {
-        if (is_array($value)) {
-            $val = array_map(static fn($item) => "'$item'", $value);
-            $operand = '[' . implode(', ', $val) . ']';
-        } else {
-            $operand = "'" . str_replace("'", "\\'", $value) . "'";
-        }
-        return $operand;
-    }
-
-    /**
-     * Rewrite fieldset toggles
-     * from toggle => [field, value] to visible => field == / in value
-     *
-     * @param array $elements
-     * @return array
-     */
-    protected static function toggle(array $elements): array
-    {
-        if (isset($elements['toggle'])) {
-            $transformed = [];
-            // we want to keep the keys and the order
-            foreach ($elements as $key => $conf) {
-                if ($key === 'toggle') {
-                    $transformed['visible'] =
-                        $conf['field'] . self::getOperator($conf) . self::getRightOperand($conf['value']);
-                } else {
-                    $transformed[$key] = $conf;
-                }
-            }
-            $elements = $transformed;
-        }
-
-        return $elements;
-    }
-
-    /**
-     * Rewrite conditional options
-     * from [field, value] to visible => field == / in value
-     *
-     * @param array $elements
-     * @return array
-     */
-    protected static function options(array $elements): array
-    {
-        if (isset($elements['conditional_choices'])) {
-            $transformed = [];
-            foreach ($elements['conditional_choices'] as $key => $conf) {
-                if (isset($conf['field']) && isset($conf['value'])) {
-                    // this is executed before minus() can transform children so we must do the replacement here
-                    $conf['field'] = str_replace('-', '_', $conf['field']);
-                    $transformed['visible'] =
-                        $conf['field'] . self::getOperator($conf) . self::getRightOperand($conf['value']);
-                }
-                $transformed['choices'] = $conf['choices'];
-                $elements['conditional_choices'][$key] = $transformed;
-            }
-        }
-
         return $elements;
     }
 
@@ -204,30 +122,5 @@ class ConfigTransformHelper
         }
 
         return $elements;
-    }
-
-    /**
-     * Replace minus with underscore in fieldnames,
-     * otherwise they will be split by the expression parser
-     *
-     * @param array $elements
-     * @return array
-     */
-    protected static function minus(array $elements): array
-    {
-        $transformed = [];
-
-        foreach ($elements as $key => $element) {
-            $newKey = str_replace('-', '_', (string) $key);
-
-            // in conditions, transform value instead of key (toggle => [field, value])
-            // this is done in options() as well
-            if (is_array($element) && isset($element['field'])) {
-                $element['field'] = str_replace('-', '_', $element['field']);
-            }
-            $transformed[$newKey] = $element;
-        }
-
-        return $transformed;
     }
 }
