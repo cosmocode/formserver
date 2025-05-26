@@ -52,7 +52,7 @@ export class BaseComponent extends HTMLElement {
      * @param {object} fieldConfig The configuration for this component as defined in the main YAML/JSON
      */
     initialize(state, fieldConfig) {
-        this.myState = this.stateHook(state, fieldConfig.name);
+        this.myState = this.stateHook(state, fieldConfig);
         this.config = fieldConfig;
         this.name = fieldConfig.name;
         this.classList.add('component');
@@ -69,11 +69,11 @@ export class BaseComponent extends HTMLElement {
      * Relevant when value type in not represented in JSON (e.g. a Set object).
      *
      * @param {State} state
-     * @param {string} name
+     * @param {object} config Field config
      * @returns {ComponentState}
      */
-    stateHook(state, name) {
-        return new ComponentState(state, name);
+    stateHook(state, config) {
+        return new ComponentState(state, config.name);
     }
 
     /**
@@ -218,7 +218,7 @@ export class BaseComponent extends HTMLElement {
 
         if (
             (!this.config.validation || this.config.validation.required !== false) &&
-            (this.myState.value === null || this.myState.value.length === 0)
+            (this.myState.value === null || this.myState.value.length === 0 || this.myState.value.size === 0)
         ) {
             throw new ValidatorError(this.name, U.getLang("error_required"));
         }

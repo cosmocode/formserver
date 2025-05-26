@@ -326,7 +326,7 @@ export class U {
      * Needed to post JSON data to backend, otherwise set entries are lost.
      *
      * @param {Object} data
-     * @returns {{}|T[]|*}
+     * @returns {{}|[]|*}
      */
     static convertSetsToArray(data) {
         if (data instanceof Set) {

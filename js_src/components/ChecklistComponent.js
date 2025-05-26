@@ -70,9 +70,14 @@ export class ChecklistComponent extends BaseComponent {
         this.myState.value = state;
     }
 
-    stateHook(state, name) {
-        let myState = new ComponentState(state, name);
+    stateHook(state, config) {
+        let myState = new ComponentState(state, config.name);
         myState.value = U.stateMultivalue(myState.value);
+
+        if (!state.hasInitialValues && !myState.value.size && "default" in config) {
+            myState.value.add(config.default);
+        }
+
         return myState;
     }
 }
