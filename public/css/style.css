@@ -133,6 +133,14 @@ fieldset[disabled] .textarea {
     background-color: var(--bulma-input-disabled-placeholder-color);
 }
 
+/**
+ * Tables
+ */
+
+.table {
+    --bulma-table-cell-border-color: #000;
+}
+
 /** Signature Pad  */
 canvas {
     display: block;
@@ -213,6 +221,10 @@ span.tooltip {
 div.modal-content {
     width: unset;
     max-width: 75%;
+
+    & div.box * {
+        font-weight: initial;
+    }
 }
 
 /**
