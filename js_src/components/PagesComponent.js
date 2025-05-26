@@ -47,8 +47,9 @@ export class PagesComponent extends BaseComponent {
         U.attachChildren(tabsContainer, this.config["children"], this.myState.state);
 
         // hide children other than target of active tab
+        // bit don't hide nested fieldsets
         // escape dots in IDs so they are not interpreted as CSS classes
-        const selector = `fieldset:not(#${activeTabTarget.replace(/\./g, '\\.')})`;
+        const selector = `fieldset:not(fieldset fieldset):not(#${activeTabTarget.replace(/\./g, '\\.')})`;
         tabsContainer.querySelectorAll(selector).forEach(child => {
             child.style.display = "none";
         });
