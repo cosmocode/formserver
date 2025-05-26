@@ -109,16 +109,21 @@ export class DropdownComponent extends BaseComponent {
      */
     shouldUpdate(detail) {
 
-        if (!this.config.conditional_choices || !this.optionsExpressions.length) {
-            return false;
+        const optionsShouldUpdate = () => {
+            if (!this.config.conditional_choices || !this.optionsExpressions.length) {
+                return false;
+            }
+
+            const vars = [];
+            for (const expr of this.optionsExpressions) {
+                vars.push(... expr.variables({withMembers: true}));
+            }
+
+            return vars.includes(detail.name);
         }
 
-        const vars = [];
-        for (const expr of this.optionsExpressions) {
-            vars.push(... expr.variables({withMembers: true}));
-        }
-
-        return vars.includes(detail.name);
+        // check field visibility condition and options visibility conditions
+        return super.shouldUpdate(detail) || optionsShouldUpdate();
     }
 
     /**
