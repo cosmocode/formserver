@@ -139,6 +139,9 @@ fieldset[disabled] .textarea {
 
 .table {
     --bulma-table-cell-border-color: #000;
+    & .column {
+        padding: unset;
+    }
 }
 
 /** Signature Pad  */
