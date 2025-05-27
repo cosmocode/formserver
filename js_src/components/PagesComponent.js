@@ -19,41 +19,50 @@ export class PagesComponent extends BaseComponent {
 
         const tabs = document.createElement("div");
         tabs.classList.add("tabs");
-
         tabsContainer.appendChild(tabs);
 
+        const pages = document.createElement("div");
+        pages.classList.add("pages");
+        tabsContainer.appendChild(pages);
+
         const tabItems = document.createElement("ul");
-        let isFirstTab = true;
-        let activeTabTarget;
+
+        let i = 0;
         Object.keys(this.config.children).forEach(key => {
             const tab = document.createElement("li");
-            const tabTarget = `${this.config.name}.${key}`;
-            if (isFirstTab) {
-                activeTabTarget = tabTarget;
-                tab.classList.add("is-active");
-                isFirstTab = false;
-            }
+
             const link = document.createElement("a");
-            link.innerText = this.config.children[key].label;
-            link.href = `#${tabTarget}`;
-            link.dataset.target = tabTarget;
-            link.addEventListener("click", this.#switchTabs);
+            let linkText = `${i + 1}`;
+            if (this.config.label) {
+                linkText = this.config.label + ` ${linkText}`;
+            }
+            if (this.config.headers && this.config.headers[i]) {
+                linkText = this.config.headers[i];
+            } else if (this.config.children[key].label) {
+                linkText = this.config.children[key].label;
+            }
+            link.innerText = linkText;
+            link.href = "#";
+            link.addEventListener("click", (e) => this.#switchTabs(tab, page, e));
             tab.appendChild(link);
             tabItems.appendChild(tab);
+
+            const page = document.createElement("div");
+            page.classList.add("page");
+            page.style.display = "none";
+
+            if (i === 0) {
+                tab.classList.add("is-active");
+                page.style.display = "";
+            }
+
+            U.attachChildren(page, this.config.children[key].children, this.myState.state);
+            pages.appendChild(page);
+
+            i++;
         });
 
         tabs.appendChild(tabItems);
-
-        U.attachChildren(tabsContainer, this.config["children"], this.myState.state);
-
-        // hide children other than target of active tab
-        // bit don't hide nested fieldsets
-        // escape dots in IDs so they are not interpreted as CSS classes
-        const selector = `fieldset:not(fieldset fieldset):not(#${activeTabTarget.replace(/\./g, '\\.')})`;
-        tabsContainer.querySelectorAll(selector).forEach(child => {
-            child.style.display = "none";
-        });
-
         pagesElement.appendChild(tabsContainer);
 
         return pagesElement;
@@ -66,22 +75,24 @@ export class PagesComponent extends BaseComponent {
 
     /**
      * Switches tabs state and children visibility
+     * @param {HTMLElement} tab
+     * @param {HTMLElement} page
      * @param {Event} e
      */
-    #switchTabs(e) {
+    #switchTabs(tab, page, e) {
         e.preventDefault();
         e.stopPropagation();
-        const targetId = e.target.dataset.target;
-        const li = e.target.parentNode;
-        li.classList.add("is-active");
-        document.getElementById(targetId).style.display = "block";
 
-        li.parentNode.childNodes.forEach(tab => {
-            if (tab.firstChild !== e.target) {
-                tab.classList.remove("is-active");
-                document.getElementById(tab.firstChild.dataset.target).style.display = "none";
-            }
+        tab.parentNode.childNodes.forEach(tb => {
+            tb.classList.remove("is-active");
         });
+
+        page.parentNode.childNodes.forEach(pg => {
+            pg.style.display = "none";
+        });
+
+        e.target.parentNode.classList.add("is-active");
+        page.style.display = "block";
     }
 }
 
