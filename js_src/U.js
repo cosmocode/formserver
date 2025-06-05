@@ -255,6 +255,19 @@ export class U {
     }
 
     /**
+     * Returns value of a given meta key, or null it the key doesn't exist.
+     *
+     * @param {string} key
+     * @returns {*|null}
+     */
+    static formMeta(key) {
+        if (Object.hasOwn(formconfig.meta, key)) {
+            return formconfig.meta[key];
+        }
+        return null;
+    }
+
+    /**
      * Returns a string from the i18l dictionary provided by backend via formconfig
      *
      * @param {string} key

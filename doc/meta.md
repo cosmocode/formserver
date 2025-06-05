@@ -64,7 +64,7 @@ The export directory is set by default to ./export. It can be changed by overrid
    saveButton: false
  ```
  
-This option disables not only the save button, but also persisting user inputs. **As soon as the form is successfully submitted, all data is lost, so send it per email!**
+Saving data is enabled by default. This option disables not only the save button, but also persisting user inputs. **As soon as the form is successfully submitted, all data is lost, so send it per email!**
 
 This way you can re-use the same form for multiple submissions of different data or for multiple users.
 

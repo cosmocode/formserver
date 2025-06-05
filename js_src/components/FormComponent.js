@@ -60,15 +60,25 @@ export class FormComponent extends HTMLElement {
         U.attachChildren(parent, this.#formConfig, this.#state);
     }
 
+    /**
+     * Attach submit buttons to the end of the form.
+     * "Send" is always used, "Save" is present by default but can be disabled in YAML canfig.
+     *
+     * @param {HTMLElement} form
+     */
     attachButtons(form) {
-        const formControlButtons = document.createElement('div');
-        formControlButtons.innerHTML =
-            `<div class="field is-grouped has-addons has-addons-centered">
-                <div class="control">
+        // optional save button
+        const saveButtonHTML = `<div class="control">
                     <button class="button is-link" type="submit" name="save">
                         ${U.getLang("button_save")}
                     </button>
-                </div>
+                </div>`;
+
+        const formControlButtons = document.createElement('div');
+
+        formControlButtons.innerHTML =
+            `<div class="field is-grouped has-addons has-addons-centered">
+               ${U.formMeta("saveButton") !== false ? saveButtonHTML : ''}
                 <div class="control">
                     <button class="button is-link" type="submit" name="send">
                         ${U.getLang("button_send")}
