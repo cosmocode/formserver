@@ -45,7 +45,7 @@ class Form
         $config = YamlHelper::parseYaml($this->getFormDirectory() . 'config.yaml');
         $this->elementsConfig = $config['form'];
         $this->meta = $config['meta'] ?? [];
-        $this->persistent = (bool)$this->getMeta('saveButton');
+        $this->persistent = $this->getMeta('saveButton') !== false;
 
         LangManager::init($this->getMeta('language'));
         $this->lang = LangManager::getTranslations();
