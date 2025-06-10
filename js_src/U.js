@@ -206,7 +206,7 @@ export class U {
 
             const rowWrapper = document.createElement('tr');
             const labelTh = document.createElement('th');
-            labelTh.innerText = fieldConfig.label;
+            labelTh.innerText = fieldConfig.label + this.requiredMark(fieldConfig);
             rowWrapper.appendChild(labelTh);
 
             for (let i = 0; i < repeat; i++) {
