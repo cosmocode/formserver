@@ -226,18 +226,6 @@ export class U {
         });
     }
 
-    static getTableColumnHeaders(label, repeat) {
-        const headers = [];
-        for (let i = 0; i <= repeat; i++) {
-            if (i === 0) {
-                headers.push('');
-            } else {
-                headers.push(`${label} ${i}`);
-            }
-        }
-        return headers;
-    }
-
     /**
      * Load field definitions from formconfig
      * @returns {Object}

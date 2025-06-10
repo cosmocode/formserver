@@ -8,10 +8,35 @@ export class TableComponent extends BaseComponent {
         tableElement.name = this.config.name;
         tableElement.classList.add('table');
 
-        const repeat = parseInt(this.config.repeat);
-        const columnHeaders = U.getTableColumnHeaders(this.config.label, repeat);
+        const headRow = this.#getHeadRow();
 
-        const thead = document.createElement('thead');
+        tableElement.appendChild(headRow);
+
+        U.attachTableRows(tableElement, this.config['children'], this.myState.state, headRow.children.length - 1); // first child is empty
+
+        return tableElement;
+    }
+
+    /**
+     * Create row with column headers
+     *
+     * @returns {HTMLTableRowElement}
+     */
+    #getHeadRow() {
+        // named headers have priority, use them as is
+        let columnHeaders = this.config.headers || [];
+
+        // add more unnamed headers if needed
+        if (this.config.repeat) {
+            let missing = parseInt(this.config.repeat) - columnHeaders.length;
+            for (let i = 0; i < missing; i++) {
+                columnHeaders.push(`${this.config.label} ${columnHeaders.length + 1}`); // Default content, or 'Column ' + (i + 1)
+            }
+        }
+
+        // prepend an empty header for the column with field names
+        columnHeaders.unshift("");
+
         const headRow = document.createElement('tr');
 
         for (const header of columnHeaders) {
@@ -19,11 +44,8 @@ export class TableComponent extends BaseComponent {
             th.innerText = header;
             headRow.appendChild(th);
         }
-        tableElement.appendChild(headRow);
 
-        U.attachTableRows(tableElement, this.config['children'], this.myState.state, repeat);
-
-        return tableElement;
+        return headRow;
     }
 
     /** @override */
