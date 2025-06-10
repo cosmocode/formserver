@@ -47,13 +47,17 @@ Options:
 Options:
 * `children` _(required)_ - content of a single table column, all inputs are allowed
 * `label` _(required)_ - column headers consist of the table label and consecutive number. In a future release it will be possible to specify a list of column headers.
-* `repeat` _(required)_ - number of columns. In a future release it will be possible to specify a list of column headers.
+* `repeat` _(required if `headers` is not set)_ - number of columns. If column headers are not explicitly set in `headers`, the `label` with consecutive numbers will be used.
+* `headers` _(required if `repeat` is not set)_ - list of column headers. Can be combined with `repeat` for a mix of named and unnamed / numbered columns. The config example below will result in columns 3-13 having headers like "Table label 3".
 * `scrollable` _(optional)_ - makes the table scrollable horizontally, useful if you have many columns
 
 ```yaml
 <id>:
   type: table
   label: Table label
+  headers:
+    - 1st column
+    - 2nd column
   repeat: 13
   scrollable: true
   children:
