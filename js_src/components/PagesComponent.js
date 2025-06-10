@@ -14,8 +14,6 @@ export class PagesComponent extends BaseComponent {
         // wraps tabs panel and content elements
         const tabsContainer = document.createElement("div");
         tabsContainer.classList.add("tabs-container");
-        // containers need a name for building full dotted paths
-        tabsContainer.name = this.config.name;
 
         const tabs = document.createElement("div");
         tabs.classList.add("tabs");
@@ -23,6 +21,8 @@ export class PagesComponent extends BaseComponent {
 
         const pages = document.createElement("div");
         pages.classList.add("pages");
+        // all containers need a name
+        pages.name = this.config.name;
         tabsContainer.appendChild(pages);
 
         const tabItems = document.createElement("ul");
@@ -48,6 +48,9 @@ export class PagesComponent extends BaseComponent {
             tabItems.appendChild(tab);
 
             const page = document.createElement("div");
+            // all containers need a name for full dotted paths
+            page.name = `${pages.name}.${key}`;
+            // debugging
             page.classList.add("page");
             page.style.display = "none";
 
