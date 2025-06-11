@@ -9,66 +9,72 @@ export class SignatureComponent extends BaseComponent {
         const wrapper = document.createElement("div");
         wrapper.classList.add("signature-pad");
 
-        const field = document.createElement("div");
-        field.classList.add("field");
+        const field = U.createField(this.config, [], true);
+        wrapper.appendChild(field);
 
         const control = document.createElement("div");
         control.classList.add("control");
 
-        field.appendChild(control);
-
-        const label = document.createElement("div");
-        label.classList.add("label");
-        if (this.config.labelsmall) {
-            label.classList.add("label-smaller");
-        }
-        label.innerText = this.config.label + U.requiredMark(this.config);
-        control.appendChild(label);
-
-        const tooltip = U.tooltipHint(this.config);
-        control.insertAdjacentHTML('beforeend', tooltip);
-
-
-
+        // actual input field to be submitted with the form
         const input = document.createElement("input");
         input.type = "hidden";
         input.name = this.name;
         control.appendChild(input);
 
-        const canvas = document.createElement("canvas");
-        control.appendChild(canvas);
-        wrapper.appendChild(field);
+        field.appendChild(control);
 
+        // dynamic canvas to draw on
+        const canvas = document.createElement("canvas");
         const signaturePad = new SignaturePad(canvas);
-        if (this.myState.value) {
-            signaturePad.fromDataURL(this.myState.value);
-        }
         // default input event is of no use here
         signaturePad.addEventListener("endStroke", () => {
             this.myState.value = signaturePad.toDataURL();
+            input.value = this.myState.value;
         });
 
+        // static image with saved signature
+        const imageDiv = document.createElement("div");
+        const image = document.createElement("img");
 
-        const fieldButton = document.createElement("div");
-        fieldButton.classList.add("field");
+        // display canvas or image depending on available data
+        let signatureVisibleElement;
+        if (!this.myState.value) {
+            signatureVisibleElement = canvas;
+        } else {
+            image.src = this.myState.value;
+            imageDiv.appendChild(image);
+            signatureVisibleElement = imageDiv;
+        }
+        control.appendChild(signatureVisibleElement);
 
-        const controlButton = document.createElement("div");
-        controlButton.classList.add("control");
+        // clear button
+        const clearButtonField = document.createElement("div");
+        clearButtonField.classList.add("field");
 
-        fieldButton.appendChild(controlButton);
+        const clearButtonControl = document.createElement("div");
+        clearButtonControl.classList.add("control");
+
+        clearButtonField.appendChild(clearButtonControl);
 
         const clearButton = document.createElement("button");
         clearButton.classList.add("button", "clear");
         clearButton.type = "button";
         clearButton.innerText = U.getLang('label_signature_delete');
         clearButton.addEventListener("click",  (event) => {
+            // clear all values
             signaturePad.clear();
             this.myState.value = null;
+            input.value = null;
+
+            // restore canvas (signature may be an image at this point)
+            control.removeChild(signatureVisibleElement);
+            signatureVisibleElement = canvas;
+            control.appendChild(signatureVisibleElement);
         });
 
-        controlButton.appendChild(clearButton);
+        clearButtonControl.appendChild(clearButton);
 
-        wrapper.appendChild(fieldButton);
+        wrapper.appendChild(clearButtonField);
 
         return wrapper;
     }
