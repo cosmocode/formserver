@@ -139,6 +139,11 @@ fieldset[disabled] .textarea {
 
 .table {
     --bulma-table-cell-border-color: #000;
+
+    & tr th:first-child {
+        min-width: 15rem;
+    }
+
     & .column {
         padding: unset;
     }
