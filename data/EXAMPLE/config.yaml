@@ -113,10 +113,22 @@ form:
             type: dropdown
             label: 'Dropdown'
             empty_label: 'Please choose'
+            default: 'Default choice'
             choices:
               - 'Choice #1'
               - 'Choice #2'
+              - 'Default choice'
               - 'Choice #3'
+          dropdownMulti:
+            type: dropdown
+            multiselect: true
+            label: 'Multi Dropdown'
+            default: 'Default choice in multi'
+            choices:
+              - 'Choice #1 in multi'
+              - 'Choice #2 in multi'
+              - 'Default choice in multi'
+              - 'Choice #3 in multi'
           checklist1:
             type: checklist
             alignment: vertical

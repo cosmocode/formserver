@@ -70,6 +70,14 @@ export class ChecklistComponent extends BaseComponent {
         this.myState.value = state;
     }
 
+    /**
+     * Ensure Set type and apply defaults, but only on initial rendering,
+     * when the form has no values yet.
+     *
+     * @param {State} state
+     * @param {Object} config
+     * @returns {ComponentState}
+     */
     stateHook(state, config) {
         let myState = new ComponentState(state, config.name);
         myState.value = U.stateMultivalue(myState.value);

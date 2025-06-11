@@ -1,5 +1,6 @@
 import {BaseComponent} from './BaseComponent.js';
 import {U} from '../U.js';
+import {ComponentState} from "../ComponentState";
 
 export class DropdownComponent extends BaseComponent {
 
@@ -124,6 +125,32 @@ export class DropdownComponent extends BaseComponent {
 
         // check field visibility condition and options visibility conditions
         return super.shouldUpdate(detail) || optionsShouldUpdate();
+    }
+
+    /**
+     * Ensure Set type for multiselect values.
+     * Apply defaults, but only on initial rendering, when the form has no values yet.
+     *
+     * @param {State} state
+     * @param {Object} config
+     * @returns {ComponentState}
+     */
+    stateHook(state, config) {
+        let myState = new ComponentState(state, config.name);
+
+        if (!state.hasInitialValues && !myState.value && "default" in config) {
+            myState.value = config.default;
+        }
+
+        if (config.multiselect) {
+            myState.value = U.stateMultivalue(myState.value);
+
+            if (!state.hasInitialValues && !myState.value.size && "default" in config) {
+                myState.value.add(config.default);
+            }
+        }
+
+        return myState;
     }
 
     /**

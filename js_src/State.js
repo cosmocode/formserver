@@ -20,7 +20,11 @@ export class State {
     /** @type {Proxy<object>} Values previously set, before a component was removed */
     oldValues;
 
+    /** @type {boolean} Relevant when populating default values */
+    hasInitialValues;
+
     constructor(initialValues = {}) {
+        this.hasInitialValues = !!Object.keys(initialValues).length;
         this.values = this.#createProxy(initialValues, State.STATE_VALUE_CHANGE_EVENT);
         this.oldValues = this.#createProxy();
     }

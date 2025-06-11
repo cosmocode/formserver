@@ -52,6 +52,10 @@ class Form
 
         try {
             $this->values = YamlHelper::parseYaml($this->getFormDirectory() . 'values.yaml');
+            // an empty array must be converted into an object
+            if (empty($this->values)) {
+                throw new \Exception("File is present but empty, this will result in invalid type of 'values' in JSON");
+            }
         } catch (\Exception $exception) {
             // no stored values.yaml, an empty object in JSON
             $this->values = new \stdClass();
