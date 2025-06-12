@@ -141,11 +141,9 @@ class Mailer
             // special handling of uploads
             if ($element['type'] === 'upload') {
                 $files = $value;
-                $value = ''; // do not send source data
+                $value = LangManager::getString('email_text_attachments');
                 foreach ($files as $file) {
-                    $value .= $fullId
-                        . ' (' . LangManager::getString('uploaded_original')
-                        . ' ' . $file['file'] . ') ';
+                    $value .=  "\n" . $file['file'];
                     $encoded = explode(",", $file['content'])[1];
                     $decoded = base64_decode($encoded);
                     $this->attachments[]
@@ -160,6 +158,11 @@ class Mailer
 
                 // do not send the image source data
                 $value = LangManager::getString('email_text_attachments');
+            }
+
+            // finally flatten all multivalue fields
+            if (is_array($value)) {
+                $value = implode(", ", $value);
             }
 
             $this->htmlBody .= sprintf($htmlLine, $label, $value);
