@@ -17,7 +17,7 @@ button_save : Économiser
 button_send : Envoyer
 button_clone: Copier le champ
 button_upload: Télécharger le fichier
-button_upload_replace: Remplacer le fichier téléchargé
+button_upload_replace: Supprimer le fichier téléchargé
 uploaded_file: Fichier enregistré
 upload_info: Le fichier sélectionné sera téléchargé et vérifié après l'enregistrement ou l'envoi du formulaire.
 upload_error: Le téléchargement est trop important!

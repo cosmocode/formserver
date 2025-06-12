@@ -17,7 +17,7 @@ button_save : Save
 button_send : Send
 button_clone: Copy field
 button_upload: Upload files
-button_upload_replace: Replace uploaded files
+button_upload_replace: Delete uploaded files
 uploaded_file: Saved file
 uploaded_original: Original filename
 upload_info: "The selected files will be uploaded and checked after saving or sending the form:"

@@ -17,7 +17,7 @@ button_save : Risparmiare
 button_send : Inviare
 button_clone: Campo di copia
 button_upload: Caricare il file
-button_upload_replace: Sostituire il file caricato
+button_upload_replace: Eliminare il file caricato
 uploaded_file: File salvato
 upload_info: Il file selezionato verrà caricato e controllato dopo il salvataggio o l'invio del modulo.
 upload_error: Il caricamento è troppo grande!

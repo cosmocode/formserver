@@ -8,6 +8,7 @@ export class UploadComponent extends BaseComponent {
     #currentFiles;
 
     html() {
+        // not using U.createField() because we need a different structure
         const field = document.createElement("div");
         field.classList.add("field", "file", "dropzone");
 
@@ -27,13 +28,13 @@ export class UploadComponent extends BaseComponent {
             control.appendChild(U.modalHint(this.config));
             control.appendChild(U.modal(this.config));
         }
-
         field.appendChild(control);
 
-        const fileLabel = document.createElement('label');
-        fileLabel.classList.add('file-label');
+        // input container must be a label to trigger upload
+        const fileInputContainer = document.createElement("label");
+        fileInputContainer.classList.add("buttons", "file-label");
 
-        control.appendChild(fileLabel);
+        control.appendChild(fileInputContainer);
 
         // actual file input and Bulma call-to-action (cta) element
         const input = document.createElement("input");
@@ -48,11 +49,11 @@ export class UploadComponent extends BaseComponent {
             input.dataset['max'] = this.config.validation.filesize;
         }
 
-        fileLabel.appendChild(input);
+        fileInputContainer.appendChild(input);
 
         const cta = document.createElement("span");
         cta.classList.add("file-cta");
-        fileLabel.appendChild(cta);
+        fileInputContainer.appendChild(cta);
 
         const labelSpan = document.createElement("span");
         labelSpan.classList.add("file-label");
@@ -64,14 +65,39 @@ export class UploadComponent extends BaseComponent {
         infoContainer.classList.add("notification", "hidden", "is-warning");
         control.appendChild(infoContainer);
 
-        // upload status from state
-        this.#showStatus(infoContainer);
-
         const errorContainer = document.createElement("div");
         errorContainer.classList.add("notification", "hidden", "is-danger");
         control.appendChild(errorContainer);
 
-        // drag & drop handling
+        // create upload status info from state
+        this.#showStatus(infoContainer);
+
+        // button to delete existing uploads
+        const deleteButton = document.createElement("button");
+        deleteButton.type = "button";
+        deleteButton.classList.add("button");
+        deleteButton.innerText = U.getLang("button_upload_replace");
+
+        deleteButton.addEventListener("click", e => {
+            this.myState.value = null;
+            input.value = null;
+            this.render();
+        });
+
+        infoContainer.appendChild(deleteButton);
+
+        this.attachDragAndDropHandlers(field, input);
+
+        return field;
+    }
+
+    /**
+     * Add drag & drop handlers
+     *
+     * @param {HTMLElement} field
+     * @param {HTMLElement} input
+     */
+    attachDragAndDropHandlers(field, input) {
         field.addEventListener("drop", e => {
             e.preventDefault();
             e.stopPropagation();
@@ -94,8 +120,6 @@ export class UploadComponent extends BaseComponent {
             e.stopPropagation();
             e.target.classList.remove("highlight");
         });
-
-        return field;
     }
 
     /** @override */
@@ -134,12 +158,20 @@ export class UploadComponent extends BaseComponent {
         if (!this.myState.value) {
             return;
         }
-        const uploads = document.createElement("ul");
-        infoNotification.appendChild(uploads);
+
+        const oldUploads = infoNotification.querySelector("ul");
+        const newUploads = document.createElement("ul");
+
         for (const fileInfo of this.myState.value) {
-            uploads.insertAdjacentHTML(
+            newUploads.insertAdjacentHTML(
                 "beforeend",
                 `<li><a href="${fileInfo.content}" download="${fileInfo.file}">${fileInfo.file}</a></li>`)
+        }
+
+        if (oldUploads !== null) {
+            infoNotification.replaceChild(newUploads, oldUploads);
+        } else {
+            infoNotification.appendChild(newUploads);
         }
         infoNotification.classList.remove("hidden");
     }
