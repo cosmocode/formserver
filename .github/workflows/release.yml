@@ -14,6 +14,11 @@ jobs:
       - uses: actions/checkout@master
       - name: Composer
         uses: php-actions/composer@v6
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 23
+      - run: npm ci
+      - run: npm run build
       - name: build
         run: |
           ./build.sh
