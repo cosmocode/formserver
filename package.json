@@ -1,10 +1,12 @@
 {
   "devDependencies": {
+    "cypress": "^14.5.4",
     "esbuild": "^0.25.0"
   },
   "scripts": {
     "build": "esbuild js_src/main.js --bundle --sourcemap --minify --outfile=public/js/bundle.js",
-    "watch": "esbuild js_src/main.js --bundle --sourcemap --outfile=public/js/bundle.js --watch"
+    "watch": "esbuild js_src/main.js --bundle --sourcemap --outfile=public/js/bundle.js --watch",
+    "cy:open": "cypress open"
   },
   "dependencies": {
     "dot-prop": "^9.0.0",
