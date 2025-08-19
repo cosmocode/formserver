@@ -48,6 +48,16 @@ label.radio {
 table {
     &.table {
         background-color: unset;
+        --bulma-table-cell-border-color: #000;
+
+        & tr th:first-child {
+            min-width: 15rem;
+        }
+
+        & .column {
+            padding: unset;
+        }
+
     }
 
     & label,
@@ -131,22 +141,6 @@ fieldset[disabled] .input,
 fieldset[disabled] .select select,
 fieldset[disabled] .textarea {
     background-color: var(--bulma-input-disabled-placeholder-color);
-}
-
-/**
- * Tables
- */
-
-.table {
-    --bulma-table-cell-border-color: #000;
-
-    & tr th:first-child {
-        min-width: 15rem;
-    }
-
-    & .column {
-        padding: unset;
-    }
 }
 
 /** Signature Pad  */
@@ -237,8 +231,12 @@ div.modal-content {
 }
 
 /**
- * Tabs
+ * Tabs / Pages
  */
+pages-component {
+    /* ensures consistent width and enables scrollable tables */
+    width: 100%;
+}
 
 /* hide legends of first-level fieldsets so they don't duplicate tabs */
 div.tabs-container fieldset:not(fieldset fieldset) legend {
