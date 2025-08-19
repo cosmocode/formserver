@@ -35,8 +35,9 @@ export class DropdownComponent extends BaseComponent {
 
         const availableChoices = this.#getAvailableChoices();
 
-        for (const optionLabel of availableChoices) {
+        for (let optionLabel of availableChoices) {
             const option = document.createElement('option');
+            optionLabel = String(optionLabel);
             option.value = optionLabel;
             option.innerText = optionLabel;
             option.selected = select.multiple ? (this.myState.value && this.myState.value.has(optionLabel)) : (this.myState.value && this.myState.value === optionLabel);
