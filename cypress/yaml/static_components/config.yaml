@@ -1,0 +1,20 @@
+form:
+  markdown0:
+    type: markdown
+    markdown: '## __Styled Headline__ { .has-text-centered .subtitle .is-3 }'
+  image0:
+    type: image
+    label: Image
+    src: logo.png
+  hr:
+    type: hr
+    column: is-full
+    color: '#f5f5f5'
+    height: 2
+  download:
+    type: download
+    label: 'Download logo.png from data dir'
+    href: logo.png
+  hidden:
+    type: hidden
+    value: 'I am not visible'

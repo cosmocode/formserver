@@ -1,0 +1,296 @@
+meta:
+  title: 'Form example'
+  css: custom.css
+  logo: logo.png
+  email:
+    subject: 'Email subject'
+    recipients:
+      - recipient1@example.com
+      - recipient2@example.com
+    cc:
+      - fieldset0.fieldset_dynamic.email1
+  export: i_will_be_moved.txt
+  saveButton: true
+  tooltip_style: 'border: 1px solid cyan'
+  language: de
+form:
+  fieldset0:
+    type: fieldset
+    column: is-full
+    children:
+      radioset1:
+        type: radioset
+        label: 'Toggle different fieldsets (hidden fieldsets lose all their values when the form is submitted/saved!)'
+        column: is-half
+        alignment: vertical
+        validation:
+          required: false
+        choices:
+          - 'Static elements'
+          - 'Dynamic elements'
+          - 'Fieldset columns'
+          - 'Tables'
+          - 'Cloning'
+          - 'Tabs'
+      hr0:
+        type: hr
+        column: is-full
+        color: '#f5f5f5'
+        height: 2
+      fieldset_static:
+        type: fieldset
+        label: 'Static form elements'
+        column: is-half
+        visible: fieldset0.radioset1 == 'Static elements'
+        children:
+          markdown0:
+            type: markdown
+            label: markdown
+            markdown: 'Hello _Markdown_!'
+          image0:
+            type: image
+            label: Image
+            src: logo.png
+          download0:
+            type: download
+            label: 'Download logo.png from data dir'
+            href: logo.png
+          hidden:
+            type: hidden
+            value: 'I am not visable'
+      fieldset_dynamic:
+        type: fieldset
+        label: 'Dynamic elements'
+        column: is-half
+        visible: fieldset0.radioset1 == 'Dynamic elements'
+        children:
+          textinput1:
+            type: textinput
+            label: 'Textinput'
+            validation:
+              match: /[a-zA-Z0-9]/
+              required: false
+            tooltip: 'Optional input\nAllowed characters: a-Z, 0-9'
+          numberinput1:
+            type: numberinput
+            label: Numberinput
+          textarea1:
+            type: textarea
+            label: 'Textarea'
+            rows: 8
+          date1:
+            type: date
+            label: 'Date'
+          time1:
+            type: time
+            label: 'Time'
+          datetime1:
+            type: datetime
+            label: 'Datetime'
+          email1:
+            type: email
+            label: 'Email (cc)'
+          radioset1:
+            type: radioset
+            alignment: vertical
+            label: 'Radioset'
+            choices:
+              - 'Choice #1'
+              - 'Choice #2'
+              - 'Choice #3'
+            modal: |
+              ###This is a modal. {.title .is-1}
+              
+              With paragraphs.
+              
+              ![](logo.png)
+              
+              And images.
+              
+              Any markdown goes.
+            tooltip: 'Optional input\nAllowed characters: a-Z, 0-9'
+          dropdown1:
+            type: dropdown
+            label: 'Dropdown'
+            empty_label: 'Please choose'
+            default: 'Default choice'
+            choices:
+              - 'Choice #1'
+              - 'Choice #2'
+              - 'Default choice'
+              - 'Choice #3'
+          dropdownMulti:
+            type: dropdown
+            multiselect: true
+            label: 'Multi Dropdown'
+            default: 'Default choice in multi'
+            choices:
+              - 'Choice #1 in multi'
+              - 'Choice #2 in multi'
+              - 'Default choice in multi'
+              - 'Choice #3 in multi'
+          checklist1:
+            type: checklist
+            alignment: vertical
+            label: 'Checklist'
+            choices:
+              - 'Choice #1'
+              - 'Choice #2 [a nice link](https://www.cosmocode.de)'
+              - 'Choice #3'
+          upload1:
+            type: upload
+            label: 'Upload'
+            tooltip: "Select or drag a file to upload"
+            validation:
+              filesize: 2MB
+              fileext: jpg, pdf, txt
+          signature:
+            type: signature
+            label: signature
+            height: 400
+            width: 600
+  fieldset_columns:
+    type: fieldset
+    column: is-full
+    label: 'Fieldset forcing 100% width for its children'
+    visible: fieldset0.radioset1 == 'Fieldset columns'
+    children:
+      fieldset5:
+        type: fieldset
+        column: is-half
+        children:
+          fieldset5a:
+            type: fieldset
+            label: 'Fieldset 2/6 width'
+            column: is-two-thirds
+            children:
+              textarea3:
+                type: textarea
+                validation:
+                  required: false
+          fieldset5b:
+            type: fieldset
+            label: 'Fieldset 1/6 width'
+            column: is-one-third
+            children:
+              textarea4:
+                type: textarea
+                validation:
+                  required: false
+      fieldset6:
+        type: fieldset
+        column: is-half
+        children:
+          fieldset6a:
+            type: fieldset
+            label: 'Fieldset 1/4 width'
+            column: is-half
+            children:
+              textarea4:
+                type: textarea
+                validation:
+                  required: false
+          fieldset6b:
+            type: fieldset
+            label: 'Fieldset 1/4 width'
+            column: is-half
+            children:
+              textarea4:
+                type: textarea
+                validation:
+                  required: false
+  fieldset_tables:
+    type: fieldset
+    label: Tables
+    visible: fieldset0.radioset1 == 'Tables'
+    children:
+      person:
+        type: table
+        label: Personal data
+        repeat: 3
+        children:
+          first_name:
+            type: textinput
+            label: First name
+            placeholder: First name
+          last_name:
+            type: textinput
+            label: Last name
+            placeholder: Last name
+          age:
+            type: numberinput
+            label: Age
+            validation:
+              required: false
+              min: 18
+              max: 99
+      scrollable:
+        type: table
+        label: Scrollable table
+        scrollable: true
+        repeat: 16
+        children:
+          address:
+            type: textinput
+            label: Address
+          code:
+            type: textinput
+            label: Code
+  fieldset_clone:
+    type: fieldset
+    label: Clone container
+    visible: fieldset0.radioset1 == 'Cloning'
+    children:
+      persons:
+        type: clone
+        label: Cloneable Person
+        children:
+          first_name:
+            type: textinput
+            label: First name
+            placeholder: First name
+          last_name:
+            type: textinput
+            label: Last name
+            placeholder: Last name
+          emails:
+            type: clone
+            label: Email addresses
+            children:
+              email:
+                type: email
+                label: Email
+                validation:
+                  required: false
+  fieldset_tabs:
+    type: pages
+    label: Tabs
+    visible: fieldset0.radioset1 == 'Tabs'
+    children:
+      personal:
+        type: fieldset
+        label: Personal data
+        children:
+          first_name:
+            type: textinput
+            label: First name
+          last_name:
+            type: textinput
+            label: Last name
+          age:
+            type: numberinput
+            label: Age
+            validation:
+              required: false
+              min: 18
+              max: 99
+      additional:
+        type: fieldset
+        label: Additional data
+        children:
+          first_name:
+            type: textinput
+            label: Info 1
+          last_name:
+            type: textinput
+            label: Info x2
