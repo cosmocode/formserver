@@ -11,6 +11,7 @@ use CosmoCode\Formserver\FormGenerator\FormRenderer;
 use CosmoCode\Formserver\Service\FileExporter;
 use CosmoCode\Formserver\Service\LangManager;
 use CosmoCode\Formserver\Service\Mailer;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Slim\Exception\HttpBadRequestException;
 
@@ -33,14 +34,12 @@ class FormAction extends AbstractAction
 
     /**
      * Constructor to inject dependencies
-     *
-     * @param Mailer $mailer
-     * @param FileExporter $fileExporter
      */
-    public function __construct(Mailer $mailer, FileExporter $fileExporter)
+    public function __construct(ContainerInterface $container)
     {
-        $this->mailer = $mailer;
-        $this->fileExporter = $fileExporter;
+        parent::__construct($container);
+        $this->mailer = $container->get(Mailer::class);
+        $this->fileExporter = $container->get(FileExporter::class);
     }
 
     /**
@@ -53,7 +52,7 @@ class FormAction extends AbstractAction
         $code = 200;
         try {
             $id = $this->resolveArg('id');
-            $form = new Form($id);
+            $form = new Form($id, $this->getDataDirectory());
 
             $formRenderer = new FormRenderer($form);
 

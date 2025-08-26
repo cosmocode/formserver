@@ -13,8 +13,6 @@ use CosmoCode\Formserver\Helper\FileHelper;
  */
 class FileExporter
 {
-    public const ROOT_DIR = __DIR__ . '/../../';
-
     /**
      * @var string
      */
@@ -35,7 +33,7 @@ class FileExporter
         }
 
         $this->exportDir = FileHelper::sanitizeDirectoryPath(
-            self::ROOT_DIR . $exportConfiguration['dir'] ?? ''
+            ROOT_DIR . $exportConfiguration['dir'] ?? ''
         );
     }
 

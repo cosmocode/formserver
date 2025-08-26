@@ -1,3 +1,6 @@
+# environment
+.env
+
 # IDE
 .idea
 *.iml

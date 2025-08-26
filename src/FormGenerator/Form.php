@@ -15,7 +15,6 @@ use CosmoCode\Formserver\Service\LangManager;
  */
 class Form
 {
-    public const DATA_DIR = __DIR__ . '/../../data/';
     public const MODE_SAVE = 'save';
     public const MODE_SEND = 'send';
 
@@ -34,13 +33,17 @@ class Form
 
     protected bool $persistent;
 
+    protected string $dataDir;
+
     /**
      * Build a form from YAML
      *
+     * @param string $dataDir
      * @param string $formId
      */
-    public function __construct(string $formId)
+    public function __construct(string $formId, string $dataDir)
     {
+        $this->dataDir = $dataDir;
         $this->id = $formId;
         $config = YamlHelper::parseYaml($this->getFormDirectory() . 'config.yaml');
         $this->elementsConfig = $config['form'];
@@ -80,7 +83,7 @@ class Form
      */
     public function getFormDirectory(): string
     {
-        return self::DATA_DIR . $this->id . '/';
+        return $this->dataDir . $this->id . '/';
     }
 
     /**
