@@ -29,7 +29,8 @@
   "config": {
     "platform": {
       "php": "8.2"
-    }
+    },
+    "process-timeout": 0
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "^3.10",
