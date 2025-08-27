@@ -1,0 +1,10 @@
+form:
+  txt_allattributes:
+    type: textinput
+    label: text label
+    tooltip: 'A useful hint for this field.'
+    column: is-half
+    placeholder: placeholder value for input
+    readonly: true
+    validation:
+      required: false

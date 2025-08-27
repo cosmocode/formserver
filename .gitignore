@@ -31,3 +31,4 @@ data/*
 
 # export directory
 /export
+.aider*
