@@ -1,0 +1,10 @@
+form:
+  email_allattributes:
+    type: email
+    label: email label
+    tooltip: 'A useful hint for this email field.'
+    column: is-half
+    placeholder: placeholder value for input
+    readonly: true
+    validation:
+      required: false

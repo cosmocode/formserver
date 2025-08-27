@@ -1,0 +1,10 @@
+form:
+  datetime_allattributes:
+    type: datetime
+    label: datetime label
+    tooltip: 'A useful hint for this datetime field.'
+    column: is-two-thirds
+    placeholder: placeholder value for input
+    readonly: true
+    validation:
+      required: false

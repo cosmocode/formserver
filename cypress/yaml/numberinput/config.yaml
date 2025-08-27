@@ -1,0 +1,10 @@
+form:
+  num_allattributes:
+    type: numberinput
+    label: number label
+    tooltip: 'A useful hint for this number field.'
+    column: is-half
+    placeholder: enter a number
+    readonly: true
+    validation:
+      required: false

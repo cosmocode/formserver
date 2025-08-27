@@ -1,0 +1,14 @@
+form:
+  checklist_allattributes:
+    type: checklist
+    label: checklist label
+    tooltip: 'A useful hint for this checklist field.'
+    column: is-half
+    alignment: vertical
+    default: 'First choice'
+    validation:
+      required: false
+    choices:
+      - First choice
+      - Second choice
+      - Third choice
