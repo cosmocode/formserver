@@ -1,9 +1,12 @@
 # environment
 .env
 
-# IDE
+# tools
 .idea
 *.iml
+.aider*
+cypress/downloads
+cypress/screenshots
 
 # dependencies
 vendor
