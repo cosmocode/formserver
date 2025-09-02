@@ -92,14 +92,14 @@ export class U {
      * @returns {HTMLElement}
      */
     static modalHint(config) {
+        const hint = document.createElement("span");
+
         if (!config.modal) {
-            return null;
+            return hint;
         }
 
-        const hint = document.createElement("span");
         hint.innerText = "?";
         hint.classList.add("modal-hint");
-        hint.dataset["modal"] = config.modal;
 
         hint.addEventListener('click', (e) => {
             const modal = e.target.nextElementSibling;
@@ -108,7 +108,7 @@ export class U {
         });
 
         return hint;
-}
+    }
 
     /**
      * Creates modal element with event handlers
@@ -117,11 +117,12 @@ export class U {
      * @returns {null|HTMLDivElement}
      */
     static modal(config) {
+        const modal = document.createElement("div");
+
         if (!config.modal) {
-            return null;
+            return modal;
         }
 
-        const modal = document.createElement("div");
         modal.classList.add("modal");
 
         const backdrop = document.createElement("div");
@@ -206,7 +207,10 @@ export class U {
 
             const rowWrapper = document.createElement('tr');
             const labelTh = document.createElement('th');
-            labelTh.innerText = fieldConfig.label + this.requiredMark(fieldConfig);
+            labelTh.insertAdjacentText("afterbegin", fieldConfig.label + this.requiredMark(fieldConfig));
+            labelTh.insertAdjacentHTML("beforeend", U.tooltipHint(fieldConfig));
+            labelTh.appendChild(U.modalHint(fieldConfig));
+            labelTh.appendChild(U.modal(fieldConfig));
             rowWrapper.appendChild(labelTh);
 
             for (let i = 0; i < repeat; i++) {

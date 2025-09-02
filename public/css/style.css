@@ -60,9 +60,12 @@ table {
 
     }
 
+    /* hide labels, tooltips and modals in cells, as they are visible once per row in <th> */
     & label,
-    & .label {
-        display: none; /* hide labels */
+    & .label,
+    & td span.tooltip-hint,
+    & td span.modal-hint {
+        display: none;
     }
 }
 
