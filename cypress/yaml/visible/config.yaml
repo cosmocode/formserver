@@ -1,0 +1,93 @@
+meta:
+  title: 'Conditional Visibility'
+form:
+  fset1:
+    type: fieldset
+    label: "Text fields"
+    children:
+      text1:
+        type: textinput
+        label: "First (type show)"
+      text2:
+        type: textinput
+        label: "Second (type show or unhide)"
+      text3:
+        type: textinput
+        label: "Third"
+        placeholder: "My visibility depends on First and Second fields"
+        visible: (fset1.text1 == 'show') and (fset1.text2 in ['show', 'unhide'])
+  fset2:
+    type: fieldset
+    label: "Dropdown fields"
+    children:
+      drop1:
+        type: dropdown
+        label: "Fourth (choose show)"
+        choices:
+          - hide
+          - show
+          - unhide
+      drop2:
+        type: dropdown
+        label: "Fifth (choose show or unhide)"
+        choices:
+          - hide
+          - show
+          - unhide
+      text4:
+        type: textinput
+        label: "Sixth"
+        placeholder: "My visibility depends on Fourth and Fifth fields"
+        visible: (fset2.drop1 == 'show') and (fset2.drop2 in ['show', 'unhide'])
+  fset3:
+    type: fieldset
+    label: "Math"
+    children:
+      num1:
+        type: numberinput
+        label: "First number"
+      num2:
+        type: numberinput
+        label: "Second number"
+      num3:
+        type: numberinput
+        label: "Secret number - sum greater than 10"
+        visible: fset3.num1 + fset3.num2 > 10
+        placeholder: 99
+  fset4:
+    type: fieldset
+    label: "Table with cell visibility conditions"
+    children:
+      drop:
+        type: dropdown
+        label: Conditional table cells/rows
+        choices:
+          - only one row
+          - extra row
+      table:
+        type: table
+        label: math
+        repeat: 2
+        children:
+          text:
+            type: textinput
+            label: "First"
+          conditional:
+            type: textinput
+            label: "Secret row"
+            visible: fset4.drop == 'extra row'
+  fset5:
+    type: fieldset
+    label: Checkbox trigger
+    children:
+      check:
+        type: checklist
+        label: Show conditional field
+        choices:
+          - show
+          - something else
+      text:
+        type: textinput
+        label: "Conditional"
+        placeholder: "My visibility depends on the checkbox"
+        visible: fset5.check in ['show']
