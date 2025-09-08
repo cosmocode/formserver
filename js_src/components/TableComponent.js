@@ -2,6 +2,15 @@ import {BaseComponent} from './BaseComponent.js';
 import {U} from '../U.js';
 
 export class TableComponent extends BaseComponent {
+
+    /** @type {[expression.Expression]|Array} Parsed expressions for conditional children */
+    childrenExpressions = [];
+
+    initialize(state, fieldConfig) {
+        super.initialize(state, fieldConfig);
+        this.childrenExpressions = this.getChildrenExpressions();
+    }
+
     html() {
         const tableElement = document.createElement('table');
         // like fieldsets, tables need a name for building full dotted paths
@@ -57,6 +66,26 @@ export class TableComponent extends BaseComponent {
         wrapper.appendChild(html);
 
         return wrapper;
+    }
+
+    /**
+     * Evaluate all dependencies, including those of children components
+     *
+     * @param {StateValueChangeDetail} detail
+     * @returns {boolean}
+     */
+    shouldUpdate(detail) {
+        return super.shouldUpdate(detail) || U.shouldUpdateFromExpressions(this.childrenExpressions, detail);
+    }
+
+    /**
+     * Collects conditional expressions attached to children,
+     * which will be evaluated in shouldUpdate()
+     *
+     * @returns {*[]}
+     */
+    getChildrenExpressions() {
+        return U.getSubitemsExpressions(this.config, "children");
     }
 
     executeValidators() {
