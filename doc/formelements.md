@@ -9,7 +9,7 @@ Form elements can be grouped visually and/or logically in [fieldsets](#fieldset)
 The element definition must contain at least the type of the form element.  
 
 Options:  
-* `label` _(optional)_ - the label of the form element (excluded: [hidden](#hidden), [markdown](#markdown))
+* `label` _(optional for most elements)_ - the label of the form element (excluded: [hidden](#hidden), [markdown](#markdown))
 * `labelsmall` _(optional)_ - if set to true, the label will be rendered in regular font instead of default bold
 * `tooltip` _(optional)_ - Shows a hint for the element. Ignored in structure elements like HR. Also see [Tooltip styling](meta.md#Tooltips)
 * `modal` _(optional)_ - Content of a simple Bulma modal in markdown syntax. Refer to the bundled EXAMPLE configuration. Images are interpreted as files located directly in your form directory. The option is ignored in structure elements like HR.  
@@ -30,7 +30,7 @@ Fieldsets group other form elements (including nested fieldsets).
 Options:
 * `children` _(required)_ - containing child form elements
 * `background` _(optional)_ the background color may be one of [https://bulma.io/documentation/helpers/color-helpers/#background-color](Bulma's colors) (without the prefix `has-background-`) or a valid CSS definition.
-* `visible` _(optional)_ - the fieldset is disabled and hidden until the visible condition is met
+* `visible` _(optional)_ - the fieldset is disabled and hidden until the [visible condition](conditional.md) is met
 
 ```yaml
 <id>:
