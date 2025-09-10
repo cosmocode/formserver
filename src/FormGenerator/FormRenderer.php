@@ -64,7 +64,7 @@ class FormRenderer
         // Global variables available in all templates and macros
         $this->twig->addGlobal('configJSON', $this->form->getJSON());
 
-        $this->twig->addGlobal('form_id', $this->form->getId());
+        $this->twig->addGlobal('formId', $this->form->getId());
         $this->twig->addGlobal('button_save_label', LangManager::getString('button_save'));
         $this->twig->addGlobal('button_send_label', LangManager::getString('button_send'));
         $this->twig->addGlobal('button_clone_label', LangManager::getString('button_clone'));
@@ -83,7 +83,7 @@ class FormRenderer
             [
                 'title' => $this->form->getMeta('title'),
                 'css' => $this->form->getMeta('css'),
-                'form_id' => $this->form->getId(),
+                'formId' => $this->form->getId(),
                 'logo' => $this->form->getMeta('logo'),
                 'save_button_visible' => $this->form->getMeta('saveButton') ?? true,
                 'send_button_visible' => ($this->form->getMeta('email') || $this->form->getMeta('export')) ?? false,

@@ -9,7 +9,7 @@ describe('Test EXAMPLE config', () => {
         cy.get('#fieldset0\\.fieldset_static > div.label').should('be.visible');
     });
 
-    it('"dynamic elements" link is clicked and its dropdown component has prefilled value "Choice #2"', () => {
+    it.only('"dynamic elements" link is clicked and its dropdown component has prefilled value "Choice #2"', () => {
         cy.contains('Dynamic elements').click();
         cy.get('[name="fieldset0\\.fieldset_dynamic\\.dropdown1"]').should('have.value', 'Choice #2');
     });

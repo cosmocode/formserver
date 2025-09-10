@@ -1,4 +1,5 @@
 import {deleteProperty, getProperty, setProperty} from "dot-prop";
+import {U} from './U.js';
 
 /**
  * @typedef {Object} StateValueChangeDetail The event detail for a stateValueChangeEvent event
@@ -23,7 +24,12 @@ export class State {
     /** @type {boolean} Relevant when populating default values */
     hasInitialValues;
 
-    constructor(initialValues = {}) {
+    /** @type {string} */
+    formName;
+
+    constructor(formName, initialValues = {}) {
+        this.formName = formName;
+
         this.hasInitialValues = !!Object.keys(initialValues).length;
         this.values = this.#createProxy(initialValues, State.STATE_VALUE_CHANGE_EVENT);
         this.oldValues = this.#createProxy();
@@ -58,6 +64,11 @@ export class State {
                             /** @type {StateValueChangeDetail} */
                             detail: {name, value}
                         });
+                        State.writeStateToOPFS(this.formName, this)
+                            .then(() => {
+                                console.log('state updated in OPFS for ' + this.formName);
+                            });
+
                         document.dispatchEvent(event);
                     }
 
@@ -73,5 +84,40 @@ export class State {
                 }
             }
         );
+    }
+
+    static async writeStateToOPFS(formName, state) {
+        const fileHandle = await this.getOPFSFileHandle(formName);
+        // get a writable stream
+        const writable = await fileHandle.createWritable();
+        // write JSON representation of the state to the stream
+        await writable.write(JSON.stringify(U.convertSetsToArray(state)));
+        // closing the stream persists contents
+        await writable.close();
+    }
+
+    static async clearOPFS(formName) {
+        const fileHandle = await this.getOPFSFileHandle(formName);
+        fileHandle.remove().then(() => {
+            console.log("removed state from OPFS");
+        });
+    }
+
+    static async getValuesFromOPFS(formName) {
+        let storedValues = {};
+        try {
+            const fileHandle = await this.getOPFSFileHandle(formName);
+            const file = await fileHandle.getFile();
+            const contents = JSON.parse(await file.text());
+            return contents.values;
+        } catch (e) {
+            return storedValues;
+        }
+    }
+
+    static async getOPFSFileHandle(formName) {
+        const opfsRoot = await navigator.storage.getDirectory();
+        return await opfsRoot
+            .getFileHandle(`${formName}.json`, {create: true});
     }
 }

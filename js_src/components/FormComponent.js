@@ -23,10 +23,9 @@ import {State} from "../State";
  *   - child elements like clone or table, need the initial data to know how many copies to render
  */
 
-
-
 export class FormComponent extends HTMLElement {
 
+    #name;
     #form;
     #state;
     #formConfig;
@@ -37,10 +36,19 @@ export class FormComponent extends HTMLElement {
         this.#form = document.createElement('form');
         this.appendChild(this.#form);
         this.#formConfig = U.loadFormConfig();
-        this.#state = new State(U.loadFormValues()); // loads "values" part of JSON config
     }
 
-    connectedCallback() {
+    async connectedCallback() {
+        this.#name = this.getAttribute("formId");
+
+        // stored values have precedence over initial values from backend
+        let initialValues = await State.getValuesFromOPFS(this.#name);
+
+        if (!Object.keys(initialValues).length) {
+            initialValues = U.loadFormValues(); // loads "values" part of JSON config
+        }
+
+        this.#state = new State(this.#name, initialValues);
         this.render();
     }
 
@@ -130,7 +138,12 @@ export class FormComponent extends HTMLElement {
                 return response.json();
             })
             .then((data) => {
-                this.#displayFormStatusNotification(!isValid ? "form_invalid" : (event.submitter.name === "send" ? "send_success" : "form_valid"));
+                // FIXME this is not real status from response!
+                const status = !isValid ? "form_invalid" : (event.submitter.name === "send" ? "send_success" : "form_valid");
+                this.#displayFormStatusNotification(status);
+                if (status === "send_success") {
+                    this.#state.clearOPFS(this.#name);
+                }
             })
             .catch((error) => {
                 this.#displayFormStatusNotification("send_failed");
