@@ -41,15 +41,8 @@ export class FormComponent extends HTMLElement {
     async connectedCallback() {
         this.#name = this.getAttribute("formId");
 
-        // stored values have precedence over initial values from backend
-        let initialValues = await State.getValuesFromOPFS(this.#name);
-
-        if (!Object.keys(initialValues).length) {
-            initialValues = U.loadFormValues(); // loads "values" part of JSON config
-        }
-
-        this.#state = new State(this.#name, initialValues);
-        this.render();
+        const initialValues = U.loadFormValues(); // loads "values" part of JSON config
+        this.#state = new State(this.#name, initialValues, this.render.bind(this));
     }
 
     render() {
@@ -142,7 +135,7 @@ export class FormComponent extends HTMLElement {
                 const status = !isValid ? "form_invalid" : (event.submitter.name === "send" ? "send_success" : "form_valid");
                 this.#displayFormStatusNotification(status);
                 if (status === "send_success") {
-                    this.#state.clearOPFS(this.#name);
+                    this.#state.clearOPFS();
                 }
             })
             .catch((error) => {

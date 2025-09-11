@@ -15,10 +15,10 @@ export class State {
 
     static STATE_VALUE_CHANGE_EVENT = 'stateValueChangeEvent';
 
-    /** @type {Proxy<object>} The current state values */
+    /** @type {Object} The current state values */
     values;
 
-    /** @type {Proxy<object>} Values previously set, before a component was removed */
+    /** @type {Object} Values previously set, before a component was removed */
     oldValues;
 
     /** @type {boolean} Relevant when populating default values */
@@ -27,12 +27,48 @@ export class State {
     /** @type {string} */
     formName;
 
-    constructor(formName, initialValues = {}) {
-        this.formName = formName;
+    /** @type {function|null} */
+    #onStateInitializedCallback = null;
 
-        this.hasInitialValues = !!Object.keys(initialValues).length;
-        this.values = this.#createProxy(initialValues, State.STATE_VALUE_CHANGE_EVENT);
+    /**
+     * Creates a new State instance
+     *
+     * @param {string} formName Unique name for the form (used for OPFS storage)
+     * @param {object} initialValues Initial values to populate the state with (if no OPFS values exist)
+     * @param {function} onStateInitialized Callback when state is initialized
+     */
+    constructor(formName, initialValues = {}, onStateInitialized = null) {
+        this.formName = formName;
+        this.#onStateInitializedCallback = onStateInitialized;
+        // noinspection JSIgnoredPromiseFromCall
+        this.#initialize(initialValues);
+    }
+
+    /**
+     * Initialize the state object
+     *
+     * Prefers OPFS stored values over initialValues passed to the constructor.
+     *
+     * Calls the onStateInitialized callback when done.
+     *
+     * @param {object} initialValues
+     * @returns {Promise<void>}
+     */
+    async #initialize(initialValues = {}) {
+        // load stored values from OPFS
+        let valuesToUse = await this.getValuesFromOPFS();
+
+        if((!Object.keys(valuesToUse).length)) {
+            valuesToUse = initialValues;
+        }
+
+        this.hasInitialValues = !!Object.keys(valuesToUse).length;
+        this.values = this.#createProxy(valuesToUse, State.STATE_VALUE_CHANGE_EVENT);
         this.oldValues = this.#createProxy();
+
+        if (this.#onStateInitializedCallback) {
+            this.#onStateInitializedCallback();
+        }
     }
 
     /**
@@ -44,7 +80,7 @@ export class State {
      *
      * @param {object} initialValues
      * @param {null|string} withEvent Emit an event with this name when a value is set
-     * @returns {Proxy<object>}
+     * @returns {Object}
      */
     #createProxy(initialValues = {}, withEvent = null) {
         return new Proxy(initialValues, {
@@ -64,10 +100,8 @@ export class State {
                             /** @type {StateValueChangeDetail} */
                             detail: {name, value}
                         });
-                        State.writeStateToOPFS(this.formName, this)
-                            .then(() => {
-                                console.log('state updated in OPFS for ' + this.formName);
-                            });
+                        // noinspection JSIgnoredPromiseFromCall
+                        this.writeStateToOPFS();
 
                         document.dispatchEvent(event);
                     }
@@ -86,27 +120,27 @@ export class State {
         );
     }
 
-    static async writeStateToOPFS(formName, state) {
-        const fileHandle = await this.getOPFSFileHandle(formName);
+    async writeStateToOPFS() {
+        const fileHandle = await this.getOPFSFileHandle();
         // get a writable stream
         const writable = await fileHandle.createWritable();
         // write JSON representation of the state to the stream
-        await writable.write(JSON.stringify(U.convertSetsToArray(state)));
+        await writable.write(JSON.stringify(U.convertSetsToArray(this)));
         // closing the stream persists contents
         await writable.close();
     }
 
-    static async clearOPFS(formName) {
-        const fileHandle = await this.getOPFSFileHandle(formName);
+    async clearOPFS() {
+        const fileHandle = await this.getOPFSFileHandle();
         fileHandle.remove().then(() => {
             console.log("removed state from OPFS");
         });
     }
 
-    static async getValuesFromOPFS(formName) {
+    async getValuesFromOPFS() {
         let storedValues = {};
         try {
-            const fileHandle = await this.getOPFSFileHandle(formName);
+            const fileHandle = await this.getOPFSFileHandle();
             const file = await fileHandle.getFile();
             const contents = JSON.parse(await file.text());
             return contents.values;
@@ -115,9 +149,9 @@ export class State {
         }
     }
 
-    static async getOPFSFileHandle(formName) {
+    async getOPFSFileHandle() {
         const opfsRoot = await navigator.storage.getDirectory();
         return await opfsRoot
-            .getFileHandle(`${formName}.json`, {create: true});
+            .getFileHandle(`${this.formName}.json`, {create: true});
     }
 }
