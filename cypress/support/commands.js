@@ -23,3 +23,18 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+// cypress/support/commands.js
+
+Cypress.Commands.add('clearOPFS', () => {
+    return cy.window().then(async (win) => {
+        try {
+            const root = await win.navigator.storage.getDirectory();
+            root.remove();
+            cy.log('OPFS cleared successfully.');
+        } catch (error) {
+            cy.log('Failed to access or clear OPFS:', error);
+            throw error;
+        }
+    });
+});
