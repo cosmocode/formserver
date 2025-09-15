@@ -17,6 +17,7 @@ import './components/NumberinputComponent.js';
 import './components/PagesComponent.js';
 import './components/RadiosetComponent.js';
 import './components/SignatureComponent.js';
+import './components/SorterComponent.js';
 import './components/TableComponent.js';
 import './components/TextareaComponent.js';
 import './components/TextinputComponent.js';

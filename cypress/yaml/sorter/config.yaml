@@ -1,0 +1,64 @@
+meta:
+  title: "Task Priority Sorter"
+form:
+  description:
+    type: markdown
+    markdown: "Drag and drop to reorder tasks by priority"
+  task_priorities:
+    type: sorter
+    label: "Task Priorities"
+    tooltip: "Drag items to reorder them by priority (highest to lowest)"
+    alignment: horizontal
+    items:
+      - value: "critical_bug_fixes"
+        label: "Critical Bug Fixes"
+      - value: "feature_development"
+        label: "Feature Development"
+      - value: "code_review"
+        label: "Code Review"
+      - value: "documentation"
+        label: "Documentation"
+      - value: "testing"
+        label: "Testing"
+      - value: "refactoring"
+        label: "Code Refactoring"
+    validation:
+      required: true
+
+  project_phases:
+    type: sorter
+    label: "Project Phases"
+    tooltip: "Order the phases as they should be executed"
+    items:
+      - value: "planning"
+        label: "Planning & Requirements"
+      - value: "design"
+        label: "Design & Architecture"
+      - value: "development"
+        label: "Development"
+      - value: "testing"
+        label: "Quality Assurance"
+      - value: "deployment"
+        label: "Deployment"
+      - value: "maintenance"
+        label: "Maintenance"
+    column: "is-half"
+
+  team_preferences:
+    type: sorter
+    label: "Team Meeting Preferences"
+    tooltip: "Rank meeting types by team preference"
+    items:
+      - value: "standup"
+        label: "Daily Standup"
+      - value: "retrospective"
+        label: "Sprint Retrospective"
+      - value: "planning"
+        label: "Sprint Planning"
+      - value: "review"
+        label: "Sprint Review"
+      - value: "one_on_one"
+        label: "One-on-One"
+    column: "is-half"
+    validation:
+      required: false
