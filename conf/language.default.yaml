@@ -10,6 +10,7 @@ form_invalid: Form was saved successfully, but it still contains errors.
 send_success: The form was sent successfully.
 send_prevented: The form could not be sent because it contains errors.
 send_failed: There was en error sending email. Please contact the administrator.
+offline: You are currently offline. Form submission is disabled. All data is saved in your browser. You will be able to submit is as soon as you are online again.
 label_signature_delete: Clear input
 label_signature_replace: Replace input
 email_text_attachments: Look into the attachments

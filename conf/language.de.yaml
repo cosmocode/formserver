@@ -10,6 +10,7 @@ form_invalid: Formular gespeichert, aber es enthält Fehler
 send_success: Das Formular wurde erfolgreich versendet
 send_prevented: Das Formular konnte nicht gesendet werden, da es fehlerhaft ist.
 send_failed: Es gab einen Fehler beim Versenden der Mail. Bitte kontaktieren Sie den Administrator.
+offline: Sie sind derzeit offline. Das Absenden des Formulars ist deaktiviert. Alle Daten werden in Ihrem Browser gespeichert. Sie können das Formular absenden, sobald Sie wieder online sind.
 label_signature_delete: Eingabe löschen
 label_signature_replace: Eingabe erneuern
 email_text_attachments: Die Anhänge ansehen

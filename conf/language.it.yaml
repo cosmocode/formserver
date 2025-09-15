@@ -10,6 +10,7 @@ form_invalid: Il modulo è stato salvato con successo, ma contiene ancora degli 
 send_success: Il modulo è stato inviato con successo.
 send_prevented: Il modulo non può essere inviato perché contiene errori.
 send_failed: Si è verificato un errore nell'invio dell'e-mail. Si prega di contattare l'amministratore.
+offline: Al momento sei offline. L'invio del modulo è disabilitato. Tutti i dati vengono salvati nel tuo browser. Potrai inviarlo non appena sarai di nuovo online.
 label_signature_delete: Ingresso libero
 label_signature_replace: Sostituire l'ingresso
 email_text_attachments: Esaminare gli allegati

@@ -10,6 +10,7 @@ form_invalid: Le formulaire a été enregistré avec succès, mais il contient e
 send_success: Le formulaire a été envoyé avec succès.
 send_prevented: Le formulaire n'a pas pu être envoyé car il contient des erreurs.
 send_failed: Une erreur s'est produite lors de l'envoi du courrier électronique. Veuillez contacter l'administrateur.
+offline: Vous êtes actuellement hors ligne. L'envoi du formulaire est désactivé. Toutes les données sont enregistrées dans votre navigateur. Vous pourrez l'envoyer dès que vous serez de nouveau en ligne.
 label_signature_delete: Entrée libre
 label_signature_replace: Remplacer l'entrée
 email_text_attachments: Examinez les pièces jointes
