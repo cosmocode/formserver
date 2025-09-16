@@ -1,11 +1,16 @@
 import {BaseComponent} from './BaseComponent.js';
 import {U} from '../U.js';
+import {ValidatorError} from "../ValidatorError";
 
 /**
  * Sorter component for drag-and-drop sorting of items
  */
 export class SorterComponent extends BaseComponent {
 
+    /**
+     * Renders the HTML for the sorter component
+     * @returns {HTMLElement} The rendered field element
+     */
     html() {
         const field = U.createField(this.config);
 
@@ -16,44 +21,37 @@ export class SorterComponent extends BaseComponent {
         sortableList.classList.add("sortable-list");
         sortableList.setAttribute("draggable", "false");
 
-        // Add flex class if alignment is horizontal
+        // add flex classes if alignment is horizontal
         if (this.config.alignment === 'horizontal') {
-            sortableList.classList.add("is-flex", "sortable-list-horizontal");
+            sortableList.classList.add("is-flex", "is-flex-wrap-wrap", "sortable-list-horizontal");
         }
 
-        // Get current sorted items from state or use default items
-        const items = this.getItemsWithState();
+        // get items from state or config
+        const items = this.getItems();
 
         items.forEach((item, index) => {
             const listItem = document.createElement("li");
             const isEnabled = item.enabled !== false;
-            
+
             listItem.classList.add("sortable-item", "box", "is-flex", "is-align-items-center", "p-3", "m-2");
             if (!isEnabled) {
                 listItem.classList.add("is-disabled");
                 listItem.style.opacity = "0.5";
             }
-            
+
             listItem.setAttribute("draggable", isEnabled ? "true" : "false");
             listItem.setAttribute("data-value", item.value || item);
-            listItem.setAttribute("data-enabled", isEnabled);
+            listItem.setAttribute("data-enabled", isEnabled.toString());
             listItem.style.cursor = isEnabled ? "grab" : "default";
-            
+
             listItem.innerHTML = `
                 <span class="drag-handle icon is-small mr-2" style="cursor: ${isEnabled ? 'grab' : 'not-allowed'};">
-                    <svg width="12" height="16" viewBox="0 0 12 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="3" cy="3" r="1.5" fill="${isEnabled ? '#999' : '#ccc'}"/>
-                        <circle cx="9" cy="3" r="1.5" fill="${isEnabled ? '#999' : '#ccc'}"/>
-                        <circle cx="3" cy="8" r="1.5" fill="${isEnabled ? '#999' : '#ccc'}"/>
-                        <circle cx="9" cy="8" r="1.5" fill="${isEnabled ? '#999' : '#ccc'}"/>
-                        <circle cx="3" cy="13" r="1.5" fill="${isEnabled ? '#999' : '#ccc'}"/>
-                        <circle cx="9" cy="13" r="1.5" fill="${isEnabled ? '#999' : '#ccc'}"/>
-                    </svg>
+                    ${this.#getDragIcon(isEnabled)}
                 </span>
                 <label class="checkbox mr-2" style="cursor: pointer;">
                     <input type="checkbox" ${isEnabled ? 'checked' : ''} data-toggle-item="${item.value || item}">
                 </label>
-                <span class="item-label has-text-weight-medium ${isEnabled ? '' : 'has-text-grey-light'}">${item.label || item}</span>
+                <span class="item-label ${isEnabled ? '' : 'has-text-grey-light'}">${item.label || item}</span>
             `;
             sortableList.appendChild(listItem);
         });
@@ -64,8 +62,84 @@ export class SorterComponent extends BaseComponent {
         return field;
     }
 
+    /**
+     * Updates the component state based on the current order and enabled state of items
+     */
+    updateStateFromSortedList() {
+        const sortableList = this.querySelector('.sortable-list');
+        if (!sortableList) return;
+
+        const items = [...sortableList.querySelectorAll('.sortable-item')];
+
+        this.myState.value = items.map(item => ({
+            value: item.getAttribute('data-value'),
+            enabled: item.getAttribute('data-enabled') === 'true'
+        }));
+    }
+
+    /**
+     * Gets the items to display, merging state and config data
+     * @returns {Array} Array of item objects with value, label, and enabled properties
+     */
+    getItems() {
+        const stateItems = this.myState.value;
+        const configItems = this.config.items || [];
+
+        // if we have state data with enabled/disabled info, use it
+        if (stateItems && Array.isArray(stateItems) && stateItems.length > 0 &&
+            typeof stateItems[0] === 'object' && 'enabled' in stateItems[0]) {
+            return stateItems.map(stateItem => {
+                const configItem = configItems.find(ci => (ci.value || ci) === stateItem.value);
+                return {
+                    value: stateItem.value,
+                    label: configItem ? (configItem.label || configItem) : stateItem.value,
+                    enabled: stateItem.enabled
+                };
+            });
+        }
+
+        // if we have simple array state (just values), merge with config
+        if (stateItems && Array.isArray(stateItems)) {
+            return stateItems.map(value => {
+                const configItem = configItems.find(ci => (ci.value || ci) === value);
+                return {
+                    value: value,
+                    label: configItem ? (configItem.label || configItem) : value,
+                    enabled: true // default to enabled
+                };
+            });
+        }
+
+        // fall back to config items, all enabled by default
+        return configItems.map(item => ({
+            value: item.value || item,
+            label: item.label || item,
+            enabled: true
+        }));
+    }
+
+    /**
+     * Generates the drag handle icon SVG
+     * @param {boolean} isEnabled Whether the item is enabled
+     * @returns {string} SVG markup for the drag icon
+     */
+    #getDragIcon(isEnabled) {
+        return `<svg width="12" height="16" viewBox="0 0 12 16" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="3" cy="3" r="1.5" fill="${isEnabled ? '#999' : '#ccc'}"/>
+            <circle cx="9" cy="3" r="1.5" fill="${isEnabled ? '#999' : '#ccc'}"/>
+            <circle cx="3" cy="8" r="1.5" fill="${isEnabled ? '#999' : '#ccc'}"/>
+            <circle cx="9" cy="8" r="1.5" fill="${isEnabled ? '#999' : '#ccc'}"/>
+            <circle cx="3" cy="13" r="1.5" fill="${isEnabled ? '#999' : '#ccc'}"/>
+            <circle cx="9" cy="13" r="1.5" fill="${isEnabled ? '#999' : '#ccc'}"/>
+        </svg>`;
+    }
+
+    // region drag and drop event handling
+
+    /**
+     * Override to handle drag and drop events and checkbox toggles
+     */
     registerStateChangeHandler() {
-        // Override to handle drag and drop events and checkbox toggles
         this.addEventListener('dragstart', this.handleDragStart.bind(this));
         this.addEventListener('dragover', this.handleDragOver.bind(this));
         this.addEventListener('drop', this.handleDrop.bind(this));
@@ -73,6 +147,10 @@ export class SorterComponent extends BaseComponent {
         this.addEventListener('change', this.handleToggleChange.bind(this));
     }
 
+    /**
+     * Handles the start of a drag operation
+     * @param {DragEvent} e The drag start event
+     */
     handleDragStart(e) {
         if (!e.target.classList.contains('sortable-item')) return;
         if (e.target.getAttribute('data-enabled') === 'false') {
@@ -88,6 +166,10 @@ export class SorterComponent extends BaseComponent {
         e.dataTransfer.setData('text/plain', e.target.getAttribute('data-value'));
     }
 
+    /**
+     * Handles drag over events to enable dropping
+     * @param {DragEvent} e The drag over event
+     */
     handleDragOver(e) {
         e.preventDefault();
         e.dataTransfer.dropEffect = 'move';
@@ -106,11 +188,19 @@ export class SorterComponent extends BaseComponent {
         }
     }
 
+    /**
+     * Handles the drop event and updates state
+     * @param {DragEvent} e The drop event
+     */
     handleDrop(e) {
         e.preventDefault();
         this.updateStateFromSortedList();
     }
 
+    /**
+     * Handles the end of a drag operation and resets visual state
+     * @param {DragEvent} e The drag end event
+     */
     handleDragEnd(e) {
         if (e.target.classList.contains('sortable-item')) {
             e.target.classList.remove('dragging');
@@ -120,6 +210,13 @@ export class SorterComponent extends BaseComponent {
         }
     }
 
+    /**
+     * Determines which element should come after the dragged element based on position
+     * @param {HTMLElement} container The container element
+     * @param {number} position The mouse position (x or y coordinate)
+     * @param {boolean} isHorizontal Whether the layout is horizontal
+     * @returns {HTMLElement|null} The element that should come after the dragged element
+     */
     getDragAfterElement(container, position, isHorizontal = false) {
         const draggableElements = [...container.querySelectorAll('.sortable-item:not(.dragging)')];
 
@@ -141,101 +238,58 @@ export class SorterComponent extends BaseComponent {
         }, { offset: Number.NEGATIVE_INFINITY }).element;
     }
 
+    /**
+     * Handles checkbox toggle events to enable/disable items
+     * @param {Event} e The change event
+     */
     handleToggleChange(e) {
         if (!e.target.matches('input[type="checkbox"][data-toggle-item]')) return;
-        
+
         const itemValue = e.target.getAttribute('data-toggle-item');
         const isEnabled = e.target.checked;
         const listItem = e.target.closest('.sortable-item');
-        
-        // Update visual state
+
+        // update visual state
         listItem.setAttribute('data-enabled', isEnabled);
         listItem.setAttribute('draggable', isEnabled);
         listItem.style.cursor = isEnabled ? "grab" : "default";
         listItem.style.opacity = isEnabled ? "1" : "0.5";
-        
+
         if (isEnabled) {
             listItem.classList.remove('is-disabled');
         } else {
             listItem.classList.add('is-disabled');
         }
-        
-        // Update drag handle and label styling
+
+        // update drag handle and label styling
         const dragHandle = listItem.querySelector('.drag-handle svg');
         const circles = dragHandle.querySelectorAll('circle');
         circles.forEach(circle => {
             circle.setAttribute('fill', isEnabled ? '#999' : '#ccc');
         });
-        
+
         const label = listItem.querySelector('.item-label');
         if (isEnabled) {
             label.classList.remove('has-text-grey-light');
         } else {
             label.classList.add('has-text-grey-light');
         }
-        
-        // Update state
+
         this.updateStateFromSortedList();
     }
 
-    updateStateFromSortedList() {
-        const sortableList = this.querySelector('.sortable-list');
-        if (!sortableList) return;
+    // endregion
 
-        const items = [...sortableList.querySelectorAll('.sortable-item')];
-        const itemsWithState = items.map(item => ({
-            value: item.getAttribute('data-value'),
-            enabled: item.getAttribute('data-enabled') === 'true'
-        }));
-
-        this.myState.value = itemsWithState;
-    }
-
-    getItemsWithState() {
-        const currentState = this.myState.value;
-        const configItems = this.config.items || [];
-        
-        // If we have state data with enabled/disabled info, use it
-        if (currentState && Array.isArray(currentState) && currentState.length > 0 && 
-            typeof currentState[0] === 'object' && 'enabled' in currentState[0]) {
-            return currentState.map(stateItem => {
-                const configItem = configItems.find(ci => (ci.value || ci) === stateItem.value);
-                return {
-                    value: stateItem.value,
-                    label: configItem ? (configItem.label || configItem) : stateItem.value,
-                    enabled: stateItem.enabled
-                };
-            });
-        }
-        
-        // If we have simple array state (just values), merge with config
-        if (currentState && Array.isArray(currentState)) {
-            return currentState.map(value => {
-                const configItem = configItems.find(ci => (ci.value || ci) === value);
-                return {
-                    value: value,
-                    label: configItem ? (configItem.label || configItem) : value,
-                    enabled: true // default to enabled
-                };
-            });
-        }
-        
-        // Fall back to config items, all enabled by default
-        return configItems.map(item => ({
-            value: item.value || item,
-            label: item.label || item,
-            enabled: true
-        }));
-    }
-
+    /**
+     * Override the base validation to handle our complex state structure
+     */
     executeValidators() {
-        // Override the base validation to handle our complex state structure
         if (!this.visible) {
             return;
         }
 
-        const hasEnabledItems = this.myState.value && 
-            Array.isArray(this.myState.value) && 
+        const hasEnabledItems = this.myState.value &&
+            Array.isArray(this.myState.value) &&
             this.myState.value.some(item => item.enabled !== false);
 
         if (
@@ -247,5 +301,4 @@ export class SorterComponent extends BaseComponent {
     }
 }
 
-// Register the custom element
 customElements.define('sorter-component', SorterComponent);
