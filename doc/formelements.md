@@ -447,3 +447,24 @@ Options:
     validation:
       required: true
 ```
+
+### Sorter
+
+This element allows users to reorder items using drag-and-drop. Items can be arranged horizontally or vertically. It is possible to disable items using checkboxes, without removing them for the list.
+
+Options:
+* `items` _(required)_ - defines the available items
+* `alignment` _(optional)_ - sets the layout orientation, possible values are `vertical` (default) or `horizontal`
+
+```yaml
+  <id>:
+    type: sorter
+    label: sorter label
+    alignment: horizontal
+    validation:
+      required: true
+    items:
+      - First item
+      - Second item
+      - Third item
+```

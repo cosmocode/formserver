@@ -1,5 +1,10 @@
 meta:
   title: "Task Priority Sorter"
+  email:
+    subject: 'Email subject'
+    recipients:
+      - recipient1@example.com
+      - recipient2@example.com
 form:
   description:
     type: markdown
@@ -10,18 +15,12 @@ form:
     tooltip: "Drag items to reorder them by priority (highest to lowest)"
     alignment: horizontal
     items:
-      - value: "critical_bug_fixes"
-        label: "Critical Bug Fixes"
-      - value: "feature_development"
-        label: "Feature Development"
-      - value: "code_review"
-        label: "Code Review"
-      - value: "documentation"
-        label: "Documentation"
-      - value: "testing"
-        label: "Testing"
-      - value: "refactoring"
-        label: "Code Refactoring"
+      - "Critical Bug Fixes"
+      - "Feature Development"
+      - "Code Review"
+      - "Documentation"
+      - "Testing"
+      - "Code Refactoring"
     validation:
       required: true
 
@@ -30,18 +29,12 @@ form:
     label: "Project Phases"
     tooltip: "Order the phases as they should be executed"
     items:
-      - value: "planning"
-        label: "Planning & Requirements"
-      - value: "design"
-        label: "Design & Architecture"
-      - value: "development"
-        label: "Development"
-      - value: "testing"
-        label: "Quality Assurance"
-      - value: "deployment"
-        label: "Deployment"
-      - value: "maintenance"
-        label: "Maintenance"
+      - "Planning & Requirements"
+      - "Design & Architecture"
+      - "Development"
+      - "Quality Assurance"
+      - "Deployment"
+      - "Maintenance"
     column: "is-half"
 
   team_preferences:
@@ -49,16 +42,11 @@ form:
     label: "Team Meeting Preferences"
     tooltip: "Rank meeting types by team preference"
     items:
-      - value: "standup"
-        label: "Daily Standup"
-      - value: "retrospective"
-        label: "Sprint Retrospective"
-      - value: "planning"
-        label: "Sprint Planning"
-      - value: "review"
-        label: "Sprint Review"
-      - value: "one_on_one"
-        label: "One-on-One"
+      - "Daily Standup"
+      - "Sprint Retrospective"
+      - "Sprint Planning"
+      - "Sprint Review"
+      - "One-on-One"
     column: "is-half"
     validation:
       required: false

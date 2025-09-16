@@ -51,7 +51,7 @@ export class SorterComponent extends BaseComponent {
                 <label class="checkbox mr-2" style="cursor: pointer;">
                     <input type="checkbox" ${isEnabled ? 'checked' : ''} data-toggle-item="${item.value || item}">
                 </label>
-                <span class="item-label ${isEnabled ? '' : 'has-text-grey-light'}">${item.label || item}</span>
+                <span class="item-label ${isEnabled ? '' : 'has-text-grey-light'}">${item.value || item}</span>
             `;
             sortableList.appendChild(listItem);
         });
@@ -63,7 +63,9 @@ export class SorterComponent extends BaseComponent {
     }
 
     /**
-     * Updates the component state based on the current order and enabled state of items
+     * Updates the component state based on the current order and enabled state of items.
+     * We store values in Arrays, different from Checklists and Dropdowns, because
+     * here order is the priority, not uniqueness.
      */
     updateStateFromSortedList() {
         const sortableList = this.querySelector('.sortable-list');
@@ -79,7 +81,7 @@ export class SorterComponent extends BaseComponent {
 
     /**
      * Gets the items to display, merging state and config data
-     * @returns {Array} Array of item objects with value, label, and enabled properties
+     * @returns {Array} Array of item objects with value and enabled properties
      */
     getItems() {
         const stateItems = this.myState.value;
@@ -88,32 +90,20 @@ export class SorterComponent extends BaseComponent {
         // if we have state data with enabled/disabled info, use it
         if (stateItems && Array.isArray(stateItems) && stateItems.length > 0 &&
             typeof stateItems[0] === 'object' && 'enabled' in stateItems[0]) {
-            return stateItems.map(stateItem => {
-                const configItem = configItems.find(ci => (ci.value || ci) === stateItem.value);
-                return {
-                    value: stateItem.value,
-                    label: configItem ? (configItem.label || configItem) : stateItem.value,
-                    enabled: stateItem.enabled
-                };
-            });
+            return stateItems;
         }
 
         // if we have simple array state (just values), merge with config
         if (stateItems && Array.isArray(stateItems)) {
-            return stateItems.map(value => {
-                const configItem = configItems.find(ci => (ci.value || ci) === value);
-                return {
-                    value: value,
-                    label: configItem ? (configItem.label || configItem) : value,
-                    enabled: true // default to enabled
-                };
-            });
+            return stateItems.map(value => ({
+                value: value,
+                enabled: true // default to enabled
+            }));
         }
 
         // fall back to config items, all enabled by default
         return configItems.map(item => ({
-            value: item.value || item,
-            label: item.label || item,
+            value: item,
             enabled: true
         }));
     }
