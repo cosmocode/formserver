@@ -160,6 +160,17 @@ class Mailer
                 $value = LangManager::getString('email_text_attachments');
             }
 
+            // special handling for sorter elements - filter out disabled items
+            if ($element['type'] === 'sorter' && is_array($value)) {
+                $enabledItems = [];
+                foreach ($value as $item) {
+                    if (is_array($item) && isset($item['enabled']) && $item['enabled'] && isset($item['value'])) {
+                        $enabledItems[] = $item['value'];
+                    }
+                }
+                $value = $enabledItems;
+            }
+
             // finally flatten all multivalue fields
             if (is_array($value)) {
                 $value = implode(", ", $value);
