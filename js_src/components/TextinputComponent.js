@@ -27,20 +27,30 @@ export class TextinputComponent extends BaseComponent {
 
 
     /**
-     * Handle "match" validation
+     * Handle text specific validation rules
      */
     executeValidators() {
         super.executeValidators();
 
-        if (
-            this.config.validation && this.config.validation.match
-        ) {
+        if (!this.config.validation) {
+            return;
+        }
+
+        if (this.config.validation.match) {
             const pattern = this.config.validation.match.replace(/^\/|\/$/g, '');
             const regex = new RegExp(pattern);
             // a null value is internally converted into the string "null", so replace it with ""
             if (regex.test(this.myState.value || "") === false) {
                 throw new ValidatorError(this.name, U.getLang("error_match"));
             }
+        }
+
+        if (
+            this.config.validation.maxlength &&
+            this.myState.value &&
+            this.myState.value.length > this.config.validation.maxlength
+        ) {
+            throw new ValidatorError(this.name, `${U.getLang("error_maxlength")} ${this.config.validation.maxlength}`);
         }
     }
 

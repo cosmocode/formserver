@@ -266,7 +266,7 @@ Options:
     column: is-half
     placeholder: placeholder value for input
     validation:
-      required: false
+      maxlength: 500
     rows: 7
     cols: 40
 ```

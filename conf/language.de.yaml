@@ -2,6 +2,7 @@ error_notfound: Die gesuchte Seite konnte nicht gefunden werden.
 error_required: Das ist ein Pflichtfeld
 error_min: Minimaler Wert ist
 error_max: Maximaler Wert ist
+error_maxlength: Maximale Textlänge ist
 error_match: Eingabe muss übereinstimmen mit
 error_fileext: Erlaubte Dateiformate sind
 error_filesize: Maximale Dateigröße
