@@ -62,7 +62,7 @@ export class UploadComponent extends BaseComponent {
 
         // notification containers
         const infoContainer = document.createElement("div");
-        infoContainer.classList.add("notification", "hidden", "is-warning");
+        infoContainer.classList.add("notification", "hidden", "is-info");
         control.appendChild(infoContainer);
 
         const errorContainer = document.createElement("div");
@@ -146,7 +146,7 @@ export class UploadComponent extends BaseComponent {
 
         this.myState.value = state;
 
-        this.#showStatus(this.querySelector(".notification.is-warning"));
+        this.#showStatus(this.querySelector(".notification.is-info"));
     }
 
     /**
@@ -163,9 +163,27 @@ export class UploadComponent extends BaseComponent {
         const newUploads = document.createElement("ul");
 
         for (const fileInfo of this.myState.value) {
-            newUploads.insertAdjacentHTML(
-                "beforeend",
-                `<li><a href="${fileInfo.content}" download="${fileInfo.file}">${fileInfo.file}</a></li>`)
+
+            const listItem = document.createElement("li");
+            listItem.classList.add("is-flex", "is-align-items-center", "mb-2");
+            listItem.innerHTML = `<a href="${fileInfo.content}" download="${fileInfo.file}">${fileInfo.file}</a>`;
+
+            // images get a thumbnail with modal trigger
+            const imageRegex = /\.(jpg|jpeg|png|gif|bmp|webp|svg)$/i;
+            const isImage = imageRegex.test(fileInfo.file);
+
+            if (isImage) {
+                const preview = document.createElement("a");
+                preview.href = "#";
+                preview.classList.add("image", "is-64x64", "mr-2");
+                preview.innerHTML = `<img width="100px" alt="Preview of ${fileInfo.file}" src="${fileInfo.content}">`;
+                preview.appendChild(U.modal({"modal": `<img src="${fileInfo.content}">`}));
+                preview.addEventListener('click', U.modalEventHandler);
+
+                listItem.prepend(preview);
+            }
+
+            newUploads.appendChild(listItem);
         }
 
         if (oldUploads !== null) {

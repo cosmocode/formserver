@@ -99,16 +99,21 @@ export class U {
         const hint = document.createElement("span");
         hint.innerText = "?";
         hint.classList.add("modal-hint");
-        hint.dataset["modal"] = config.modal;
-
-        hint.addEventListener('click', (e) => {
-            const modal = e.target.nextElementSibling;
-            modal.classList.add('is-active');
-            document.querySelector('html').classList.add('is-clipped');
-        });
+        hint.addEventListener('click', this.modalEventHandler);
 
         return hint;
-}
+    }
+
+    /**
+     * Modals are triggered via modalHint and in image preview in UploadComponent
+     * @param {Event} e
+     */
+    static modalEventHandler(e) {
+        e.preventDefault();
+        const modal = e.target.nextElementSibling;
+        modal.classList.add('is-active');
+        document.querySelector('html').classList.add('is-clipped');
+    }
 
     /**
      * Creates modal element with event handlers
