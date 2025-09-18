@@ -124,11 +124,18 @@ form .has-errors {
         border-color: hsl(var(--bulma-danger-h),var(--bulma-danger-s),var(--bulma-danger-on-scheme-l));
     }
 
+    &.label,
     & label,
     & .label,
     & option {
         color: hsl(var(--bulma-danger-h),var(--bulma-danger-s),var(--bulma-danger-on-scheme-l));
     }
+}
+
+.tabs li.has-errors a {
+    color: #ffffff;
+    background-color: hsl(var(--bulma-danger-h),var(--bulma-danger-s),var(--bulma-danger-on-scheme-l));
+    border: 1px solid #ffffff;
 }
 
 /**

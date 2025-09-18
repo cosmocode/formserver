@@ -8,6 +8,7 @@ error_fileext: Allowed file types are
 error_filesize: Maximum file size is
 error_start: Value must be on or after
 error_end: Value must be on or before
+error_pages: Some tabs contain errors
 form_valid: Form was saved successfully
 form_invalid: Form was saved successfully, but it still contains errors.
 send_success: The form was sent successfully.

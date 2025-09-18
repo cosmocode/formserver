@@ -8,6 +8,7 @@ error_fileext: Les types de fichiers autorisés sont
 error_filesize: La taille maximale du fichier est de
 error_start: La valeur doit être le ou après le
 error_end: La valeur doit être le ou avant le
+error_pages: Certains onglets contiennent des erreurs
 form_valid: Le formulaire a été enregistré avec succès
 form_invalid: Le formulaire a été enregistré avec succès, mais il contient encore des erreurs.
 send_success: Le formulaire a été envoyé avec succès.

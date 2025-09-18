@@ -8,6 +8,7 @@ error_fileext: I tipi di file consentiti sono
 error_filesize: La dimensione massima del file è
 error_start: Il valore deve essere il o dopo il
 error_end: Il valore deve essere il o prima del
+error_pages: Alcune schede contengono errori
 form_valid: Il modulo è stato salvato con successo
 form_invalid: Il modulo è stato salvato con successo, ma contiene ancora degli errori.
 send_success: Il modulo è stato inviato con successo.
