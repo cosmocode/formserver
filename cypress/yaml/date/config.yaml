@@ -8,3 +8,9 @@ form:
     readonly: true
     validation:
       required: false
+  date_writeable:
+    type: date
+    label: writeable date
+    validation:
+      start: '2023-01-01'
+      end: '2025-12-31'

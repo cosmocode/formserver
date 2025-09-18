@@ -6,6 +6,8 @@ error_maxlength: Maximale Textlänge ist
 error_match: Eingabe muss übereinstimmen mit
 error_fileext: Erlaubte Dateiformate sind
 error_filesize: Maximale Dateigröße
+error_start: Wert muss am oder nach dem
+error_end: Wert muss am oder vor dem
 form_valid: Das Formular wurde gespeichert
 form_invalid: Formular gespeichert, aber es enthält Fehler
 send_success: Das Formular wurde erfolgreich versendet

@@ -1,6 +1,7 @@
 import {BaseComponent} from './BaseComponent.js';
 import html from 'html-template-tag';
 import {U} from '../U.js';
+import {ValidatorError} from '../ValidatorError.js';
 
 export class TimeComponent extends BaseComponent {
     html() {
@@ -22,6 +23,29 @@ export class TimeComponent extends BaseComponent {
         control.appendChild(input);
 
         return field;
+    }
+
+    executeValidators() {
+        super.executeValidators();
+
+        if (!this.config.validation) {
+            return;
+        }
+
+        const value = this.myState.value;
+        if (!value) {
+            return;
+        }
+
+        // Check start time validation
+        if (this.config.validation.start && value < this.config.validation.start) {
+            throw new ValidatorError(this.name, `${U.getLang("error_start")} ${this.config.validation.start}`);
+        }
+
+        // Check end time validation
+        if (this.config.validation.end && value > this.config.validation.end) {
+            throw new ValidatorError(this.name, `${U.getLang("error_end")} ${this.config.validation.end}`);
+        }
     }
 }
 

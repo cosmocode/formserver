@@ -283,6 +283,8 @@ Text input that expects a date and provides a calendar picker.
     placeholder: placeholder value for input
     validation:
       required: false
+      start: '2023-01-01'
+      end: '2025-12-31'
 ```
 
 ### Time
@@ -297,6 +299,8 @@ Text input that expects a time and provides a time picker.
     placeholder: placeholder value for input
     validation:
       required: false
+      start: '09:00'
+      end: '17:00'
 ```
 
 ### Datetime
@@ -311,6 +315,8 @@ Text input that expects a date and a time and provides a combined picker.
     placeholder: placeholder value for input
     validation:
       required: false
+      start: '2023-01-01 00:00'
+      end: '2025-12-31 23:59'
 ```
 
 ### Email

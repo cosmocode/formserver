@@ -8,3 +8,9 @@ form:
     readonly: true
     validation:
       required: false
+  time_writeable:
+    type: time
+    label: writeable time
+    validation:
+      start: '09:00'
+      end: '17:00'
