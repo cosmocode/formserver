@@ -22,6 +22,17 @@ describe('Test textinput component', () => {
             .first()
             .find('input')
             .should('have.attr', 'readonly');
+
+        // test suffix
+        cy.get('textinput-component')
+            .first()
+            .find(".field")
+            .should("have.class", "has-addons")
+            .find("> p.control")
+            .should('have.length', 2)
+            .last()
+            .find("> a.button.is-static")
+            .should("be.visible");
     });
 
     it('textinput required hint', () => {

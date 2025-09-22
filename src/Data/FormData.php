@@ -44,6 +44,7 @@ class FormData
                 $formData[$currentPath] = [
                     'type' => $currentConfig['type'] ?? null,
                     'label' => $currentConfig['label'] ?? null,
+                    'suffix' => $currentConfig['suffix'] ?? null,
                     'value' => $value
                 ];
             }

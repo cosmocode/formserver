@@ -227,12 +227,16 @@ Options:
 
 Simple text input.
 
+Options:
+* `suffix` _(optional)_ - attaches suffix to the end of input. A hint how the entered value will be interpreted. E.g. email domain, or a unit of measure. This text will be included in the email. 
+
 ```yaml
   <id>:
     type: textinput
     label: text label
     column: is-half
     placeholder: placeholder value for input
+    suffix: suffix text
     validation:
       required: false
 ```

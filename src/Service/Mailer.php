@@ -151,6 +151,12 @@ class Mailer
                 }
             }
 
+            // some elements may have configured suffixes, but state has raw values
+            if ($element['suffix']) {
+                $value .= ' ' . $element['suffix'];
+            }
+
+            // move signature to attachments
             if ($element['type'] === 'signature') {
                 $encoded_image = explode(",", $value)[1];
                 $decoded_image = base64_decode($encoded_image);
