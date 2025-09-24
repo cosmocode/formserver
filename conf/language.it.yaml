@@ -2,14 +2,19 @@ error_notfound: Non è stato possibile trovare la pagina cercata.
 error_required: Questo è un campo obbligatorio
 error_min: Il valore deve essere almeno
 error_max: Il valore non deve superare
+error_maxlength: Il testo supera la lunghezza massima di
 error_match: Il valore deve corrispondere
 error_fileext: I tipi di file consentiti sono
 error_filesize: La dimensione massima del file è
+error_start: Il valore deve essere il o dopo il
+error_end: Il valore deve essere il o prima del
+error_pages: Alcune schede contengono errori
 form_valid: Il modulo è stato salvato con successo
 form_invalid: Il modulo è stato salvato con successo, ma contiene ancora degli errori.
 send_success: Il modulo è stato inviato con successo.
 send_prevented: Il modulo non può essere inviato perché contiene errori.
 send_failed: Si è verificato un errore nell'invio dell'e-mail. Si prega di contattare l'amministratore.
+offline: Al momento sei offline. L'invio del modulo è disabilitato. Tutti i dati vengono salvati nel tuo browser. Potrai inviarlo non appena sarai di nuovo online.
 label_signature_delete: Ingresso libero
 label_signature_replace: Sostituire l'ingresso
 email_text_attachments: Esaminare gli allegati

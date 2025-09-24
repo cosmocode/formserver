@@ -2,14 +2,19 @@ error_notfound: The resource you are looking for could not be found.
 error_required: This is a required field
 error_min: Value must be at least
 error_max: Value must not exceed
+error_maxlength: Input exceeds maximum length of
 error_match: Value must match
 error_fileext: Allowed file types are
 error_filesize: Maximum file size is
+error_start: Value must be on or after
+error_end: Value must be on or before
+error_pages: Some tabs contain errors
 form_valid: Form was saved successfully
 form_invalid: Form was saved successfully, but it still contains errors.
 send_success: The form was sent successfully.
 send_prevented: The form could not be sent because it contains errors.
 send_failed: There was en error sending email. Please contact the administrator.
+offline: You are currently offline. Form submission is disabled. All data is saved in your browser. You will be able to submit is as soon as you are online again.
 label_signature_delete: Clear input
 label_signature_replace: Replace input
 email_text_attachments: Look into the attachments

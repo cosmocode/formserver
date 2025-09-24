@@ -1,0 +1,16 @@
+form:
+  txt_allattributes:
+    type: textinput
+    label: readonly text
+    tooltip: 'A useful hint for this field.'
+    column: is-half
+    placeholder: placeholder value for input
+    readonly: true
+    suffix: Ne
+    validation:
+      required: false
+  txt_writeable:
+    type: textinput
+    label: text label
+    validation:
+      maxlength: 50

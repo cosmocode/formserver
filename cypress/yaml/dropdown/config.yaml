@@ -1,0 +1,28 @@
+form:
+  dropdown_allattributes:
+    type: dropdown
+    label: dropdown label
+    tooltip: 'A useful hint for this dropdown field.'
+    column: is-half
+    empty_label: choose an option
+    default: 'first choice [a nice link](https://www.cosmocode.de)'
+    validation:
+      required: false
+    choices:
+      - first choice [a nice link](https://www.cosmocode.de)
+      - second choice
+      - third choice
+  dropdown_multiselect_allattributes:
+    type: dropdown
+    label: dropdown multiselect label
+    tooltip: 'A useful hint for this multiselect dropdown field.'
+    column: is-half
+    multiselect: true
+    size: 3
+    default: 'first choice [a nice link](https://www.cosmocode.de)'
+    validation:
+      required: false
+    choices:
+      - first choice [a nice link](https://www.cosmocode.de)
+      - second choice
+      - third choice

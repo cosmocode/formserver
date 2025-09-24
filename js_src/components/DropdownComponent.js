@@ -104,28 +104,13 @@ export class DropdownComponent extends BaseComponent {
     }
 
     /**
-     * Evaluate all dependencies of options
+     * Evaluate all dependencies, including those attached to options
      *
      * @param {StateValueChangeDetail} detail
      * @returns {boolean}
      */
     shouldUpdate(detail) {
-
-        const optionsShouldUpdate = () => {
-            if (!this.config.conditional_choices || !this.optionsExpressions.length) {
-                return false;
-            }
-
-            const vars = [];
-            for (const expr of this.optionsExpressions) {
-                vars.push(... expr.variables({withMembers: true}));
-            }
-
-            return vars.includes(detail.name);
-        }
-
-        // check field visibility condition and options visibility conditions
-        return super.shouldUpdate(detail) || optionsShouldUpdate();
+        return super.shouldUpdate(detail) || U.shouldUpdateFromExpressions(this.optionsExpressions, detail);
     }
 
     /**
@@ -171,16 +156,7 @@ export class DropdownComponent extends BaseComponent {
      * @returns {*[]}
      */
     getOptionsExpressions() {
-        const expressions= [];
-        if (!this.config.conditional_choices) {
-            return expressions;
-        }
-
-        for (const set of this.config.conditional_choices) {
-            expressions.push(U.getParsedExpression(set.visible));
-        }
-
-        return expressions.filter((expr) => { return expr; });
+        return U.getSubitemsExpressions(this.config, "conditional_choices");
     }
 
     /**

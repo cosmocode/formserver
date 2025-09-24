@@ -9,7 +9,7 @@ Form elements can be grouped visually and/or logically in [fieldsets](#fieldset)
 The element definition must contain at least the type of the form element.  
 
 Options:  
-* `label` _(optional)_ - the label of the form element (excluded: [hidden](#hidden), [markdown](#markdown))
+* `label` _(optional for most elements)_ - the label of the form element (excluded: [hidden](#hidden), [markdown](#markdown))
 * `labelsmall` _(optional)_ - if set to true, the label will be rendered in regular font instead of default bold
 * `tooltip` _(optional)_ - Shows a hint for the element. Ignored in structure elements like HR. Also see [Tooltip styling](meta.md#Tooltips)
 * `modal` _(optional)_ - Content of a simple Bulma modal in markdown syntax. Refer to the bundled EXAMPLE configuration. Images are interpreted as files located directly in your form directory. The option is ignored in structure elements like HR.  
@@ -30,7 +30,7 @@ Fieldsets group other form elements (including nested fieldsets).
 Options:
 * `children` _(required)_ - containing child form elements
 * `background` _(optional)_ the background color may be one of [https://bulma.io/documentation/helpers/color-helpers/#background-color](Bulma's colors) (without the prefix `has-background-`) or a valid CSS definition.
-* `visible` _(optional)_ - the fieldset is disabled and hidden until the visible condition is met
+* `visible` _(optional)_ - the fieldset is disabled and hidden until the [visible condition](conditional.md) is met
 
 ```yaml
 <id>:
@@ -227,12 +227,16 @@ Options:
 
 Simple text input.
 
+Options:
+* `suffix` _(optional)_ - attaches suffix to the end of input. A hint how the entered value will be interpreted. E.g. email domain, or a unit of measure. This text will be included in the email. 
+
 ```yaml
   <id>:
     type: textinput
     label: text label
     column: is-half
     placeholder: placeholder value for input
+    suffix: suffix text
     validation:
       required: false
 ```
@@ -266,7 +270,7 @@ Options:
     column: is-half
     placeholder: placeholder value for input
     validation:
-      required: false
+      maxlength: 500
     rows: 7
     cols: 40
 ```
@@ -283,6 +287,8 @@ Text input that expects a date and provides a calendar picker.
     placeholder: placeholder value for input
     validation:
       required: false
+      start: '2023-01-01'
+      end: '2025-12-31'
 ```
 
 ### Time
@@ -297,6 +303,8 @@ Text input that expects a time and provides a time picker.
     placeholder: placeholder value for input
     validation:
       required: false
+      start: '09:00'
+      end: '17:00'
 ```
 
 ### Datetime
@@ -311,6 +319,8 @@ Text input that expects a date and a time and provides a combined picker.
     placeholder: placeholder value for input
     validation:
       required: false
+      start: '2023-01-01 00:00'
+      end: '2025-12-31 23:59'
 ```
 
 ### Email
@@ -446,4 +456,25 @@ Options:
     width: 900
     validation:
       required: true
+```
+
+### Sorter
+
+This element allows users to reorder items using drag-and-drop. Items can be arranged horizontally or vertically. It is possible to disable items using checkboxes, without removing them for the list.
+
+Options:
+* `items` _(required)_ - defines the available items
+* `alignment` _(optional)_ - sets the layout orientation, possible values are `vertical` (default) or `horizontal`
+
+```yaml
+  <id>:
+    type: sorter
+    label: sorter label
+    alignment: horizontal
+    validation:
+      required: true
+    items:
+      - First item
+      - Second item
+      - Third item
 ```

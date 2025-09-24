@@ -151,6 +151,12 @@ class Mailer
                 }
             }
 
+            // some elements may have configured suffixes, but state has raw values
+            if ($element['suffix']) {
+                $value .= ' ' . $element['suffix'];
+            }
+
+            // move signature to attachments
             if ($element['type'] === 'signature') {
                 $encoded_image = explode(",", $value)[1];
                 $decoded_image = base64_decode($encoded_image);
@@ -158,6 +164,17 @@ class Mailer
 
                 // do not send the image source data
                 $value = LangManager::getString('email_text_attachments');
+            }
+
+            // special handling for sorter elements - filter out disabled items
+            if ($element['type'] === 'sorter' && is_array($value)) {
+                $enabledItems = [];
+                foreach ($value as $item) {
+                    if (is_array($item) && isset($item['enabled']) && $item['enabled'] && isset($item['value'])) {
+                        $enabledItems[] = $item['value'];
+                    }
+                }
+                $value = $enabledItems;
             }
 
             // finally flatten all multivalue fields

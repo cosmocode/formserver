@@ -2,14 +2,19 @@ error_notfound: Die gesuchte Seite konnte nicht gefunden werden.
 error_required: Das ist ein Pflichtfeld
 error_min: Minimaler Wert ist
 error_max: Maximaler Wert ist
+error_maxlength: Maximale Textlänge ist
 error_match: Eingabe muss übereinstimmen mit
 error_fileext: Erlaubte Dateiformate sind
 error_filesize: Maximale Dateigröße
+error_start: Wert muss am oder nach dem
+error_end: Wert muss am oder vor dem
+error_pages: Einige Tabs enthalten Fehler
 form_valid: Das Formular wurde gespeichert
 form_invalid: Formular gespeichert, aber es enthält Fehler
 send_success: Das Formular wurde erfolgreich versendet
 send_prevented: Das Formular konnte nicht gesendet werden, da es fehlerhaft ist.
 send_failed: Es gab einen Fehler beim Versenden der Mail. Bitte kontaktieren Sie den Administrator.
+offline: Sie sind derzeit offline. Das Absenden des Formulars ist deaktiviert. Alle Daten werden in Ihrem Browser gespeichert. Sie können das Formular absenden, sobald Sie wieder online sind.
 label_signature_delete: Eingabe löschen
 label_signature_replace: Eingabe erneuern
 email_text_attachments: Die Anhänge ansehen

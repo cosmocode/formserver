@@ -1,0 +1,13 @@
+form:
+  radio_allattributes:
+    type: radioset
+    label: radioset label
+    tooltip: 'A useful hint for this radioset field.'
+    column: is-half
+    alignment: vertical
+    validation:
+      required: true
+    choices:
+      - First choice
+      - Second choice
+      - Third choice

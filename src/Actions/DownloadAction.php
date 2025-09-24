@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace CosmoCode\Formserver\Actions;
 
 use CosmoCode\Formserver\Helper\FileHelper;
-use DI\NotFoundException;
 use Mimey\MimeTypes;
 use Psr\Http\Message\ResponseInterface as Response;
 use Slim\Psr7\Stream;
@@ -15,13 +14,10 @@ use Slim\Psr7\Stream;
  */
 class DownloadAction extends AbstractAction
 {
-    public const DATA_DIRECTORY = __DIR__ . '/../../data/';
-
     /**
      * Action to download file
      *
      * @return Response
-     * @throws NotFoundException
      * @throws \Slim\Exception\HttpBadRequestException
      */
     protected function action(): Response
@@ -33,7 +29,7 @@ class DownloadAction extends AbstractAction
         $directory = $this->escapePath(
             $this->resolveArg('id')
         );
-        $filePath = self::DATA_DIRECTORY . $directory . '/' . $file;
+        $filePath = $this->getDataDirectory() . $directory . '/' . $file;
 
         if (file_exists($filePath)) {
             $mimes = new MimeTypes();

@@ -1,6 +1,12 @@
-# IDE
+# environment
+.env
+
+# tools
 .idea
 *.iml
+.aider*
+cypress/downloads
+cypress/screenshots
 
 # dependencies
 vendor
@@ -25,3 +31,4 @@ data/*
 
 # export directory
 /export
+.aider*

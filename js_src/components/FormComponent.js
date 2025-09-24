@@ -23,12 +23,15 @@ import {State} from "../State";
  *   - child elements like clone or table, need the initial data to know how many copies to render
  */
 
-
-
 export class FormComponent extends HTMLElement {
 
+    /** @type {string} The form identifier */
+    #name;
+    /** @type {HTMLFormElement} The form DOM element */
     #form;
+    /** @type {State} The form state manager */
     #state;
+    /** @type {object} The form configuration object */
     #formConfig;
 
     constructor() {
@@ -37,13 +40,21 @@ export class FormComponent extends HTMLElement {
         this.#form = document.createElement('form');
         this.appendChild(this.#form);
         this.#formConfig = U.loadFormConfig();
-        this.#state = new State(U.loadFormValues()); // loads "values" part of JSON config
     }
 
-    connectedCallback() {
-        this.render();
+    /**
+     * Called when the element is connected to the DOM
+     */
+    async connectedCallback() {
+        this.#name = this.getAttribute("formId");
+
+        const initialValues = U.loadFormValues(); // loads "values" part of JSON config
+        this.#state = new State(this.#name, initialValues, this.render.bind(this));
     }
 
+    /**
+     * Renders the form with all its components and buttons
+     */
     render() {
         const errorContainer = document.createElement('div');
         errorContainer.classList.add('notification');
@@ -56,6 +67,10 @@ export class FormComponent extends HTMLElement {
         this.#form.addEventListener('submit', this.handleSubmit.bind(this));
     }
 
+    /**
+     * Attaches form elements to the parent container
+     * @param {HTMLElement} parent The parent element to attach children to
+     */
     attachElements(parent) {
         U.attachChildren(parent, this.#formConfig, this.#state);
     }
@@ -86,8 +101,15 @@ export class FormComponent extends HTMLElement {
                 </div>
             </div>`;
         form.appendChild(formControlButtons);
+
+        // add offline/online event listeners
+        this.#handleOfflineState(formControlButtons);
     }
 
+    /**
+     * Validates all form components
+     * @returns {boolean} True if all components are valid, false otherwise
+     */
     validate() {
         const components = this.querySelectorAll('.component');
         let ok = true;
@@ -100,6 +122,10 @@ export class FormComponent extends HTMLElement {
     }
 
 
+    /**
+     * Handles form submission
+     * @param {Event} event The submit event
+     */
     handleSubmit(event) {
         event.preventDefault();
 
@@ -130,7 +156,12 @@ export class FormComponent extends HTMLElement {
                 return response.json();
             })
             .then((data) => {
-                this.#displayFormStatusNotification(!isValid ? "form_invalid" : (event.submitter.name === "send" ? "send_success" : "form_valid"));
+                // FIXME this is not real status from response!
+                const status = !isValid ? "form_invalid" : (event.submitter.name === "send" ? "send_success" : "form_valid");
+                this.#displayFormStatusNotification(status);
+                if (status === "send_success") {
+                    this.#state.clearOPFS();
+                }
             })
             .catch((error) => {
                 this.#displayFormStatusNotification("send_failed");
@@ -138,6 +169,10 @@ export class FormComponent extends HTMLElement {
             });
     }
 
+    /**
+     * Displays a status notification to the user
+     * @param {string} status The status key for the notification message
+     */
     #displayFormStatusNotification(status) {
         const notification = this.querySelector('.notification');
 
@@ -161,6 +196,48 @@ export class FormComponent extends HTMLElement {
 
         notification.style.display = 'block';
         notification.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    /**
+     * Handles offline/online state changes and updates button availability
+     * @param {HTMLElement} formControlButtons The container with form control buttons
+     */
+    #handleOfflineState(formControlButtons) {
+        const updateButtonState = () => {
+            const buttons = formControlButtons.querySelectorAll('button');
+            const isOffline = !navigator.onLine;
+
+            buttons.forEach(button => {
+                button.disabled = isOffline;
+            });
+
+            let offlineMessage = formControlButtons.querySelector('.offline-message');
+            if (isOffline) {
+                if (!offlineMessage) {
+                    offlineMessage = document.createElement('div');
+                    offlineMessage.classList.add('notification', 'is-warning', 'offline-message');
+                    offlineMessage.innerHTML = `<div class="icon-text">
+                            <span class="icon">
+                                <img src="/images/cloud-off-outline.svg" alt="Offline">
+                            </span>
+                            <span>${U.getLang("offline")}</span>
+                        </div>`;
+                    formControlButtons.insertBefore(offlineMessage, formControlButtons.firstChild);
+                }
+                offlineMessage.style.display = 'block';
+            } else {
+                if (offlineMessage) {
+                    offlineMessage.style.display = 'none';
+                }
+            }
+        };
+
+        // Initial state check
+        updateButtonState();
+
+        // Listen for online/offline events
+        window.addEventListener('online', updateButtonState);
+        window.addEventListener('offline', updateButtonState);
     }
 }
 

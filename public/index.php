@@ -7,21 +7,27 @@ use Psr\Http\Message\ServerRequestInterface;
 use Slim\Factory\AppFactory;
 use Slim\Factory\ServerRequestCreatorFactory;
 
-require __DIR__ . '/../vendor/autoload.php';
+define('ROOT_DIR', __DIR__ . '/../');
+
+require ROOT_DIR . 'vendor/autoload.php';
 
 // Instantiate PHP-DI ContainerBuilder
 $containerBuilder = new ContainerBuilder();
 
 if (false) { // Should be set to true in production
-    $containerBuilder->enableCompilation(__DIR__ . '/../var/cache');
+    $containerBuilder->enableCompilation(ROOT_DIR . 'var/cache');
 }
 
+// Load .env file
+$dotenv = Dotenv\Dotenv::createImmutable(ROOT_DIR);
+$dotenv->safeLoad();
+
 // Set up settings
-$settings = require __DIR__ . '/../app/settings.php';
+$settings = require ROOT_DIR . 'app/settings.php';
 $settings($containerBuilder);
 
 // Set up dependencies
-$dependencies = require __DIR__ . '/../app/dependencies.php';
+$dependencies = require ROOT_DIR . 'app/dependencies.php';
 $dependencies($containerBuilder);
 
 // Build PHP-DI Container instance
@@ -30,10 +36,9 @@ $container = $containerBuilder->build();
 // Instantiate the app
 AppFactory::setContainer($container);
 $app = AppFactory::create();
-$callableResolver = $app->getCallableResolver();
 
 // Register routes
-$routes = require __DIR__ . '/../app/routes.php';
+$routes = require ROOT_DIR . 'app/routes.php';
 $routes($app);
 
 /** @var bool $displayErrorDetails */
@@ -63,7 +68,7 @@ $customErrorHandler = function (
 
     if ($exception instanceof \Slim\Exception\HttpNotFoundException) {
         // custom error page
-        $errorPage = __DIR__ . '/../' . $settings['errorPageNotFound'];
+        $errorPage = ROOT_DIR . $settings['errorPageNotFound'];
         if (is_file($errorPage)) {
             $errorMessage = file_get_contents($errorPage);
         } else {
@@ -73,7 +78,7 @@ $customErrorHandler = function (
         $response = $response->withStatus(404);
     } else {
         // custom error page
-        $errorPage = __DIR__ . '/../' . $settings['errorPageGeneral'];
+        $errorPage = ROOT_DIR . $settings['errorPageGeneral'];
         if (is_file($errorPage)) {
             $errorMessage = file_get_contents($errorPage);
         } else {

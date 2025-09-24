@@ -89,40 +89,45 @@ export class U {
      * Creates modal hint button
      *
      * @param {Object} config
-     * @returns {HTMLElement}
+     * @returns {HTMLElement|null}
      */
     static modalHint(config) {
-        const hint = document.createElement("span");
-
         if (!config.modal) {
-            return hint;
+            return null;
         }
 
+        const hint = document.createElement("span");
         hint.innerText = "?";
         hint.classList.add("modal-hint");
-
-        hint.addEventListener('click', (e) => {
-            const modal = e.target.nextElementSibling;
-            modal.classList.add('is-active');
-            document.querySelector('html').classList.add('is-clipped');
-        });
+        hint.addEventListener('click', this.modalEventHandler);
 
         return hint;
     }
 
     /**
-     * Creates modal element with event handlers
+     * Modals are triggered via modalHint and in image preview in UploadComponent
+     * @param {Event} e
+     */
+    static modalEventHandler(e) {
+        e.preventDefault();
+        const modal = e.target.nextElementSibling;
+        modal.classList.add('is-active');
+        document.querySelector('html').classList.add('is-clipped');
+    }
+
+    /**
+     * Creates modal element with event handlers.
+     * Must be after modalHint in the DOM
      *
      * @param {Object} config
      * @returns {null|HTMLDivElement}
      */
     static modal(config) {
-        const modal = document.createElement("div");
-
         if (!config.modal) {
-            return modal;
+            return null;
         }
 
+        const modal = document.createElement("div");
         modal.classList.add("modal");
 
         const backdrop = document.createElement("div");
@@ -206,11 +211,22 @@ export class U {
             const fieldConfig = childrenConfig[key];
 
             const rowWrapper = document.createElement('tr');
+
+            // check if the row should be hidden
+            const visibilityExpression = U.getParsedExpression(fieldConfig.visible);
+            const visible = !visibilityExpression || U.conditionMatches(visibilityExpression, state);
+            // can't use early return because children elements must always exist in order to update their state
+            if (!visible) {
+                rowWrapper.classList.add("hidden");
+            }
+
             const labelTh = document.createElement('th');
             labelTh.insertAdjacentText("afterbegin", fieldConfig.label + this.requiredMark(fieldConfig));
             labelTh.insertAdjacentHTML("beforeend", U.tooltipHint(fieldConfig));
-            labelTh.appendChild(U.modalHint(fieldConfig));
-            labelTh.appendChild(U.modal(fieldConfig));
+            if (fieldConfig.modal) {
+                labelTh.appendChild(U.modalHint(fieldConfig));
+                labelTh.appendChild(U.modal(fieldConfig));
+            }
             rowWrapper.appendChild(labelTh);
 
             for (let i = 0; i < repeat; i++) {
@@ -366,5 +382,62 @@ export class U {
             return new Set(value);
         }
         return new Set();
+    }
+
+    /**
+     * Collects expressions from subitems of a configuration object
+     *
+     * @param {Object} config - Configuration object containing subitems
+     * @param {string} itemsKey - Key to access the subitems array (e.g., 'conditional_choices', 'children')
+     * @returns {Array} Array of parsed expressions
+     */
+    static getSubitemsExpressions(config, itemsKey) {
+        const expressionConfigKey = "visible";
+        const expressions = [];
+        const items = config[itemsKey];
+
+        if (!items) {
+            return expressions;
+        }
+
+        // Handle array of items (like conditional_choices)
+        if (Array.isArray(items)) {
+            for (const item of items) {
+                if (item[expressionConfigKey]) {
+                    expressions.push(this.getParsedExpression(item[expressionConfigKey]));
+                }
+            }
+        }
+        // Handle object with keys (like children)
+        else if (typeof items === 'object') {
+            for (const itemKey in items) {
+                const item = items[itemKey];
+                if (item[expressionConfigKey]) {
+                    expressions.push(this.getParsedExpression(item[expressionConfigKey]));
+                }
+            }
+        }
+
+        return expressions.filter((expr) => { return expr; });
+    }
+
+    /**
+     * Checks if expressions should trigger an update based on state change
+     *
+     * @param {Array} expressions - Array of parsed expressions
+     * @param {StateValueChangeDetail} detail - State change detail
+     * @returns {boolean} True if any expression depends on the changed state
+     */
+    static shouldUpdateFromExpressions(expressions, detail) {
+        if (!expressions.length) {
+            return false;
+        }
+
+        const vars = [];
+        for (const expr of expressions) {
+            vars.push(...expr.variables({withMembers: true}));
+        }
+
+        return vars.includes(detail.name);
     }
 }

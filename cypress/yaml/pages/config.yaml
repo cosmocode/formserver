@@ -1,0 +1,115 @@
+form:
+  pages_component:
+    type: pages
+    label: Multi-step Form
+    headers:
+      - "Personal Info"
+      - "Contact Details"
+      - "Preferences"
+    children:
+      page1:
+        label: "Personal Information"
+        children:
+          first_name:
+            type: textinput
+            label: First Name
+            column: is-half
+            validation:
+              required: true
+          last_name:
+            type: textinput
+            label: Last Name
+            column: is-half
+            validation:
+              required: true
+          birth_date:
+            type: date
+            label: Date of Birth
+            column: is-half
+            validation:
+              required: true
+              start: '1900-01-01'
+              end: '2010-12-31'
+          age:
+            type: numberinput
+            label: Age
+            column: is-half
+            validation:
+              required: true
+              min: 18
+              max: 100
+      page2:
+        label: "Contact Details"
+        children:
+          email:
+            type: email
+            label: Email Address
+            column: is-full
+            validation:
+              required: true
+          phone:
+            type: textinput
+            label: Phone Number
+            column: is-half
+            validation:
+              required: false
+          address:
+            type: textarea
+            label: Address
+            column: is-full
+            rows: 3
+            validation:
+              required: true
+              maxlength: 200
+          contact_time:
+            type: time
+            label: Preferred Contact Time
+            column: is-half
+            validation:
+              required: false
+              start: '09:00'
+              end: '17:00'
+      page3:
+        label: "Preferences"
+        children:
+          newsletter:
+            type: checklist
+            label: Newsletter Subscriptions
+            column: is-full
+            choices:
+              - Weekly Updates
+              - Monthly Newsletter
+              - Special Offers
+            validation:
+              required: false
+          contact_method:
+            type: radioset
+            label: Preferred Contact Method
+            column: is-full
+            choices:
+              - Email
+              - Phone
+              - SMS
+            validation:
+              required: true
+          comments:
+            type: textarea
+            label: Additional Comments
+            column: is-full
+            rows: 4
+            validation:
+              required: false
+              maxlength: 500
+
+meta:
+  saveButton: true
+
+lang:
+  button_save: Save Draft
+  button_send: Submit Form
+  form_valid: Form saved successfully
+  send_success: Form submitted successfully
+  send_failed: Failed to submit form
+  send_prevented: Please fix validation errors before submitting
+  form_invalid: Please correct the errors in the form
+  offline: You are currently offline

@@ -78,6 +78,8 @@ form:
             type: textarea
             label: 'Textarea'
             rows: 8
+            validation:
+              maxlength: 120
           date1:
             type: date
             label: 'Date'

@@ -1,6 +1,7 @@
 import {BaseComponent} from './BaseComponent.js';
 import html from 'html-template-tag';
 import {U} from '../U.js';
+import {ValidatorError} from "../ValidatorError";
 
 export class TextareaComponent extends BaseComponent {
     html() {
@@ -29,6 +30,20 @@ export class TextareaComponent extends BaseComponent {
 
         return field;
 
+    }
+
+    /**
+     * Handle "maxlength" validation
+     */
+    executeValidators() {
+        super.executeValidators();
+
+        if (
+            this.config.validation && this.config.validation.maxlength &&
+            this.myState.value && this.myState.value.length > this.config.validation.maxlength
+        ) {
+            throw new ValidatorError(this.name, `${U.getLang("error_maxlength")} ${this.config.validation.maxlength}`);
+        }
     }
 }
 

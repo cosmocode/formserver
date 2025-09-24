@@ -1,4 +1,5 @@
 settings:
+  dataDir: data
   displayErrorDetails: false
   email:
     sender: formgenerator@example.com

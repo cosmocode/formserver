@@ -1,0 +1,12 @@
+form:
+  textarea_allattributes:
+    type: textarea
+    label: textarea label
+    tooltip: 'A useful hint for this textarea field.'
+    column: is-half
+    placeholder: placeholder value for input
+    validation:
+      required: false
+      maxlength: 100
+    rows: 7
+    cols: 40

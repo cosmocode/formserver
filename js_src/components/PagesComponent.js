@@ -1,5 +1,6 @@
 import {BaseComponent} from './BaseComponent.js';
 import {U} from '../U.js';
+import {ValidatorError} from '../ValidatorError.js';
 
 export class PagesComponent extends BaseComponent {
     html() {
@@ -72,8 +73,50 @@ export class PagesComponent extends BaseComponent {
     }
 
 
+    /**
+     * Custom validation and error handling for pages component,
+     * which consists of other components.
+     */
     executeValidators() {
-        return true;
+        if (!this.visible) {
+            return;
+        }
+
+        const tabs = this.querySelectorAll('.tabs li');
+
+        // first clear existing error classes
+        tabs.forEach(tab => {
+            tab.classList.remove('has-errors');
+        });
+
+        // validate page child components
+        let pagesHaveValidationError = false;
+        const pages = this.querySelectorAll('.pages .page');
+
+        pages.forEach((page, pageIndex) => {
+            const pageComponents = page.querySelectorAll('.component');
+
+            for (const component of pageComponents) {
+                try {
+                    component.executeValidators();
+                } catch (ValidatorError) {
+                    tabs[pageIndex].classList.add('has-errors'); // error class for particular tab
+                    pagesHaveValidationError = pagesHaveValidationError || true;
+                }
+            }
+        });
+
+        // custom error hint for the whole component (usually handled in BaseComponent.htmlWrap)
+        // throwing a ValidationError would rerender the component and remove error classes from tabs
+        if (pagesHaveValidationError) {
+            const label = this.querySelector(".box > div.label");
+            label.classList.add("has-errors");
+
+            const errorElement = document.createElement('p');
+            errorElement.classList.add('help', 'is-danger');
+            errorElement.innerText = U.getLang("error_pages");
+            label.after(errorElement);
+        }
     }
 
     /**
