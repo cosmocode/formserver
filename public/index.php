@@ -18,8 +18,9 @@ if (false) { // Should be set to true in production
     $containerBuilder->enableCompilation(ROOT_DIR . 'var/cache');
 }
 
-// Load .env file
-$dotenv = Dotenv\Dotenv::createImmutable(ROOT_DIR);
+// Load .env file and env variables
+// unsafe because we need getenv(), $_ENV is not available in Github runners
+$dotenv = Dotenv\Dotenv::createUnsafeImmutable(ROOT_DIR);
 $dotenv->safeLoad();
 
 // Set up settings

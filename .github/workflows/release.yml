@@ -1,14 +1,11 @@
-name: Create Release
+name: Test and Create Release
 
 on:
   push:
-    tags:
-      - 'v*'
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 env:
-  DATA_DIR: cypress/yaml
+  DATA_DIR: 'cypress/yaml'
   CYPRESS_BASE_URL: "http://localhost:8181"
 
 jobs:
@@ -25,6 +22,14 @@ jobs:
           node-version: 23
       - run: npm ci
       - run: npm run build --if-present
+      - name: PHP env check
+        run: |
+          php -r '
+            $edd = $_ENV["DATA_DIR"] ?? "--nonexistent--";
+            $gdd = getenv("DATA_DIR") ?? "--nonexistent--";
+            echo "S_ENV variable DATA_DIR is: " . $edd . "\n";
+            echo "getenv variable DATA_DIR is:" . $gdd . "\n";
+          '
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:

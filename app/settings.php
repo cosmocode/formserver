@@ -15,8 +15,10 @@ return function (ContainerBuilder $containerBuilder) {
     }
 
     // finally merge from environment
-    if (!empty($_ENV['DATA_DIR'])) {
-        $settings['settings']['dataDir'] = $_ENV['DATA_DIR'];
+    // dotenv loads .env files and env variables - in that order
+    // using getenv() since $_ENV is not available in (at least some) GitHub runners
+    if (!empty(getenv('DATA_DIR'))) {
+        $settings['settings']['dataDir'] = getenv('DATA_DIR');
     }
 
     $containerBuilder->addDefinitions($settings);
