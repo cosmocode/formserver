@@ -1,14 +1,11 @@
-name: Create Release
+name: Test and Create Release
 
 on:
   push:
-    tags:
-      - 'v*'
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 env:
-  DATA_DIR: cypress/yaml
+  DATA_DIR: 'cypress/yaml'
   CYPRESS_BASE_URL: "http://localhost:8181"
 
 jobs:
