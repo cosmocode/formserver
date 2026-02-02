@@ -1,5 +1,12 @@
 describe('Test sorter component', () => {
 
+    const valuesFilePath = './cypress/yaml/sorter/values.yaml';
+
+    before(() => {
+        cy.exec(`rm -f ${valuesFilePath}`);
+        cy.clearOPFS();
+    });
+
     beforeEach(() => {
         cy.visit('/sorter');
     });
@@ -11,8 +18,8 @@ describe('Test sorter component', () => {
             .should('have.length', 6)
             .each(($item) => {
                 cy.wrap($item)
-                    .should('have.attr', 'draggable', 'true')
-                    .and('have.attr', 'data-enabled', 'true');
+                    .should('have.attr', 'draggable', 'false')
+                    .and('have.attr', 'data-enabled', 'false');
             });
     });
 
@@ -76,7 +83,7 @@ describe('Test sorter component', () => {
             .should('have.length', 5)
             .each(($checkbox) => {
                 cy.wrap($checkbox)
-                    .should('be.checked')
+                    .should('not.be.checked')
                     .and('have.attr', 'data-toggle-item');
             });
     });
