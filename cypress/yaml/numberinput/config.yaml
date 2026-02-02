@@ -1,3 +1,8 @@
+meta:
+  email:
+    subject: 'Numberinput Email'
+    recipients:
+      - recipient1@example.com
 form:
   num_allattributes:
     type: numberinput
@@ -8,3 +13,12 @@ form:
     readonly: true
     validation:
       required: false
+  num_with_suffix:
+    type: numberinput
+    label: Size
+    suffix: mm
+    column: is-half
+    placeholder: enter size in millimeters
+    validation:
+      required: true
+      min: 0

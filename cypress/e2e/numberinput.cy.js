@@ -6,12 +6,13 @@ describe('Test numberinput component', () => {
 
     it('numberinput attributes', () => {
         cy.get('numberinput-component')
+            .first()
             .find('input')
             .should('have.attr', 'name', 'num_allattributes')
             .and('have.attr', 'type', 'number')
             .and('have.attr', 'placeholder', 'enter a number')
             .and('have.prop', 'value', '');
-        
+
         cy.get('numberinput-component')
             .find('input')
             .should('have.attr', 'readonly');
@@ -19,9 +20,24 @@ describe('Test numberinput component', () => {
 
     it('numberinput validation', () => {
         cy.get('numberinput-component')
+            .first()
             .find('label')
             .should('not.contain.text', '*')
             .and('contain.text', 'number label');
+    });
+
+    it('numberinput with suffix', () => {
+        cy.get('numberinput-component')
+            .eq(1)
+            .find('.button.is-static')
+            .should('contain.text', 'mm')
+            .and('be.visible');
+
+        cy.get('numberinput-component')
+            .eq(1)
+            .find('label')
+            .should('contain.text', 'Size')
+            .and('contain.text', '*');
     });
 
 
