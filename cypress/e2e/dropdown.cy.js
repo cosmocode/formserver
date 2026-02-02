@@ -105,4 +105,30 @@ describe('Test dropdown component', () => {
             .should('have.attr', 'value', 'third choice');
     });
 
+    it('dropdown with suffix', () => {
+        cy.get('dropdown-component')
+            .eq(2)
+            .find('.button.is-static')
+            .should('contain.text', 'Mbps')
+            .and('be.visible');
+
+        cy.get('dropdown-component')
+            .eq(2)
+            .find('label')
+            .should('contain.text', 'Network Throughput')
+            .and('contain.text', '*');
+
+        cy.get('dropdown-component')
+            .eq(2)
+            .find('option')
+            .should('have.length', 5); // including empty_label option
+
+        cy.get('dropdown-component')
+            .eq(2)
+            .find('option')
+            .eq(0)
+            .should('have.attr', 'value', '')
+            .and('contain.text', 'select throughput');
+    });
+
 });

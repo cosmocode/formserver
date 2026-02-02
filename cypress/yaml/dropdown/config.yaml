@@ -1,3 +1,9 @@
+meta:
+  title: "Dropdown Component"
+  email:
+    subject: 'Test dropdown'
+    recipients:
+      - recipient1@example.com
 form:
   dropdown_allattributes:
     type: dropdown
@@ -26,3 +32,14 @@ form:
       - first choice [a nice link](https://www.cosmocode.de)
       - second choice
       - third choice
+  dropdown_with_suffix:
+    type: dropdown
+    label: Network Throughput
+    suffix: Mbps
+    column: is-half
+    empty_label: select throughput
+    choices:
+      - 10
+      - 100
+      - 1000
+      - 10000
