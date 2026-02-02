@@ -51,7 +51,7 @@ export class SorterComponent extends BaseComponent {
                 <label class="checkbox mr-2" style="cursor: pointer;">
                     <input type="checkbox" ${isEnabled ? 'checked' : ''} data-toggle-item="${item.value || item}">
                 </label>
-                <span class="item-label ${isEnabled ? '' : 'has-text-grey-light'}">${item.value || item}</span>
+                <span class="item-label ${isEnabled ? '' : 'has-text-dark'}">${item.value || item}</span>
             `;
             sortableList.appendChild(listItem);
         });
@@ -97,14 +97,14 @@ export class SorterComponent extends BaseComponent {
         if (stateItems && Array.isArray(stateItems)) {
             return stateItems.map(value => ({
                 value: value,
-                enabled: true // default to enabled
+                enabled: false // default to disabled
             }));
         }
 
-        // fall back to config items, all enabled by default
+        // fall back to config items, all disabled by default
         return configItems.map(item => ({
             value: item,
-            enabled: true
+            enabled: false
         }));
     }
 
@@ -260,9 +260,9 @@ export class SorterComponent extends BaseComponent {
 
         const label = listItem.querySelector('.item-label');
         if (isEnabled) {
-            label.classList.remove('has-text-grey-light');
+            label.classList.remove('has-text-dark');
         } else {
-            label.classList.add('has-text-grey-light');
+            label.classList.add('has-text-dark');
         }
 
         this.updateStateFromSortedList();
