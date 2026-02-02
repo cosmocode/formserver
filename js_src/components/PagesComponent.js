@@ -108,14 +108,31 @@ export class PagesComponent extends BaseComponent {
 
         // custom error hint for the whole component (usually handled in BaseComponent.htmlWrap)
         // throwing a ValidationError would rerender the component and remove error classes from tabs
-        if (pagesHaveValidationError) {
-            const label = this.querySelector(".box > div.label");
+        this.#handleErrorMessage(pagesHaveValidationError);
+    }
+
+    /**
+     * Handles showing/hiding error messages for the pages component
+     * @param {boolean} hasError Whether there are validation errors
+     */
+    #handleErrorMessage(hasError) {
+        const label = this.querySelector(".box > div.label");
+
+        // remove any existing error message first
+        const existingError = label.nextElementSibling;
+        if (existingError && existingError.classList.contains('help') && existingError.classList.contains('is-danger')) {
+            existingError.remove();
+        }
+
+        if (hasError) {
             label.classList.add("has-errors");
 
             const errorElement = document.createElement('p');
             errorElement.classList.add('help', 'is-danger');
             errorElement.innerText = U.getLang("error_pages");
             label.after(errorElement);
+        } else {
+            label.classList.remove("has-errors");
         }
     }
 
