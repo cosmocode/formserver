@@ -460,16 +460,18 @@ Options:
 
 ### Sorter
 
-This element allows users to reorder items using drag-and-drop. Items can be arranged horizontally or vertically. It is possible to disable items using checkboxes, without removing them for the list.
+This element allows users to reorder items using drag-and-drop. Items can be arranged horizontally or vertically. Optional checkboxes let users disable entries without removing them from the list.
 
 Options:
 * `items` _(required)_ - defines the available items
 * `alignment` _(optional)_ - sets the layout orientation, possible values are `vertical` (default) or `horizontal`
+* `checkboxes` _(optional)_ - set to `true` to display enable/disable checkboxes next to each item. Default is `false`, meaning items cannot be disabled. When enabled, each checkbox starts checked.
 
 ```yaml
   <id>:
     type: sorter
     label: sorter label
+    checkboxes: true
     alignment: horizontal
     validation:
       required: true

@@ -97,6 +97,11 @@ fieldset {
     display: contents;
 }
 
+sorter-component[data-has-checkboxes="false"] label.checkbox,
+sorter-component[data-has-checkboxes="false"] input[type="checkbox"][data-toggle-item] {
+    display: none;
+}
+
 /**
  * Readonly field looking more like disabled ones,
  * simulate readonly look for inputs that have no HTML readonly attribute

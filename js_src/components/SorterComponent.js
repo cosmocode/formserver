@@ -7,12 +7,23 @@ import {ValidatorError} from "../ValidatorError";
  */
 export class SorterComponent extends BaseComponent {
 
+    initialize(state, fieldConfig) {
+        super.initialize(state, fieldConfig);
+
+        const normalizedItems = this.#normalizeStateItems();
+        if (normalizedItems) {
+            this.myState.value = normalizedItems;
+        }
+    }
+
     /**
      * Renders the HTML for the sorter component
      * @returns {HTMLElement} The rendered field element
      */
     html() {
         const field = U.createField(this.config);
+        const hasCheckboxes = this.#hasCheckboxes();
+        this.dataset.hasCheckboxes = hasCheckboxes ? 'true' : 'false';
 
         const control = document.createElement("div");
         control.classList.add("control");
@@ -29,9 +40,9 @@ export class SorterComponent extends BaseComponent {
         // get items from state or config
         const items = this.getItems();
 
-        items.forEach((item, index) => {
+        items.forEach((item) => {
             const listItem = document.createElement("li");
-            const isEnabled = item.enabled !== false;
+            const isEnabled = hasCheckboxes ? item.enabled !== false : true;
 
             listItem.classList.add("sortable-item", "box", "is-flex", "is-align-items-center", "p-3", "m-2");
             if (!isEnabled) {
@@ -44,13 +55,16 @@ export class SorterComponent extends BaseComponent {
             listItem.setAttribute("data-enabled", isEnabled.toString());
             listItem.style.cursor = isEnabled ? "grab" : "default";
 
+            const checkboxHtml = hasCheckboxes ? `
+                <label class="checkbox mr-2" style="cursor: pointer;">
+                    <input type="checkbox" ${isEnabled ? 'checked' : ''} data-toggle-item="${item.value || item}">
+                </label>` : '';
+
             listItem.innerHTML = `
                 <span class="drag-handle icon is-small mr-2" style="cursor: ${isEnabled ? 'grab' : 'not-allowed'};">
                     ${this.#getDragIcon(isEnabled)}
                 </span>
-                <label class="checkbox mr-2" style="cursor: pointer;">
-                    <input type="checkbox" ${isEnabled ? 'checked' : ''} data-toggle-item="${item.value || item}">
-                </label>
+                ${checkboxHtml}
                 <span class="item-label ${isEnabled ? '' : 'has-text-dark'}">${item.value || item}</span>
             `;
             sortableList.appendChild(listItem);
@@ -73,9 +87,10 @@ export class SorterComponent extends BaseComponent {
 
         const items = [...sortableList.querySelectorAll('.sortable-item')];
 
+        const hasCheckboxes = this.#hasCheckboxes();
         this.myState.value = items.map(item => ({
             value: item.getAttribute('data-value'),
-            enabled: item.getAttribute('data-enabled') === 'true'
+            enabled: hasCheckboxes ? item.getAttribute('data-enabled') === 'true' : true
         }));
     }
 
@@ -97,14 +112,14 @@ export class SorterComponent extends BaseComponent {
         if (stateItems && Array.isArray(stateItems)) {
             return stateItems.map(value => ({
                 value: value,
-                enabled: false // default to disabled
+                enabled: true
             }));
         }
 
-        // fall back to config items, all disabled by default
+        // fall back to config items, enabled by default
         return configItems.map(item => ({
             value: item,
-            enabled: false
+            enabled: true
         }));
     }
 
@@ -134,7 +149,9 @@ export class SorterComponent extends BaseComponent {
         this.addEventListener('dragover', this.handleDragOver.bind(this));
         this.addEventListener('drop', this.handleDrop.bind(this));
         this.addEventListener('dragend', this.handleDragEnd.bind(this));
-        this.addEventListener('change', this.handleToggleChange.bind(this));
+        if (this.#hasCheckboxes()) {
+            this.addEventListener('change', this.handleToggleChange.bind(this));
+        }
     }
 
     /**
@@ -233,7 +250,7 @@ export class SorterComponent extends BaseComponent {
      * @param {Event} e The change event
      */
     handleToggleChange(e) {
-        if (!e.target.matches('input[type="checkbox"][data-toggle-item]')) return;
+        if (!this.#hasCheckboxes() || !e.target.matches('input[type="checkbox"][data-toggle-item]')) return;
 
         const itemValue = e.target.getAttribute('data-toggle-item');
         const isEnabled = e.target.checked;
@@ -288,6 +305,50 @@ export class SorterComponent extends BaseComponent {
         ) {
             throw new ValidatorError(this.name, U.getLang("error_required"));
         }
+    }
+
+    #hasCheckboxes() {
+        return this.config.checkboxes === true;
+    }
+
+    /**
+     * Ensures the sorter state matches the current schema.
+     *
+     * - Converts legacy primitive entries into `{value, enabled}` objects.
+     * - Forces all items to `enabled: true` when checkboxes are disabled.
+     * - Re-seeds state from config items if no values were saved.
+     *
+     * @returns {Array|null} Normalized items or `null` when no change was needed.
+     */
+    #normalizeStateItems() {
+        const hasCheckboxes = this.#hasCheckboxes();
+        const stateItems = this.myState.value;
+
+        if (!stateItems) {
+            return (this.config.items || []).map(item => ({
+                value: item,
+                enabled: true
+            }));
+        }
+
+        if (!Array.isArray(stateItems) || stateItems.length === 0) {
+            return (this.config.items || []).map(item => ({
+                value: item,
+                enabled: true
+            }));
+        }
+
+        const needsNormalization = stateItems.some(item => typeof item !== 'object' || item === null || !('value' in item));
+        const shouldEnableAll = !hasCheckboxes && stateItems.some(item => item && item.enabled === false);
+
+        if (!needsNormalization && !shouldEnableAll) {
+            return null;
+        }
+
+        return stateItems.map(item => ({
+            value: (typeof item === 'object' && item !== null && 'value' in item) ? item.value : item,
+            enabled: hasCheckboxes ? (typeof item === 'object' && item !== null && item.enabled === false ? false : true) : true
+        }));
     }
 }
 

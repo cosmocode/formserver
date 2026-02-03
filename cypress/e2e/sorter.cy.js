@@ -18,8 +18,8 @@ describe('Test sorter component', () => {
             .should('have.length', 6)
             .each(($item) => {
                 cy.wrap($item)
-                    .should('have.attr', 'draggable', 'false')
-                    .and('have.attr', 'data-enabled', 'false');
+                    .should('have.attr', 'draggable', 'true')
+                    .and('have.attr', 'data-enabled', 'true');
             });
     });
 
@@ -78,14 +78,24 @@ describe('Test sorter component', () => {
 
     it('sorter checkboxes', () => {
         cy.get('sorter-component')
-            .last()
+            .first()
             .find('input[type="checkbox"]')
-            .should('have.length', 5)
+            .should('have.length', 6)
             .each(($checkbox) => {
                 cy.wrap($checkbox)
-                    .should('not.be.checked')
+                    .should('be.checked')
                     .and('have.attr', 'data-toggle-item');
             });
+    });
+
+    it('sorter without checkbox config hides toggles', () => {
+        cy.get('sorter-component')
+            .eq(1)
+            .find('input[type="checkbox"]').should('have.length', 0);
+
+        cy.get('sorter-component')
+            .eq(2)
+            .find('input[type="checkbox"]').should('have.length', 0);
     });
 
     it('sorter checkbox toggle functionality', () => {

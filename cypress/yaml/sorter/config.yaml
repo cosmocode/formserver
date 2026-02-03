@@ -13,6 +13,7 @@ form:
     type: sorter
     label: "Task Priorities"
     tooltip: "Drag items to reorder them by priority (highest to lowest)"
+    checkboxes: true
     alignment: horizontal
     items:
       - "Critical Bug Fixes"
