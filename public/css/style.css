@@ -57,7 +57,9 @@ table {
         & .column {
             padding: unset;
         }
-
+        &.is-v-separated td {
+            border-left: 1px solid #000;
+        }
     }
 
     /* hide labels, tooltips and modals in cells, as they are visible once per row in <th> */
@@ -277,4 +279,10 @@ div.tabs-container fieldset:not(fieldset fieldset) legend {
 
 .column.is-1 > .field > .control > .select select {
     min-width: 5rem;
+}
+
+/* make dropdown selects take full width in table cells */
+table td .select,
+table td .select select {
+    width: 100%;
 }

@@ -15,7 +15,7 @@ export class TableComponent extends BaseComponent {
         const tableElement = document.createElement('table');
         // like fieldsets, tables need a name for building full dotted paths
         tableElement.name = this.config.name;
-        tableElement.classList.add('table');
+        tableElement.classList.add('table', 'is-v-separated');
 
         const headRow = this.#getHeadRow();
 
