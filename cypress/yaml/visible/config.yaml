@@ -34,6 +34,10 @@ form:
           - hide
           - show
           - unhide
+      static1:
+        type: markdown
+        markdown: I am visible when first dropdown says **hide**
+        visible: fset2.drop1 == 'hide'
       text4:
         type: textinput
         label: "Sixth"

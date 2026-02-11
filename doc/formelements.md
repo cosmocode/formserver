@@ -364,7 +364,7 @@ Representation of a select input.
 
 Options:
 * **EITHER** `choices` _(optionally required)_ - defines available options. Markdown is supported.
-*  **OR** `conditional_choices` _(optionally required)_ - defines options available if a condition is met (depending on the value of another form field). This option has priority over `choices`!
+*  **OR** `conditional_choices` _(optionally required)_ - defines options available if a condition is met (depending on the value of another form field). This option has priority over `choices`! Refer to [Conditional visibility](conditional.md) for explanation and limitations.
 * `empty_label` _(optional)_ - a placeholder text shown if no value has been chosen (e.g. "Please select"). **Note:** this is not a real option and has no value that could be saved. In multiselect fields it is irrelevant and ignored.
 * `multiselect` _(optional)_ - enables selecting multiple options
 * `size` _(optional)_ - if multiselect is turned on this defines the number of rows shown, otherwise ignored

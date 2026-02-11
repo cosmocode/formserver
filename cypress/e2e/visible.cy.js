@@ -3,6 +3,10 @@ describe('Conditional Visibility Tests', () => {
         cy.visit('/visible');
     });
 
+    afterEach(() => {
+        cy.clearOPFS();
+    });
+
     it('should show/hide text fields based on input conditions', () => {
         // Initially, the third field should be hidden
         cy.get('[name="fset1.text3"]').should('not.exist');
@@ -51,6 +55,10 @@ describe('Conditional Visibility Tests', () => {
         // Select "hide" in fourth dropdown - sixth should be hidden again
         cy.get('[name="fset2.drop1"]').select('hide');
         cy.get('[name="fset2.text4"]').should('not.exist');
+    });
+
+    it('should show field based on initial value of dropdown, state not changed yet', () => {
+        cy.get('markdown-component').contains('I am visible when first dropdown says').should('be.visible');
     });
 
     it('should show/hide fields based on mathematical conditions', () => {

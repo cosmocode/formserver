@@ -159,6 +159,11 @@ export class DropdownComponent extends BaseComponent {
             myState.value = config.default;
         }
 
+        // without empty_label config, first option is the value
+        if (!myState.value && !config.empty_label && !config.multiselect) {
+            myState.value = config.choices[0];
+        }
+
         if (config.multiselect) {
             myState.value = U.stateMultivalue(myState.value);
 
