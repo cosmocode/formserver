@@ -66,7 +66,7 @@ describe('Test sorter component', () => {
 
     it('sorter drag handles', () => {
         cy.get('sorter-component')
-            .last()
+            .eq(2)
             .find('.drag-handle')
             .should('have.length', 5)
             .each(($handle) => {
@@ -133,7 +133,7 @@ describe('Test sorter component', () => {
     });
 
     it('fixed first item has correct attributes', () => {
-        cy.get('sorter-component[name="fixed_items"]')
+        cy.get('sorter-component').eq(3)
             .find('.sortable-item')
             .first()
             .should('have.attr', 'data-fixed', 'true')
@@ -143,7 +143,7 @@ describe('Test sorter component', () => {
     });
 
     it('fixed last item has correct attributes', () => {
-        cy.get('sorter-component[name="fixed_items"]')
+        cy.get('sorter-component').eq(3)
             .find('.sortable-item')
             .last()
             .should('have.attr', 'data-fixed', 'true')
@@ -153,13 +153,13 @@ describe('Test sorter component', () => {
     });
 
     it('fixed items have no checkbox even when checkboxes enabled', () => {
-        cy.get('sorter-component[name="fixed_items"]')
+        cy.get('sorter-component').eq(3)
             .find('.sortable-item')
             .first()
             .find('input[type="checkbox"]')
             .should('have.length', 0);
 
-        cy.get('sorter-component[name="fixed_items"]')
+        cy.get('sorter-component').eq(3)
             .find('.sortable-item')
             .last()
             .find('input[type="checkbox"]')
@@ -167,13 +167,13 @@ describe('Test sorter component', () => {
     });
 
     it('fixed items have no drag handle', () => {
-        cy.get('sorter-component[name="fixed_items"]')
+        cy.get('sorter-component').eq(3)
             .find('.sortable-item')
             .first()
             .find('.drag-handle')
             .should('have.length', 0);
 
-        cy.get('sorter-component[name="fixed_items"]')
+        cy.get('sorter-component').eq(3)
             .find('.sortable-item')
             .last()
             .find('.drag-handle')
@@ -181,19 +181,23 @@ describe('Test sorter component', () => {
     });
 
     it('non-fixed items in fixed sorter remain draggable with checkboxes', () => {
-        cy.get('sorter-component[name="fixed_items"]')
+        cy.get('sorter-component').eq(3)
             .find('.sortable-item')
             .eq(1)
-            .should('not.have.attr', 'data-fixed')
-            .and('have.attr', 'draggable', 'true')
+            .should(($el) => {
+                expect($el).to.not.have.attr('data-fixed');
+                expect($el).to.have.attr('draggable', 'true');
+            })
             .find('input[type="checkbox"]')
             .should('have.length', 1);
 
-        cy.get('sorter-component[name="fixed_items"]')
+        cy.get('sorter-component').eq(3)
             .find('.sortable-item')
             .eq(2)
-            .should('not.have.attr', 'data-fixed')
-            .and('have.attr', 'draggable', 'true')
+            .should(($el) => {
+                expect($el).to.not.have.attr('data-fixed');
+                expect($el).to.have.attr('draggable', 'true');
+            })
             .find('.drag-handle')
             .should('have.length', 1);
     });
