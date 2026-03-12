@@ -51,3 +51,16 @@ form:
     column: "is-half"
     validation:
       required: false
+
+  fixed_items:
+    type: sorter
+    label: "Fixed Items Sorter"
+    checkboxes: true
+    fixFirst: true
+    fixLast: true
+    items:
+      - "Always First"
+      - "Movable A"
+      - "Movable B"
+      - "Movable C"
+      - "Always Last"

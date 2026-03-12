@@ -466,12 +466,16 @@ Options:
 * `items` _(required)_ - defines the available items
 * `alignment` _(optional)_ - sets the layout orientation, possible values are `vertical` (default) or `horizontal`
 * `checkboxes` _(optional)_ - set to `true` to display enable/disable checkboxes next to each item. Default is `false`, meaning items cannot be disabled. When enabled, each checkbox starts checked.
+* `fixFirst` _(optional)_ - set to `true` to lock the first item in place. It cannot be dragged or toggled and always stays at the top of the list. Default is `false`.
+* `fixLast` _(optional)_ - set to `true` to lock the last item in place. It cannot be dragged or toggled and always stays at the bottom of the list. Default is `false`.
 
 ```yaml
   <id>:
     type: sorter
     label: sorter label
     checkboxes: true
+    fixFirst: true
+    fixLast: true
     alignment: horizontal
     validation:
       required: true

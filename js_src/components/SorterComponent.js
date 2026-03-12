@@ -40,9 +40,11 @@ export class SorterComponent extends BaseComponent {
         // get items from state or config
         const items = this.getItems();
 
-        items.forEach((item) => {
+        items.forEach((item, index) => {
             const listItem = document.createElement("li");
-            const isEnabled = hasCheckboxes ? item.enabled !== false : true;
+            const isFixed = (index === 0 && this.config.fixFirst) ||
+                            (index === items.length - 1 && this.config.fixLast);
+            const isEnabled = isFixed ? true : (hasCheckboxes ? item.enabled !== false : true);
 
             listItem.classList.add("sortable-item", "box", "is-flex", "is-align-items-center", "p-3", "m-2");
             if (!isEnabled) {
@@ -50,20 +52,25 @@ export class SorterComponent extends BaseComponent {
                 listItem.style.opacity = "0.5";
             }
 
-            listItem.setAttribute("draggable", isEnabled ? "true" : "false");
+            listItem.setAttribute("draggable", (isEnabled && !isFixed) ? "true" : "false");
             listItem.setAttribute("data-value", item.value || item);
             listItem.setAttribute("data-enabled", isEnabled.toString());
-            listItem.style.cursor = isEnabled ? "grab" : "default";
+            if (isFixed) {
+                listItem.setAttribute("data-fixed", "true");
+            }
+            listItem.style.cursor = (isEnabled && !isFixed) ? "grab" : "default";
 
-            const checkboxHtml = hasCheckboxes ? `
+            const showCheckbox = hasCheckboxes && !isFixed;
+            const checkboxHtml = showCheckbox ? `
                 <label class="checkbox mr-2" style="cursor: pointer;">
                     <input type="checkbox" ${isEnabled ? 'checked' : ''} data-toggle-item="${item.value || item}">
                 </label>` : '';
 
+            const showDragHandle = !isFixed;
             listItem.innerHTML = `
-                <span class="drag-handle icon is-small mr-2" style="cursor: ${isEnabled ? 'grab' : 'not-allowed'};">
+                ${showDragHandle ? `<span class="drag-handle icon is-small mr-2" style="cursor: ${isEnabled ? 'grab' : 'not-allowed'};">
                     ${this.#getDragIcon(isEnabled)}
-                </span>
+                </span>` : ''}
                 ${checkboxHtml}
                 <span class="item-label ${isEnabled ? '' : 'has-text-dark'}">${item.value || item}</span>
             `;
@@ -160,7 +167,8 @@ export class SorterComponent extends BaseComponent {
      */
     handleDragStart(e) {
         if (!e.target.classList.contains('sortable-item')) return;
-        if (e.target.getAttribute('data-enabled') === 'false') {
+        if (e.target.getAttribute('data-enabled') === 'false' ||
+            e.target.getAttribute('data-fixed') === 'true') {
             e.preventDefault();
             return;
         }
@@ -188,8 +196,21 @@ export class SorterComponent extends BaseComponent {
         const afterElement = this.getDragAfterElement(sortableList, isHorizontal ? e.clientX : e.clientY, isHorizontal);
         const dragging = sortableList.querySelector('.dragging');
 
+        // Prevent placing before a fixed-first item or after a fixed-last item
+        const children = [...sortableList.querySelectorAll('.sortable-item')];
+        const firstChild = children[0];
+        const lastChild = children[children.length - 1];
+
         if (afterElement == null) {
-            sortableList.appendChild(dragging);
+            // Would append to end — block if last item is fixed
+            if (this.config.fixLast && lastChild && lastChild.getAttribute('data-fixed') === 'true') {
+                sortableList.insertBefore(dragging, lastChild);
+            } else {
+                sortableList.appendChild(dragging);
+            }
+        } else if (this.config.fixFirst && afterElement === firstChild && firstChild.getAttribute('data-fixed') === 'true') {
+            // Would insert before the fixed first item — place after it instead
+            sortableList.insertBefore(dragging, firstChild.nextSibling);
         } else {
             sortableList.insertBefore(dragging, afterElement);
         }
@@ -323,16 +344,17 @@ export class SorterComponent extends BaseComponent {
     #normalizeStateItems() {
         const hasCheckboxes = this.#hasCheckboxes();
         const stateItems = this.myState.value;
+        const configItems = this.config.items || [];
 
         if (!stateItems) {
-            return (this.config.items || []).map(item => ({
+            return configItems.map(item => ({
                 value: item,
                 enabled: true
             }));
         }
 
         if (!Array.isArray(stateItems) || stateItems.length === 0) {
-            return (this.config.items || []).map(item => ({
+            return configItems.map(item => ({
                 value: item,
                 enabled: true
             }));
@@ -340,15 +362,43 @@ export class SorterComponent extends BaseComponent {
 
         const needsNormalization = stateItems.some(item => typeof item !== 'object' || item === null || !('value' in item));
         const shouldEnableAll = !hasCheckboxes && stateItems.some(item => item && item.enabled === false);
+        const needsFixEnforce = this.config.fixFirst || this.config.fixLast;
 
-        if (!needsNormalization && !shouldEnableAll) {
+        if (!needsNormalization && !shouldEnableAll && !needsFixEnforce) {
             return null;
         }
 
-        return stateItems.map(item => ({
+        let items = stateItems.map(item => ({
             value: (typeof item === 'object' && item !== null && 'value' in item) ? item.value : item,
             enabled: hasCheckboxes ? (typeof item === 'object' && item !== null && item.enabled === false ? false : true) : true
         }));
+
+        // Ensure fixed items are in their correct positions
+        if (this.config.fixFirst && configItems.length > 0) {
+            const fixedValue = configItems[0];
+            const idx = items.findIndex(i => i.value === fixedValue);
+            if (idx > 0) {
+                const [fixedItem] = items.splice(idx, 1);
+                fixedItem.enabled = true;
+                items.unshift(fixedItem);
+            } else if (idx === 0) {
+                items[0].enabled = true;
+            }
+        }
+
+        if (this.config.fixLast && configItems.length > 0) {
+            const fixedValue = configItems[configItems.length - 1];
+            const idx = items.findIndex(i => i.value === fixedValue);
+            if (idx >= 0 && idx < items.length - 1) {
+                const [fixedItem] = items.splice(idx, 1);
+                fixedItem.enabled = true;
+                items.push(fixedItem);
+            } else if (idx === items.length - 1) {
+                items[items.length - 1].enabled = true;
+            }
+        }
+
+        return items;
     }
 }
 
