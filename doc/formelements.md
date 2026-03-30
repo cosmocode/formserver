@@ -51,6 +51,8 @@ Options:
 * `headers` _(required if `repeat` is not set)_ - list of column headers. Can be combined with `repeat` for a mix of named and unnamed / numbered columns. The config example below will result in columns 3-13 having headers like "Table label 3".
 * `scrollable` _(optional)_ - makes the table scrollable horizontally, useful if you have many columns
 
+**Technical Note:** Column fields are numbered with underscore prefix (e.g., `_1`, `_2`) to ensure valid JavaScript identifiers in expressions. When stored in `values.yaml`, they appear as `tableName._1.fieldname`.
+
 ```yaml
 <id>:
   type: table
@@ -390,13 +392,15 @@ Options:
         choices:
           - A1
           - A2
-      -  
+      -
         visible: fieldsetLevel1.FieldsetLevel2.myFieldname == 'Value B'
         choices:
           - 10 B
           - 20 B
           - 30 B
 ```
+
+It is possible to make `conditional_choices` depend on dynamically created fields in tables. Read [more information and syntax examples](conditional.md).
 
 ### Checklist
 

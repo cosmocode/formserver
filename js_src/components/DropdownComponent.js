@@ -141,7 +141,9 @@ export class DropdownComponent extends BaseComponent {
      * @returns {boolean}
      */
     shouldUpdate(detail) {
-        return super.shouldUpdate(detail) || U.shouldUpdateFromExpressions(this.optionsExpressions, detail);
+        const superResult = super.shouldUpdate(detail);
+        const expressionsResult = U.shouldUpdateFromExpressions(this.optionsExpressions, detail);
+        return superResult || expressionsResult;
     }
 
     /**
@@ -160,7 +162,7 @@ export class DropdownComponent extends BaseComponent {
         }
 
         // without empty_label config, first option is the value
-        if (!myState.value && !config.empty_label && !config.multiselect) {
+        if (!myState.value && !config.empty_label && !config.multiselect && config.choices) {
             myState.value = config.choices[0];
         }
 
@@ -189,10 +191,53 @@ export class DropdownComponent extends BaseComponent {
      * Collects conditional expressions attached to options,
      * which will be evaluated in shouldUpdate()
      *
+     * Resolves @. references in table contexts before parsing expressions
+     * to ensure correct dependency tracking
+     *
      * @returns {*[]}
      */
     getOptionsExpressions() {
-        return U.getSubitemsExpressions(this.config, "conditional_choices");
+        const expressions = [];
+        const conditionalChoices = this.config.conditional_choices;
+
+        if (!conditionalChoices || !Array.isArray(conditionalChoices)) {
+            return expressions;
+        }
+
+        const columnContext = this.#getColumnContext();
+
+        for (const choiceSet of conditionalChoices) {
+            if (choiceSet.visible) {
+                // Resolve @. references for table columns
+                const resolvedExpression = U.resolveTableFieldReferences(choiceSet.visible, columnContext);
+                const parsed = U.getParsedExpression(resolvedExpression);
+                if (parsed) {
+                    expressions.push(parsed);
+                }
+            }
+        }
+
+        return expressions;
+    }
+
+    /**
+     * Extract table column context from field name
+     *
+     * Parses field names in the format "tableName.columnIndex.fieldName"
+     * where columnIndex is underscore-prefixed (e.g., "_1", "_2", "_3")
+     *
+     * @returns {Object|null} {tableName, columnIndex} or null if not in a table
+     */
+    #getColumnContext() {
+        // Parse this.config.name format: "tableName._columnIndex.fieldName"
+        const parts = this.config.name.split('.');
+        if (parts.length === 3 && /^_\d+$/.test(parts[1])) {
+            return {
+                tableName: parts[0],
+                columnIndex: parts[1]
+            };
+        }
+        return null;
     }
 
     /**
@@ -206,11 +251,22 @@ export class DropdownComponent extends BaseComponent {
         }
 
         if (this.config.conditional_choices) {
+            const columnContext = this.#getColumnContext();
+
             const filtered = this.config.conditional_choices.filter(set => {
                 if (!set.visible) {
                     return true;
                 }
-                const expr = U.getParsedExpression(set.visible);
+
+                // Resolve @. references for table columns
+                const resolvedExpression = U.resolveTableFieldReferences(set.visible, columnContext);
+                const expr = U.getParsedExpression(resolvedExpression);
+
+                // If expression failed to parse, show the choices (fail-safe)
+                if (!expr) {
+                    return true;
+                }
+
                 return U.conditionMatches(expr, this.myState.state);
             });
 

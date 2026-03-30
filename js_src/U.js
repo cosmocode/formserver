@@ -1,5 +1,5 @@
 import expression from "expr-eval";
-import {setProperty} from "dot-prop";
+import {getProperty, setProperty} from "dot-prop";
 import html from 'html-template-tag';
 
 /**
@@ -230,10 +230,12 @@ export class U {
             rowWrapper.appendChild(labelTh);
 
             for (let i = 0; i < repeat; i++) {
-                const idx = `${i + 1}`;
-                fieldConfig.name = `${parentName}${idx}.${key}`; // add full dotted field ID to config
+                const idx = `_${i + 1}`;
+                // Create a deep copy to prevent shared object mutation across columns
+                const columnFieldConfig = structuredClone(fieldConfig);
+                columnFieldConfig.name = `${parentName}${idx}.${key}`; // add full dotted field ID to config
                 const element = document.createElement(`${fieldConfig.type}-component`);
-                element.initialize(state, fieldConfig);
+                element.initialize(state, columnFieldConfig);
 
                 const fieldTd = document.createElement('td');
                 fieldTd.appendChild(element);
@@ -317,6 +319,29 @@ export class U {
     }
 
     /**
+     * Resolves @. field references in expressions to actual table column paths
+     *
+     * This enables conditional expressions within table columns to reference
+     * other fields in the same column using @.fieldname syntax, which gets
+     * resolved to tableName._columnIndex.fieldname where _columnIndex uses
+     * underscore prefix (e.g., _1, _2) for valid JavaScript identifiers.
+     *
+     * @param {string} expression - Expression with @. syntax
+     * @param {Object|null} columnContext - {tableName: string, columnIndex: string (with underscore prefix)}
+     * @returns {string} Resolved expression
+     */
+    static resolveTableFieldReferences(expression, columnContext) {
+        if (!expression || !columnContext) {
+            return expression;
+        }
+
+        const pattern = /@\.(\w+)/g;
+        return expression.replace(pattern, (match, fieldName) => {
+            return `${columnContext.tableName}.${columnContext.columnIndex}.${fieldName}`;
+        });
+    }
+
+    /**
      * Evaluate expression against current form state
      *
      * @param {expression.Expression} expression
@@ -331,7 +356,7 @@ export class U {
             // initializes non-existing variables with null
             const data = {};
             vars.forEach(v => {
-                setProperty(data, v, state.values[v]);
+                setProperty(data, v, getProperty(state.values, v));
             });
 
             return !!expression.evaluate(data);

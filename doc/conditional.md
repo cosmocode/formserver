@@ -33,11 +33,35 @@ visible: full.dotted.elementId + full.dotted.another.elementId > 100
 
 ## Exception: Tables
 
-Fields contained in a table may not be dependent on other table fields. That would potentially break the table, because the columns would not be identical (some columns could have extra conditional fields).
+A field in a table may depend on a field outside the table. If the visibility condition is met, a new row will be displayed in all columns.
 
-Also, field names in tables are created dynamically, so you cannot use them in visibility conditions. This affects conditional options in dropdowns, too. Their visibility may not depend on a field in a table.
+But visibility of fields contained in a table may not be dependent on other table fields. That would potentially break the table, because the columns would not be identical (some columns could have extra conditional fields).
 
-A field in a table can depend on a field outside the table. If the visibility condition is met, a new row will be displayed in all columns.
+The case of **`conditional_choices`** in **dropdown fields** is a bit different. Presenting different options doesn't affect the layout. So within tables can use the `@.fieldname` syntax to reference other fields in the same column. This allows conditional choices based on the current values of a different field in the same column:
+
+**Technical Note:** Table columns use underscore-prefixed numbering (e.g., `_1`, `_2`) for valid JavaScript identifiers. The `@.fieldname` syntax automatically resolves to the appropriate column format (e.g., `tableName._1.fieldname`).
+
+```yaml
+children:
+  category:
+    type: dropdown
+    choices:
+      - fruits
+      - vegetables
+  product:
+    type: dropdown
+    conditional_choices:
+      - visible: "@.category == 'fruits'"
+        choices:
+          - apple
+          - banana
+          - orange
+      - visible: "@.category == 'vegetables'"
+        choices:
+          - carrot
+          - broccoli
+          - spinach
+```
 
 ## Exception: Clone
 
