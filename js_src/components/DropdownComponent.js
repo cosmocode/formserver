@@ -223,21 +223,26 @@ export class DropdownComponent extends BaseComponent {
     /**
      * Extract table column context from field name
      *
-     * Parses field names in the format "tableName.columnIndex.fieldName"
-     * where columnIndex is underscore-prefixed (e.g., "_1", "_2", "_3")
+     * Finds the last segment matching ._<integer> in the dotted path,
+     * supporting both simple ("table._1.field") and nested paths
+     * ("page.outer_table._3.inner_table._2.field").
      *
      * @returns {Object|null} {tableName, columnIndex} or null if not in a table
      */
     #getColumnContext() {
-        // Parse this.config.name format: "tableName._columnIndex.fieldName"
         const parts = this.config.name.split('.');
-        if (parts.length === 3 && /^_\d+$/.test(parts[1])) {
-            return {
-                tableName: parts[0],
-                columnIndex: parts[1]
-            };
+        let colIdx = -1;
+        for (let i = parts.length - 1; i >= 0; i--) {
+            if (/^_\d+$/.test(parts[i])) {
+                colIdx = i;
+                break;
+            }
         }
-        return null;
+        if (colIdx < 1) return null;
+        return {
+            tableName: parts.slice(0, colIdx).join('.'),
+            columnIndex: parts[colIdx]
+        };
     }
 
     /**

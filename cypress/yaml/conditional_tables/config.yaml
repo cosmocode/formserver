@@ -1,7 +1,5 @@
 meta:
   title: Conditional Choices in Tables Test
-  store: false
-
 form:
   products_table:
     type: table

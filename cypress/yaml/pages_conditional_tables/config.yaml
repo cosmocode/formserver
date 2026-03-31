@@ -1,0 +1,42 @@
+meta:
+  title: Conditional Choices in Tables Test
+form:
+  pages_component:
+    type: pages
+    label: Multi-step Form
+    headers:
+      - "Produce page"
+    children:
+      page1:
+        label: "Produce page"
+        children:
+          products_table:
+            type: table
+            label: Product Selection
+            repeat: 3
+            children:
+              category:
+                type: dropdown
+                label: Category
+                empty_label: "Select a category"
+                choices:
+                  - "some fruits"
+                  - "some vegetables"
+              product:
+                type: dropdown
+                label: Product
+                empty_label: "Select a product"
+                conditional_choices:
+                  - visible: "@.category == 'some fruits'"
+                    choices:
+                      - apple
+                      - banana
+                      - orange
+                  - visible: "@.category == 'some vegetables'"
+                    choices:
+                      - carrot
+                      - broccoli
+                      - lettuce
+              quantity:
+                type: numberinput
+                label: Quantity

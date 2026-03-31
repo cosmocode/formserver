@@ -1,10 +1,12 @@
 describe('Test time component', () => {
 
     beforeEach(() => {
+        cy.visit('/time');
+    });
+
+    afterEach(() => {
         const valuesFile = './cypress/yaml/time/values.yaml';
         cy.exec(`rm -f ${valuesFile}`);
-
-        cy.visit('/time');
     });
 
     it('time attributes', () => {
