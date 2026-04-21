@@ -223,9 +223,9 @@ export class DropdownComponent extends BaseComponent {
     /**
      * Extract table column context from field name
      *
-     * Finds the last segment matching ._<integer> in the dotted path,
-     * supporting both simple ("table._1.field") and nested paths
-     * ("page.outer_table._3.inner_table._2.field").
+     * Finds the last segment matching .COL<integer> in the dotted path,
+     * supporting both simple ("table.COL1.field") and nested paths
+     * ("page.outer_table.COL3.inner_table.COL2.field").
      *
      * @returns {Object|null} {tableName, columnIndex} or null if not in a table
      */
@@ -233,7 +233,7 @@ export class DropdownComponent extends BaseComponent {
         const parts = this.config.name.split('.');
         let colIdx = -1;
         for (let i = parts.length - 1; i >= 0; i--) {
-            if (/^_\d+$/.test(parts[i])) {
+            if (/^COL\d+$/.test(parts[i])) {
                 colIdx = i;
                 break;
             }

@@ -230,7 +230,7 @@ export class U {
             rowWrapper.appendChild(labelTh);
 
             for (let i = 0; i < repeat; i++) {
-                const idx = `_${i + 1}`;
+                const idx = `COL${i + 1}`;
                 // Create a deep copy to prevent shared object mutation across columns
                 const columnFieldConfig = structuredClone(fieldConfig);
                 columnFieldConfig.name = `${parentName}${idx}.${key}`; // add full dotted field ID to config
@@ -323,11 +323,11 @@ export class U {
      *
      * This enables conditional expressions within table columns to reference
      * other fields in the same column using @.fieldname syntax, which gets
-     * resolved to tableName._columnIndex.fieldname where _columnIndex uses
-     * underscore prefix (e.g., _1, _2) for valid JavaScript identifiers.
+     * resolved to tableName.COLcolumnIndex.fieldname where COLcolumnIndex uses
+     * COL prefix (e.g., COL1, COL2) for valid JavaScript identifiers.
      *
      * @param {string} expression - Expression with @. syntax
-     * @param {Object|null} columnContext - {tableName: string, columnIndex: string (with underscore prefix)}
+     * @param {Object|null} columnContext - {tableName: string, columnIndex: string (with COL prefix)}
      * @returns {string} Resolved expression
      */
     static resolveTableFieldReferences(expression, columnContext) {

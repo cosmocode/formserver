@@ -39,7 +39,7 @@ But visibility of fields contained in a table may not be dependent on other tabl
 
 The case of **`conditional_choices`** in **dropdown fields** is a bit different. Presenting different options doesn't affect the layout. So within tables can use the `@.fieldname` syntax to reference other fields in the same column. This allows conditional choices based on the current values of a different field in the same column:
 
-**Technical Note:** Table columns use underscore-prefixed numbering (e.g., `_1`, `_2`) for valid JavaScript identifiers. The `@.fieldname` syntax automatically resolves to the appropriate column format (e.g., `tableName._1.fieldname`).
+**Technical Note:** Table columns use `COL`-prefixed numbering (e.g., `COL1`, `COL2`) for valid JavaScript identifiers. The `@.fieldname` syntax automatically resolves to the appropriate column format (e.g., `tableName.COL1.fieldname`).
 
 ```yaml
 children:
